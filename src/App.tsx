@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-
+// Importing styles for the app
 function GamingPage() {
   const [score, setScore] = useState<number>(0);
   const [currentColor, setCurrentColor] = useState<string>('');
