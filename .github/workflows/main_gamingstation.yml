@@ -65,7 +65,14 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_24B62503E9264C33BC8E031DB23D8A1F }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3EF4278F30F24C3EA1B013D2BD5CAA0B }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A78317725F3C43629E6A6093F973C0F6 }}
-
+      - name: Clear wwwroot before deploy
+        run: |
+          az webapp ssh --name GamingStation --resource-group GamingTest-Copilot --command "rm -rf /home/site/wwwroot/*"
+        env:
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A78317725F3C43629E6A6093F973C0F6 }}
+          AZURE_CLIENT_ID: ${{ secrets.AZUREAPPSERVICE_CLIENTID_24B62503E9264C33BC8E031DB23D8A1F }}
+          AZURE_TENANT_ID: ${{ secrets.AZUREAPPSERVICE_TENANTID_3EF4278F30F24C3EA1B013D2BD5CAA0B }}
+        
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
