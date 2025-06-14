@@ -1,0 +1,85 @@
+/* src/components/WinCelebration.css */
+.win-celebration-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75); /* Darker overlay for better contrast */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* Very high z-index to be on top of everything */
+  cursor: pointer;
+  animation: fadeInOverlay 0.3s ease-out;
+}
+
+.win-celebration-content {
+  background-color: var(--card-background-color); /* Use theme variable */
+  padding: 30px 40px; /* Adjusted padding */
+  border-radius: 12px; /* Consistent with game-card */
+  text-align: center;
+  color: var(--text-color); /* Use theme variable */
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15); /* Adjusted shadow */
+  transform: scale(0.8); /* Initial state for pop-in */
+  animation: popInContent 0.3s 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Smoother pop-in */
+}
+
+.win-celebration-content h1 {
+  font-size: 2.8em; /* Adjusted size */
+  color: var(--primary-color); /* Use theme variable */
+  margin-top: 0; /* Reset margin */
+  margin-bottom: 0.5em;
+}
+
+.win-celebration-content p {
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+}
+
+/* Keyframes for animations */
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popInContent {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Responsive adjustments for WinCelebration */
+@media (max-width: 768px) {
+  .win-celebration-content {
+    padding: 25px 30px; /* Reduce padding */
+    /* max-width: 80vw; */ /* Ensure it's not too wide */
+  }
+  .win-celebration-content h1 {
+    font-size: 2.2em; /* Reduce font size */
+  }
+  .win-celebration-content p {
+    font-size: 1em;
+  }
+  .win-celebration-content p:last-child { /* Smaller text for dismiss message */
+    font-size: 0.7em;
+    margin-top: 15px; /* Add some space for the smaller text */
+  }
+}
+
+@media (max-width: 480px) {
+  .win-celebration-content {
+    padding: 20px 15px; /* Further reduce padding */
+    width: 85vw;
+    max-width: 320px; /* Max width for very small screens */
+  }
+  .win-celebration-content h1 {
+    font-size: 1.8em; /* Further reduce font size */
+  }
+  .win-celebration-content p {
+    font-size: 0.9em;
+  }
+   .win-celebration-content p:last-child {
+    font-size: 0.65em;
+    margin-top: 10px;
+  }
+}

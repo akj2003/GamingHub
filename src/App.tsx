@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import WinCelebration from './components/WinCelebration'; // Import WinCelebration
 // Importing styles for the app
 function GamingPage() {
   const [score, setScore] = useState<number>(0);
@@ -9,12 +10,15 @@ function GamingPage() {
   const [shapeOptions, setShapeOptions] = useState<string[]>([]);
   const [message, setMessage] = useState<string>('');
   const [step, setStep] = useState<'color' | 'shape' | 'win'>('color');
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const colorList = [
-    'red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown', 'black', 'white'
+    'red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown', 'black', 'white',
+    'teal', 'lime', 'cyan', 'magenta', 'indigo', 'violet', 'maroon', 'navy', 'silver', 'gold'
   ];
   const shapeList = [
-    'circle', 'square', 'triangle', 'star', 'hexagon', 'rectangle', 'oval', 'diamond'
+    'circle', 'square', 'triangle', 'star', 'hexagon', 'rectangle', 'oval', 'diamond',
+    'pentagon', 'heptagon', 'octagon', 'cross', 'arrow', 'heart'
   ];
 
   function newRound() {
@@ -53,6 +57,7 @@ function GamingPage() {
         if (newScore >= 10) {
           setStep('win');
           setMessage('🏆 You win! Congratulations!');
+          setShowCelebration(true);
         } else {
           setStep('shape');
           setMessage('Correct color! Now pick the shape.');
@@ -71,6 +76,7 @@ function GamingPage() {
         if (newScore >= 10) {
           setStep('win');
           setMessage('🏆 You win! Congratulations!');
+          setShowCelebration(true);
         } else {
           setMessage('Correct! Next round...');
           setTimeout(newRound, 1200);
@@ -84,23 +90,38 @@ function GamingPage() {
 
   function renderShape(shape: string, color: string) {
     const size = 60;
+    const commonSvgStyle = { display: 'block', margin: '0 auto' };
+    const commonDivStyle = { width: size, height: size, background: color, margin: '0 auto' };
+
     switch (shape) {
       case 'circle':
-        return <div style={{ width: size, height: size, borderRadius: '50%', background: color, margin: '0 auto' }} />;
+        return <div style={{ ...commonDivStyle, borderRadius: '50%' }} />;
       case 'square':
-        return <div style={{ width: size, height: size, background: color, margin: '0 auto' }} />;
+        return <div style={commonDivStyle} />;
       case 'triangle':
-        return <div style={{ width: 0, height: 0, borderLeft: `${size/2}px solid transparent`, borderRight: `${size/2}px solid transparent`, borderBottom: `${size}px solid ${color}`, margin: '0 auto' }} />;
+        return <div style={{ width: 0, height: 0, borderLeft: `${size / 2}px solid transparent`, borderRight: `${size / 2}px solid transparent`, borderBottom: `${size}px solid ${color}`, margin: '0 auto' }} />;
       case 'star':
-        return <svg width={size} height={size} viewBox="0 0 50 50" style={{ display: 'block', margin: '0 auto' }}><polygon points="25,2 31,18 48,18 34,29 39,46 25,36 11,46 16,29 2,18 19,18" fill={color} /></svg>;
+        return <svg width={size} height={size} viewBox="0 0 50 50" style={commonSvgStyle}><polygon points="25,2 31,18 48,18 34,29 39,46 25,36 11,46 16,29 2,18 19,18" fill={color} /></svg>;
       case 'hexagon':
-        return <svg width={size} height={size} viewBox="0 0 100 100" style={{ display: 'block', margin: '0 auto' }}><polygon points="50,10 90,30 90,70 50,90 10,70 10,30" fill={color} /></svg>;
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><polygon points="50,10 90,30 90,70 50,90 10,70 10,30" fill={color} /></svg>;
       case 'rectangle':
-        return <div style={{ width: size * 1.5, height: size * 0.7, background: color, margin: '0 auto' }} />;
+        return <div style={{ width: size * 1.5, height: size * 0.75, background: color, margin: '0 auto' }} />;
       case 'oval':
-        return <div style={{ width: size * 1.2, height: size * 0.7, background: color, borderRadius: '50%', margin: '0 auto' }} />;
+        return <div style={{ width: size * 1.25, height: size * 0.8, background: color, borderRadius: '50%', margin: '0 auto' }} />;
       case 'diamond':
-        return <div style={{ width: size, height: size, background: color, transform: 'rotate(45deg)', margin: '0 auto' }} />;
+        return <div style={{ ...commonDivStyle, transform: 'rotate(45deg)' }} />;
+      case 'pentagon':
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><polygon points="50,5 95,35 80,95 20,95 5,35" fill={color} /></svg>;
+      case 'heptagon':
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><polygon points="50,5 89,25 95,65 68,95 32,95 5,65 11,25" fill={color} /></svg>;
+      case 'octagon':
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><polygon points="30,5 70,5 95,30 95,70 70,95 30,95 5,70 5,30" fill={color} /></svg>;
+      case 'cross':
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><path d="M30,10 L70,10 L70,30 L90,30 L90,70 L70,70 L70,90 L30,90 L30,70 L10,70 L10,30 L30,30 Z" fill={color} /></svg>;
+      case 'arrow':
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><path d="M5,35 L60,35 L60,15 L95,50 L60,85 L60,65 L5,65 Z" fill={color} /></svg>;
+      case 'heart':
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><path d="M50,30 C40,10 10,20 10,50 C10,80 50,95 50,95 C50,95 90,80 90,50 C90,20 60,10 50,30 Z" fill={color} /></svg>;
       default:
         return null;
     }
@@ -112,15 +133,16 @@ function GamingPage() {
   }
 
   return (
-    <div className="card" style={{ maxWidth: 420, margin: '2em auto', boxShadow: '0 4px 24px 0 #0002', background: '#fff', borderRadius: 16 }}>
-      <h1 style={{ fontSize: '2.2em', marginBottom: 0, color: '#3f51b5', letterSpacing: 1 }}>🎨 Shape & Color Game</h1>
-      <p style={{ fontSize: '1.1em', color: '#666', marginTop: 4, marginBottom: 24 }}>
-        Score: <b style={{ color: '#43a047' }}>{score}</b> / 10
+    <>
+      {showCelebration && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <div className="game-card" style={{ maxWidth: 420 }}>
+        <h1>🎨 Shape & Color Game</h1>
+        <p className="score-text">
+        Score: <b>{score}</b> / 10
       </p>
-      {/* Show restart button during the game */}
       {step !== 'win' && (
         <button
-          style={{ marginBottom: '1.5em', background: 'linear-gradient(90deg,#e3e3e3,#f5f5f5)', color: '#222', minWidth: 120, border: '1px solid #bbb', borderRadius: 8, fontWeight: 600, fontSize: '1em', boxShadow: '0 2px 8px #0001' }}
+          className="game-button game-button-secondary mb-2"
           onClick={restartGame}
         >
           Restart
@@ -128,36 +150,18 @@ function GamingPage() {
       )}
       {step === 'color' && (
         <>
-          <div style={{ margin: '1.5em 0 1em', fontSize: '1.2em', fontWeight: 600, color: '#333' }}>
+          <div className="mt-2 mb-1" style={{ fontSize: '1.2em', fontWeight: 600, color: 'var(--text-color)' }}>
             Identify the color:
-            <span style={{
-              display: 'inline-block',
-              marginLeft: '1em',
-              width: 60,
-              height: 30,
-              background: currentColor,
-              border: '2px solid #ccc',
-              borderRadius: 8,
-              verticalAlign: 'middle',
-              boxShadow: '0 2px 8px #0001',
-            }} />
+            <span className="gaming-page-color-display" style={{ background: currentColor }} />
           </div>
-          <div style={{ display: 'flex', gap: '1em', justifyContent: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
+          <div className="gaming-page-options-container">
             {colorOptions.map((color) => (
               <button
                 key={color}
+                className="gaming-page-option-button"
                 style={{
                   background: color,
-                  color: color === 'black' ? '#fff' : '#222',
-                  minWidth: 90,
-                  minHeight: 40,
-                  border: '2px solid #bbb',
-                  borderRadius: 8,
-                  fontWeight: 500,
-                  fontSize: '1em',
-                  boxShadow: '0 2px 8px #0001',
-                  transition: 'transform 0.1s',
-                  cursor: 'pointer',
+                  color: ['white', 'yellow', 'pink', 'orange', 'lime', 'cyan', 'silver', 'gold', '#fdfefe', '#eaeded'].includes(color.toLowerCase()) ? 'var(--text-color)' : 'var(--button-text-color)',
                 }}
                 onClick={() => handleColorGuess(color)}
               >
@@ -169,27 +173,15 @@ function GamingPage() {
       )}
       {step === 'shape' && (
         <>
-          <div style={{ margin: '1.5em 0 1em', fontSize: '1.2em', fontWeight: 600, color: '#333' }}>
+          <div className="mt-2 mb-1" style={{ fontSize: '1.2em', fontWeight: 600, color: 'var(--text-color)' }}>
             Identify the shape:
             <div style={{ marginTop: 16 }}>{renderShape(currentShape, currentColor)}</div>
           </div>
-          <div style={{ display: 'flex', gap: '1em', justifyContent: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
+          <div className="gaming-page-options-container">
             {shapeOptions.map((shape) => (
               <button
                 key={shape}
-                style={{
-                  background: '#f9f9f9',
-                  color: '#222',
-                  minWidth: 90,
-                  minHeight: 40,
-                  border: '2px solid #bbb',
-                  borderRadius: 8,
-                  fontWeight: 500,
-                  fontSize: '1em',
-                  boxShadow: '0 2px 8px #0001',
-                  transition: 'transform 0.1s',
-                  cursor: 'pointer',
-                }}
+                className="gaming-page-option-button"
                 onClick={() => handleShapeGuess(shape)}
               >
                 {shape.charAt(0).toUpperCase() + shape.slice(1)}
@@ -199,17 +191,17 @@ function GamingPage() {
         </>
       )}
       {step === 'win' && (
-        <div style={{ margin: '2em 0', fontSize: '1.5em', fontWeight: 700, color: '#4caf50', textAlign: 'center' }}>
+        <div className="gaming-page-win-message">
           🏆 You win! Congratulations!<br />
           <button
-            style={{ marginTop: '1.5em', background: 'linear-gradient(90deg,#e3e3e3,#f5f5f5)', color: '#222', minWidth: 140, border: '1px solid #bbb', borderRadius: 8, fontWeight: 600, fontSize: '1em', boxShadow: '0 2px 8px #0001' }}
+            className="game-button game-button-primary mt-2"
             onClick={restartGame}
           >
             Play Again
           </button>
         </div>
       )}
-      {message && <p style={{ marginTop: '1.5em', fontWeight: 500, color: message.includes('win') ? '#43a047' : '#e65100', fontSize: '1.1em' }}>{message}</p>}
+      {message && <p className="gaming-page-message" style={{ color: message.includes('win') ? 'var(--success-color)' : message.includes('Try again') || message.includes('Invalid') ? 'var(--error-color)' : 'var(--text-color)' }}>{message}</p>}
     </div>
   );
 }
@@ -219,6 +211,7 @@ function TicTacToe() {
   const [xIsNext, setXIsNext] = useState<boolean>(true);
   const [winner, setWinner] = useState<string | null>(null);
   const [draw, setDraw] = useState<boolean>(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   function calculateWinner(squares: string[]) {
     const lines = [
@@ -243,6 +236,7 @@ function TicTacToe() {
     const win = calculateWinner(newBoard);
     if (win) {
       setWinner(win);
+      setShowCelebration(true);
     } else if (newBoard.every((cell) => cell)) {
       setDraw(true);
     } else {
@@ -255,32 +249,20 @@ function TicTacToe() {
     setXIsNext(true);
     setWinner(null);
     setDraw(false);
+    setShowCelebration(false);
   }
 
   return (
-    <div className="card" style={{ maxWidth: 500, margin: '2em auto', boxShadow: '0 4px 24px 0 #0002', background: '#fff', borderRadius: 16, padding: '2em 1em' }}>
-      <h2 style={{ color: '#3f51b5', marginBottom: 18, fontSize: '2em', letterSpacing: 1 }}>Tic-Tac-Toe</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 110px)', gap: 18, justifyContent: 'center', margin: '1.5em auto' }}>
+    <>
+      {showCelebration && winner && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <div className="game-card" style={{ maxWidth: 500 }}>
+        <h2>Tic-Tac-Toe</h2>
+        <div className="tictactoe-grid">
         {board.map((cell, idx) => (
           <button
             key={idx}
-            style={{
-              width: 110,
-              height: 110,
-              fontSize: '3.2em',
-              fontWeight: 800,
-              border: '3px solid #3f51b5',
-              borderRadius: 18,
-              background: cell === '' ? '#f5f5f5' : cell === 'X' ? '#e3f2fd' : '#fce4ec',
-              color: cell === 'X' ? '#3f51b5' : cell === 'O' ? '#e65100' : '#bbb',
-              cursor: cell || winner ? 'not-allowed' : 'pointer',
-              boxShadow: '0 4px 16px #3f51b522',
-              transition: 'background 0.2s, color 0.2s',
-              outline: cell ? '2px solid #43a047' : 'none',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            className={`tictactoe-cell ${cell === 'X' ? 'x' : cell === 'O' ? 'o' : ''}`}
+            style={{ outline: cell && (winner || draw) ? `2px solid var(--success-color)` : cell && !winner && !draw && !board[idx] ? `2px solid var(--secondary-color)`: undefined }}
             onClick={() => handleClick(idx)}
             disabled={!!cell || !!winner}
             aria-label={`Tic-Tac-Toe cell ${idx + 1}`}
@@ -289,10 +271,10 @@ function TicTacToe() {
           </button>
         ))}
       </div>
-      <div style={{ margin: '1.5em 0', fontWeight: 600, fontSize: '1.3em', color: winner ? '#43a047' : draw ? '#e65100' : '#333', letterSpacing: 0.5 }}>
+      <div className="mt-1 mb-1" style={{ fontWeight: 600, fontSize: '1.3em', color: winner ? 'var(--success-color)' : draw ? 'var(--error-color)' : 'var(--text-color)', letterSpacing: 0.5 }}>
         {winner ? `Winner: ${winner}` : draw ? 'Draw!' : `Next: ${xIsNext ? 'X' : 'O'}`}
       </div>
-      <button style={{ background: 'linear-gradient(90deg,#e3e3e3,#f5f5f5)', color: '#222', minWidth: 140, border: '1px solid #bbb', borderRadius: 10, fontWeight: 700, fontSize: '1.1em', boxShadow: '0 2px 8px #0001', padding: '0.7em 1.2em' }} onClick={restart}>
+      <button className="game-button game-button-secondary" onClick={restart}>
         Restart
       </button>
     </div>
@@ -300,117 +282,245 @@ function TicTacToe() {
 }
 
 function Ludo() {
-  const [positions, setPositions] = useState<number[]>([0, 0, 0, 0]);
+  const [numPlayers, setNumPlayers] = useState<number>(4);
+  const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [positions, setPositions] = useState<number[]>(Array(4).fill(0));
   const [currentPlayer, setCurrentPlayer] = useState<number>(0);
   const [dice, setDice] = useState<number | null>(null);
   const [winner, setWinner] = useState<number | null>(null);
-  const boardSize = 20; // Simple linear board for demo
+  const boardSize = 20;
 
-  function rollDice() {
-    if (winner !== null) return;
-    const roll = Math.floor(Math.random() * 6) + 1;
-    setDice(roll);
-    setPositions((prev) => {
-      const newPos = [...prev];
-      if (newPos[currentPlayer] + roll <= boardSize) {
-        newPos[currentPlayer] += roll;
-      }
-      if (newPos[currentPlayer] === boardSize) {
-        setWinner(currentPlayer);
-      }
-      return newPos;
-    });
-    setCurrentPlayer((prev) => (prev + 1) % 4);
-  }
-
-  function restart() {
-    setPositions([0, 0, 0, 0]);
-    setCurrentPlayer(0);
-    setDice(null);
-    setWinner(null);
-  }
+  const [isRolling, setIsRolling] = useState<boolean>(false);
+  const [displayDice, setDisplayDice] = useState<number | null>(null);
+  const [justMovedPlayer, setJustMovedPlayer] = useState<number | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const playerColors = ['#e53935', '#43a047', '#1e88e5', '#fbc02d'];
   const playerNames = ['Red', 'Green', 'Blue', 'Yellow'];
 
-  return (
-    <div className="card" style={{ maxWidth: 700, margin: '2.5em auto', boxShadow: '0 4px 24px 0 #0002', background: '#fff', borderRadius: 24, padding: '2.5em 1.5em' }}>
-      <h2 style={{ color: '#3f51b5', marginBottom: 18, fontSize: '2.2em', letterSpacing: 1 }}>Ludo (Mini)</h2>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 24, marginBottom: 24 }}>
-        {positions.map((pos, idx) => (
-          <div key={idx} style={{ textAlign: 'center' }}>
-            <div style={{ width: 48, height: 48, borderRadius: '50%', background: playerColors[idx], margin: '0 auto', border: currentPlayer === idx && winner === null ? '4px solid #333' : '3px solid #bbb', boxShadow: '0 2px 8px #0001', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 26 }}>
-              {idx + 1}
-            </div>
-            <div style={{ fontSize: 17, color: '#555', marginTop: 4 }}>{playerNames[idx]}</div>
-            <div style={{ fontSize: 15, color: '#888' }}>Pos: {pos}</div>
-          </div>
-        ))}
-      </div>
-      <div style={{ margin: '1.5em 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        {/* Board split into multiple lines, now larger */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
-          {[...Array(4)].map((_, row) => (
-            <div key={row} style={{ display: 'flex', gap: 8 }}>
-              {[...Array(5)].map((_, col) => {
-                const i = row * 5 + col;
-                const playerHere = positions.findIndex((p) => p === i);
-                return (
-                  <div key={col} style={{ width: 38, height: 38, border: '2px solid #bbb', borderRadius: 8, background: playerHere !== -1 ? playerColors[playerHere] : '#f5f5f5', margin: 2, display: 'inline-block', boxShadow: playerHere !== -1 ? '0 2px 8px #0002' : undefined }} />
-                );
-              })}
-            </div>
+  function handlePlayerSelect(selectedNum: number) {
+    setNumPlayers(selectedNum);
+    restart(selectedNum);
+  }
+
+  function restart(selectedNumPlayersToUse?: number) {
+    const playersToSetup = selectedNumPlayersToUse || numPlayers;
+    if (selectedNumPlayersToUse) {
+        setNumPlayers(playersToSetup);
+    }
+    setPositions(Array(4).fill(0));
+    setCurrentPlayer(0);
+    setDice(null);
+    setWinner(null);
+    setShowCelebration(false);
+    setJustMovedPlayer(null);
+    setIsRolling(false);
+    setDisplayDice(null);
+    setGameStarted(true);
+  }
+
+  useEffect(() => {
+    if (gameStarted && !isRolling && winner === null) {
+      setDisplayDice(null);
+      setDice(null);
+    }
+  }, [currentPlayer, isRolling, winner, gameStarted, numPlayers]);
+
+  function rollDice() {
+    if (winner !== null || isRolling) return;
+
+    setIsRolling(true);
+    setDisplayDice(null);
+
+    let rollCount = 0;
+    const animationDuration = 800;
+    const singleRollAnimationTime = 80;
+    const maxRollCount = animationDuration / singleRollAnimationTime;
+
+    const rollAnimationInterval = setInterval(() => {
+      setDisplayDice(Math.floor(Math.random() * 6) + 1);
+      rollCount++;
+      if (rollCount >= maxRollCount) {
+        clearInterval(rollAnimationInterval);
+
+        const finalRoll = Math.floor(Math.random() * 6) + 1;
+        setDice(finalRoll);
+        const movedPlayer = currentPlayer;
+
+        const gameWillBeWonThisTurn = (positions[movedPlayer] + finalRoll) === boardSize;
+
+        setPositions((previousPositions) => {
+          const updatedPositionsArray = [...previousPositions];
+          if (updatedPositionsArray[movedPlayer] + finalRoll <= boardSize) {
+            updatedPositionsArray[movedPlayer] += finalRoll;
+          }
+          // Check win condition based on the just-updated position
+          if (updatedPositionsArray[movedPlayer] === boardSize) {
+            setWinner(movedPlayer);
+            setShowCelebration(true);
+          }
+          return updatedPositionsArray;
+        });
+
+        setJustMovedPlayer(movedPlayer);
+        setTimeout(() => setJustMovedPlayer(null), 500);
+
+        if (!gameWillBeWonThisTurn) {
+          if (winner === null) {
+               setCurrentPlayer((prevPlayer) => (prevPlayer + 1) % numPlayers);
+          }
+        }
+        setIsRolling(false);
+      }
+    }, singleRollAnimationTime);
+  }
+
+  if (!gameStarted) {
+    return (
+      <div className="game-card" style={{ maxWidth: 700, borderRadius: 24 }}>
+        <h2>Ludo (Mini) - Select Players</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1em', margin: '2em 0' }}>
+          {[2, 3, 4].map(num => (
+            <button
+              key={num}
+              className="game-button game-button-primary"
+              style={{minWidth: '150px', fontSize: '1.1em'}}
+              onClick={() => handlePlayerSelect(num)}
+            >
+              {num} Players
+            </button>
           ))}
         </div>
-        <div style={{ fontSize: 18, color: '#333', marginBottom: 12, fontWeight: 600 }}>
-          {winner !== null ? (
-            <span style={{ color: playerColors[winner], fontWeight: 800 }}>{playerNames[winner]} wins!</span>
-          ) : (
-            <>
-              {dice !== null && <span>Dice: <b>{dice}</b> | </span>}
-              <span style={{ color: playerColors[currentPlayer], fontWeight: 700 }}>{playerNames[currentPlayer]}'s turn</span>
-            </>
-          )}
-        </div>
-        <button
-          style={{ background: winner !== null ? '#3f51b5' : '#43a047', color: '#fff', minWidth: 140, border: '1px solid #bbb', borderRadius: 10, fontWeight: 700, fontSize: '1.1em', boxShadow: '0 2px 8px #0001', marginBottom: 10, padding: '0.7em 1.2em' }}
-          onClick={rollDice}
-          disabled={winner !== null}
-        >
-          {winner !== null ? 'Game Over' : 'Roll Dice'}
-        </button>
-        <button
-          style={{ background: '#eee', color: '#222', minWidth: 140, border: '1px solid #bbb', borderRadius: 10, fontWeight: 700, fontSize: '1.1em', boxShadow: '0 2px 8px #0001', padding: '0.7em 1.2em' }}
-          onClick={restart}
-        >
-          Restart
-        </button>
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <>
+      {showCelebration && winner !== null && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <div className="game-card" style={{ maxWidth: 700, borderRadius: 24 }}>
+        <h2>Ludo (Mini - {numPlayers} Players)</h2>
+        <div className="ludo-players mb-2">
+          {Array.from({ length: numPlayers }).map((_, idx) => {
+            const pos = positions[idx];
+            return (
+              <div key={idx} className={`ludo-player-info ${currentPlayer === idx && winner === null && !isRolling ? 'ludo-player-active' : ''} ${justMovedPlayer === idx ? 'ludo-player-just-moved' : ''}`}>
+                <div className="ludo-player-token" style={{ background: playerColors[idx] }}>
+                  {idx + 1}
+                </div>
+                <div className="ludo-player-name">{playerNames[idx]}</div>
+                <div className="ludo-player-pos">Pos: {pos}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="text-center mt-2 mb-2">
+          <div className="ludo-board">
+            {[...Array(4)].map((_, row) => (
+              <div key={row} className="ludo-board-row">
+                {[...Array(5)].map((_, col) => {
+                  const i = row * 5 + col;
+                  const playerHere = positions.findIndex((p, playerIdx) => playerIdx < numPlayers && p === i);
+                  return (
+                    <div key={col} className={`ludo-board-cell ${playerHere !== -1 ? 'ludo-board-cell-player' : ''}`} style={{ background: playerHere !== -1 ? playerColors[playerHere] : undefined, borderColor: playerHere !== -1 ? playerColors[playerHere] : 'var(--border-color)', boxShadow: playerHere !== -1 ? `0 1px 4px ${playerColors[playerHere]}99` : undefined }} />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+          <div className="mt-1 mb-1" style={{ fontSize: '1.1em', color: 'var(--text-color)', fontWeight: 600, minHeight: '1.5em' }}>
+            {winner !== null ? (
+              <span style={{ color: playerColors[winner], fontWeight: 800 }}>{playerNames[winner]} wins!</span>
+            ) : (
+              <>
+                {isRolling && displayDice !== null && <span style={{ fontSize: '1.5em', fontWeight: 700, color: 'var(--secondary-color)' }}>⚅ {displayDice}</span>}
+                {!isRolling && dice !== null && <span>Dice: <b style={{ fontSize: '1.2em', color: 'var(--primary-color)' }}>{dice}</b> | </span>}
+                {!isRolling && currentPlayer < numPlayers && <span style={{ color: playerColors[currentPlayer], fontWeight: 700}}>{playerNames[currentPlayer]}'s turn</span>}
+                {isRolling && currentPlayer < numPlayers && <span style={{ color: playerColors[currentPlayer], fontWeight: 700}}>Rolling for {playerNames[currentPlayer]}...</span>}
+              </>
+            )}
+          </div>
+          <button
+            className={`game-button mb-1 ${winner !== null || isRolling ? '' : 'game-button-special'}`}
+            style={{ background: winner !== null || isRolling ? 'var(--disabled-bg-color)' : undefined, cursor: isRolling ? 'wait' : (winner !== null ? 'not-allowed' : 'pointer') }}
+            onClick={rollDice}
+            disabled={winner !== null || isRolling}
+          >
+            {isRolling ? 'Rolling...' : winner !== null ? 'Game Over' : 'Roll Dice'}
+          </button>
+          <button
+            className="game-button game-button-secondary"
+            onClick={() => restart()}
+          >
+            Restart Game
+          </button>
+          <button
+            className="game-button game-button-secondary mt-1"
+            onClick={() => {
+              setGameStarted(false);
+            }}
+            style={{background: 'var(--error-color)', color: 'var(--button-text-color)', borderColor: 'var(--error-color)'}}
+          >
+            Change Players
+          </button>
+        </div>
+      </div>
+    </>
   );
 }
 
-function Sudoku() {
-  // 4x4 Sudoku for demo (easy to play in UI)
-  const initialBoard = [
+type SudokuDifficulty = 'Easy' | 'Medium' | 'Hard';
+
+const sudokuBoards: Record<SudokuDifficulty, number[][]> = {
+  Easy: [
     [0, 0, 2, 1],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
+    [2, 1, 0, 0],
+    [0, 0, 3, 4],
     [3, 4, 0, 0],
-  ];
-  const solution = [
-    [4, 3, 2, 1],
-    [2, 1, 4, 3],
-    [1, 2, 3, 4],
-    [3, 4, 1, 2],
-  ];
-  const [board, setBoard] = useState<number[][]>(initialBoard.map(row => [...row]));
+  ],
+  Medium: [
+    [4, 0, 0, 1],
+    [0, 1, 0, 0],
+    [0, 0, 3, 0],
+    [3, 0, 0, 2],
+  ],
+  Hard: [
+    [0, 3, 0, 0],
+    [2, 0, 0, 0],
+    [0, 0, 0, 4],
+    [0, 0, 1, 0],
+  ],
+};
+
+const sudokuSolution = [
+  [4, 3, 2, 1],
+  [2, 1, 4, 3],
+  [1, 2, 3, 4],
+  [3, 4, 1, 2],
+];
+
+function Sudoku() {
+  const [difficulty, setDifficulty] = useState<SudokuDifficulty>('Easy');
+  const [board, setBoard] = useState<number[][]>(sudokuBoards[difficulty].map(row => [...row]));
   const [selected, setSelected] = useState<[number, number] | null>(null);
   const [message, setMessage] = useState<string>('');
   const [completed, setCompleted] = useState<boolean>(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+
+  const getCurrentInitialBoard = () => sudokuBoards[difficulty];
+
+  useEffect(() => {
+    // Reset board when difficulty changes
+    setBoard(getCurrentInitialBoard().map(row => [...row]));
+    setSelected(null);
+    setMessage('');
+    setCompleted(false);
+    setShowCelebration(false); // Also hide celebration when difficulty changes
+  }, [difficulty]);
+
 
   function handleCellClick(row: number, col: number) {
-    if (initialBoard[row][col] !== 0 || completed) return;
+    if (getCurrentInitialBoard()[row][col] !== 0 || completed) return;
     setSelected([row, col]);
   }
 
@@ -422,47 +532,60 @@ function Sudoku() {
     setBoard(newBoard);
     setSelected(null);
     // Check for completion
-    if (JSON.stringify(newBoard) === JSON.stringify(solution)) {
+    if (JSON.stringify(newBoard) === JSON.stringify(sudokuSolution)) {
       setCompleted(true);
       setMessage('🎉 Sudoku Completed!');
+      setShowCelebration(true); // Show celebration on completion
     } else {
       setMessage('');
     }
   }
 
   function restart() {
-    setBoard(initialBoard.map(row => [...row]));
+    setBoard(getCurrentInitialBoard().map(row => [...row]));
     setSelected(null);
     setMessage('');
     setCompleted(false);
+    setShowCelebration(false); // Hide celebration on restart
   }
 
+  const handleDifficultyChange = (newDifficulty: SudokuDifficulty) => {
+    setDifficulty(newDifficulty); // This will trigger the useEffect to reset the board
+  };
+
   return (
-    <div className="card" style={{ maxWidth: 420, margin: '2em auto', boxShadow: '0 4px 24px 0 #0002', background: '#fff', borderRadius: 20, padding: '2em 1em' }}>
-      <h2 style={{ color: '#3f51b5', marginBottom: 18, fontSize: '2em', letterSpacing: 1 }}>Sudoku (4x4)</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 60px)', gap: 8, justifyContent: 'center', margin: '1.5em auto' }}>
-        {board.map((row, rIdx) =>
-          row.map((cell, cIdx) => (
+    <>
+      {showCelebration && completed && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}> {/* Retained maxWidth and specific borderRadius */}
+        <h2>Sudoku (4x4)</h2>
+        <div className="sudoku-difficulty-selector mb-2" style={{ display: 'flex', justifyContent: 'center', gap: '0.5em' }}>
+        {(['Easy', 'Medium', 'Hard'] as SudokuDifficulty[]).map(level => (
+          <button
+            key={level}
+            className={`game-button game-button-secondary ${difficulty === level ? 'game-button-active' : ''}`}
+            style={difficulty === level ? { backgroundColor: 'var(--primary-color)', color: 'var(--button-text-color)', borderColor: 'var(--primary-color)'} : {}}
+            onClick={() => handleDifficultyChange(level)}
+          >
+            {level}
+          </button>
+        ))}
+      </div>
+      <div className="sudoku-grid">
+        {board.map((row: number[], rIdx: number) =>
+          row.map((cell: number, cIdx: number) => (
             <button
               key={rIdx + '-' + cIdx}
+              className={`
+                sudoku-cell
+                ${getCurrentInitialBoard()[rIdx][cIdx] !== 0 ? 'sudoku-cell-initial' : ''}
+                ${selected && selected[0] === rIdx && selected[1] === cIdx ? 'sudoku-cell-selected' : ''}
+              `}
               style={{
-                width: 60,
-                height: 60,
-                fontSize: '1.7em',
-                fontWeight: 700,
-                border: selected && selected[0] === rIdx && selected[1] === cIdx ? '3px solid #43a047' : '2px solid #bbb',
-                borderRadius: 10,
-                background: initialBoard[rIdx][cIdx] !== 0 ? '#e0e7ff' : '#f5f5f5',
-                color: initialBoard[rIdx][cIdx] !== 0 ? '#6366f1' : '#222',
-                cursor: initialBoard[rIdx][cIdx] !== 0 || completed ? 'not-allowed' : 'pointer',
-                boxShadow: '0 2px 8px #0001',
-                transition: 'background 0.2s, color 0.2s',
-                outline: selected && selected[0] === rIdx && selected[1] === cIdx ? '2px solid #43a047' : 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                // All styling for cells (initial, selected, default) is now handled by CSS classes
+                // using the new color palette. Outline is part of .sudoku-cell-selected
               }}
               onClick={() => handleCellClick(rIdx, cIdx)}
+              disabled={getCurrentInitialBoard()[rIdx][cIdx] !== 0 || completed}
               aria-label={`Sudoku cell ${rIdx + 1},${cIdx + 1}`}
             >
               {cell !== 0 ? cell : ''}
@@ -470,11 +593,11 @@ function Sudoku() {
           ))
         )}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 12, margin: '1em 0' }}>
+      <div className="sudoku-input-buttons">
         {[1, 2, 3, 4].map(num => (
           <button
             key={num}
-            style={{ background: '#6366f1', color: '#fff', minWidth: 48, minHeight: 48, border: 'none', borderRadius: 8, fontWeight: 700, fontSize: '1.2em', boxShadow: '0 2px 8px #0001', cursor: completed ? 'not-allowed' : 'pointer' }}
+            className="sudoku-input-button" // Already uses themed colors from App.css
             onClick={() => handleNumberInput(num)}
             disabled={completed}
           >
@@ -482,10 +605,12 @@ function Sudoku() {
           </button>
         ))}
       </div>
-      <div style={{ margin: '1em 0', fontWeight: 600, fontSize: '1.1em', color: completed ? '#43a047' : '#333', letterSpacing: 0.5 }}>
+      {/* Status message uses theme colors */}
+      <div className="mt-1 mb-1" style={{ fontWeight: 600, fontSize: '1.1em', color: completed ? 'var(--success-color)' : 'var(--text-color)', letterSpacing: 0.5 }}>
         {message}
       </div>
-      <button style={{ background: 'linear-gradient(90deg,#e0e7ff,#fbc2eb)', color: '#222', minWidth: 120, border: '1px solid #bbb', borderRadius: 10, fontWeight: 700, fontSize: '1.1em', boxShadow: '0 2px 8px #0001', padding: '0.7em 1.2em' }} onClick={restart}>
+      {/* Restart is secondary. Unique gradient removed for theme consistency. */}
+      <button className="game-button game-button-secondary" onClick={restart}>
         Restart
       </button>
     </div>
@@ -493,18 +618,22 @@ function Sudoku() {
 }
 
 function Chess() {
-  // 4x4 Chess Mini for demo (simplified, only pawns and kings)
-  const initialBoard = [
-    ['bK', '', '', 'bP'],
-    ['', '', '', ''],
-    ['', '', '', ''],
-    ['wP', '', '', 'wK'],
-  ];
-  const [board, setBoard] = useState<string[][]>(initialBoard.map(row => [...row]));
+  // 4x4 Chess Mini with Rooks, Pawns, and Kings
+  const initialBoardSetup = {
+    standard: [
+      ['bR', 'bK', '', 'bP'],
+      ['bP', '', '', ''],
+      ['', '', '', 'wP'],
+      ['wP', '', 'wK', 'wR'],
+    ]
+    // Could add other setups here later if desired
+  };
+  const [board, setBoard] = useState<string[][]>(initialBoardSetup.standard.map(row => [...row]));
   const [selected, setSelected] = useState<[number, number] | null>(null);
   const [turn, setTurn] = useState<'w' | 'b'>('w');
   const [message, setMessage] = useState<string>('');
   const [winner, setWinner] = useState<string | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   function isOwnPiece(piece: string) {
     return piece && piece[0] === turn;
@@ -529,12 +658,42 @@ function Chess() {
       if (moving[1] === 'P') {
         // Pawn: move forward or capture
         const dir = moving[0] === 'w' ? -1 : 1;
-        if (col === sCol && row === sRow + dir && !piece) valid = true;
-        if (Math.abs(col - sCol) === 1 && row === sRow + dir && piece && piece[0] !== moving[0]) valid = true;
+        if (col === sCol && row === sRow + dir && !piece) valid = true; // Move one step forward
+        if (Math.abs(col - sCol) === 1 && row === sRow + dir && piece && piece[0] !== moving[0]) valid = true; // Capture diagonally
       } else if (moving[1] === 'K') {
         // King: move one square any direction
         if (Math.abs(row - sRow) <= 1 && Math.abs(col - sCol) <= 1 && (row !== sRow || col !== sCol)) valid = true;
+      } else if (moving[1] === 'R') { // Rook logic
+        const isHorizontal = row === sRow;
+        const isVertical = col === sCol;
+        if (isHorizontal || isVertical) {
+          let pathClear = true;
+          if (isHorizontal) {
+            const startCol = Math.min(sCol, col) + 1;
+            const endCol = Math.max(sCol, col);
+            for (let c = startCol; c < endCol; c++) {
+              if (board[row][c]) {
+                pathClear = false;
+                break;
+              }
+            }
+          } else { // isVertical
+            const startRow = Math.min(sRow, row) + 1;
+            const endRow = Math.max(sRow, row);
+            for (let r = startRow; r < endRow; r++) {
+              if (board[r][col]) {
+                pathClear = false;
+                break;
+              }
+            }
+          }
+          if (pathClear) {
+            // Target square must be empty or opponent's piece (already checked by !isOwnPiece(piece) before this block)
+            valid = true;
+          }
+        }
       }
+
       if (valid) {
         const newBoard = board.map(r => [...r]);
         newBoard[row][col] = moving;
@@ -545,8 +704,14 @@ function Chess() {
         setMessage('');
         // Check for win
         let flat = newBoard.flat();
-        if (!flat.includes('bK')) setWinner('White');
-        if (!flat.includes('wK')) setWinner('Black');
+        if (!flat.includes('bK')) {
+          setWinner('White');
+          setShowCelebration(true);
+        }
+        if (!flat.includes('wK')) {
+          setWinner('Black');
+          setShowCelebration(true);
+        }
       } else {
         setMessage('Invalid move');
         setSelected(null);
@@ -557,46 +722,44 @@ function Chess() {
   }
 
   function restart() {
-    setBoard(initialBoard.map(row => [...row]));
+    setBoard(initialBoardSetup.standard.map(row => [...row])); // Corrected reference
     setSelected(null);
     setTurn('w');
     setMessage('');
     setWinner(null);
+    setShowCelebration(false); // Hide celebration on restart
   }
 
   function renderPiece(piece: string) {
     if (!piece) return null;
     if (piece[1] === 'K') return piece[0] === 'w' ? '♔' : '♚';
     if (piece[1] === 'P') return piece[0] === 'w' ? '♙' : '♟';
+    if (piece[1] === 'R') return piece[0] === 'w' ? '♖' : '♜'; // Added Rook
     return null;
   }
 
   return (
-    <div className="card" style={{ maxWidth: 420, margin: '2em auto', boxShadow: '0 4px 24px 0 #0002', background: '#fff', borderRadius: 20, padding: '2em 1em' }}>
-      <h2 style={{ color: '#3f51b5', marginBottom: 18, fontSize: '2em', letterSpacing: 1 }}>Chess (Mini 4x4)</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 60px)', gap: 0, justifyContent: 'center', margin: '1.5em auto', border: '3px solid #6366f1', borderRadius: 10, overflow: 'hidden' }}>
+    <>
+      {showCelebration && winner && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}> {/* Retained maxWidth and specific borderRadius */}
+        <h2>Chess (Mini 4x4)</h2>
+        <div className="chess-grid">
         {board.map((row, rIdx) =>
           row.map((cell, cIdx) => {
             const isSel = selected && selected[0] === rIdx && selected[1] === cIdx;
-            const isLight = (rIdx + cIdx) % 2 === 0;
+            // const isLight = (rIdx + cIdx) % 2 === 0; // isLight logic is in CSS now via .chess-cell-light/dark
             return (
               <button
                 key={rIdx + '-' + cIdx}
+                className={`
+                  chess-cell
+                  ${(rIdx + cIdx) % 2 === 0 ? 'chess-cell-light' : 'chess-cell-dark'}
+                  ${isSel ? 'chess-cell-selected' : ''}
+                  ${cell && cell[0] === 'w' ? 'chess-piece-white' : cell ? 'chess-piece-black' : ''}
+                `}
                 style={{
-                  width: 60,
-                  height: 60,
-                  fontSize: '2em',
-                  fontWeight: 700,
-                  border: isSel ? '3px solid #43a047' : 'none',
-                  background: isSel ? '#e0e7ff' : isLight ? '#f5f5f5' : '#e0e7ff',
-                  color: cell && cell[0] === 'w' ? '#6366f1' : '#e65100',
-                  cursor: winner ? 'not-allowed' : cell && isOwnPiece(cell) ? 'pointer' : 'pointer',
-                  boxShadow: '0 2px 8px #0001',
-                  transition: 'background 0.2s, color 0.2s',
-                  outline: isSel ? '2px solid #43a047' : 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  // Cell backgrounds (light/dark), piece colors, and selection styles are handled by CSS classes.
+                  // The .chess-cell-selected class now includes a themed border.
                 }}
                 onClick={() => handleCellClick(rIdx, cIdx)}
                 aria-label={`Chess cell ${rIdx + 1},${cIdx + 1}`}
@@ -608,10 +771,12 @@ function Chess() {
           })
         )}
       </div>
-      <div style={{ margin: '1em 0', fontWeight: 600, fontSize: '1.1em', color: winner ? '#43a047' : '#333', letterSpacing: 0.5 }}>
+      {/* Status message uses theme colors */}
+      <div className="mt-1 mb-1" style={{ fontWeight: 600, fontSize: '1.1em', color: winner ? 'var(--success-color)' : 'var(--text-color)', letterSpacing: 0.5 }}>
         {winner ? `${winner} wins!` : message || `${turn === 'w' ? 'White' : 'Black'}'s turn`}
       </div>
-      <button style={{ background: 'linear-gradient(90deg,#e0e7ff,#fbc2eb)', color: '#222', minWidth: 120, border: '1px solid #bbb', borderRadius: 10, fontWeight: 700, fontSize: '1.1em', boxShadow: '0 2px 8px #0001', padding: '0.7em 1.2em' }} onClick={restart}>
+      {/* Restart is secondary. Unique gradient removed. */}
+      <button className="game-button game-button-secondary" onClick={restart}>
         Restart
       </button>
     </div>
@@ -620,81 +785,64 @@ function Chess() {
 
 function App() {
   const [game, setGame] = useState<'color-shape' | 'tictactoe' | 'ludo' | 'sudoku' | 'chess'>('color-shape');
+  // Function to check if dark theme is preferred by user or explicitly set
+  // For this refactor, we assume a light theme focus, so dynamic theme switching logic is minimal.
+  const isEffectivelyLightTheme = () => {
+    // Example: return !document.body.classList.contains('dark-theme');
+    // For now, as no theme switcher exists, we assume light theme for gradient application.
+    return true;
+  };
+
   return (
-    <div id="root" style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ff 40%, #fbc2eb 100%)',
-      padding: 0,
-      margin: 0,
-      fontFamily: 'Inter, system-ui, Avenir, Helvetica, Arial, sans-serif',
-      transition: 'background 0.5s',
-      position: 'relative',
-      overflowX: 'hidden',
-    }}>
-      {/* Decorative SVGs for a more elegant background */}
-      <svg style={{ position: 'fixed', top: -120, left: -120, zIndex: 0, opacity: 0.13 }} width="420" height="420"><circle cx="210" cy="210" r="210" fill="#a5b4fc" /></svg>
-      <svg style={{ position: 'fixed', bottom: -140, right: -140, zIndex: 0, opacity: 0.10 }} width="420" height="420"><circle cx="210" cy="210" r="210" fill="#fbc2eb" /></svg>
-      <svg style={{ position: 'fixed', top: 80, right: -100, zIndex: 0, opacity: 0.08 }} width="320" height="320"><circle cx="160" cy="160" r="160" fill="#f59e42" /></svg>
-      <header style={{
-        width: '100%',
-        background: 'rgba(255,255,255,0.98)',
-        boxShadow: '0 6px 32px #a5b4fc33',
-        padding: '2.5em 0 1.5em',
-        marginBottom: 48,
-        borderBottomLeftRadius: 40,
-        borderBottomRightRadius: 40,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        position: 'relative',
-        zIndex: 2,
-      }}>
-        <h1 style={{
-          fontSize: '2.9em',
-          background: 'linear-gradient(90deg,#6366f1,#f59e42,#f43f5e,#a5b4fc)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          margin: 0,
-          letterSpacing: 2,
-          fontWeight: 900,
-          textShadow: '0 2px 16px #a5b4fc33',
-        }}>
+    <div id="root" className="app-container">
+      {/* Decorative SVGs use CSS variables for fill, set in App.css */}
+      <svg className="decorative-svg-1" width="380" height="380" viewBox="0 0 380 380"><circle cx="190" cy="190" r="190" /></svg>
+      <svg className="decorative-svg-2" width="350" height="350" viewBox="0 0 350 350"><circle cx="175" cy="175" r="175" /></svg>
+      <svg className="decorative-svg-3" width="280" height="280" viewBox="0 0 280 280"><circle cx="140" cy="140" r="140" /></svg>
+      <header className="app-header">
+        <h1>
           🎲 Gaming Hub
         </h1>
-        <p style={{ color: '#555', fontSize: '1.18em', margin: '0.7em 0 0', fontWeight: 500, letterSpacing: 0.5 }}>
+        <p>
           Enjoy a collection of classic and modern games with a beautiful, immersive UI!
         </p>
-        <nav style={{ display: 'flex', justifyContent: 'center', gap: 28, marginTop: 36 }}>
+        <nav>
+          {/* Active nav buttons use themed gradients. Non-active buttons use standard .nav-button styling from App.css */}
           <button
-            style={{ background: game === 'color-shape' ? 'linear-gradient(90deg,#6366f1,#43e97b)' : '#f5f5f5', color: game === 'color-shape' ? '#fff' : '#222', minWidth: 150, border: 'none', borderRadius: 14, fontWeight: 700, fontSize: '1.12em', boxShadow: game === 'color-shape' ? '0 4px 16px #6366f133' : '0 2px 8px #0001', transition: 'all 0.2s', padding: '0.8em 1.3em', outline: game === 'color-shape' ? '2px solid #6366f1' : 'none', cursor: 'pointer', letterSpacing: 0.5 }}
+            className={`nav-button ${game === 'color-shape' ? 'nav-button-active' : ''}`}
+            style={game === 'color-shape' && isEffectivelyLightTheme() ? { background: 'linear-gradient(90deg, var(--primary-color), var(--success-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : {}}
             onClick={() => setGame('color-shape')}
             aria-label="Play Shape & Color Game"
           >
             Shape & Color Game
           </button>
           <button
-            style={{ background: game === 'tictactoe' ? 'linear-gradient(90deg,#6366f1,#f59e42)' : '#f5f5f5', color: game === 'tictactoe' ? '#fff' : '#222', minWidth: 150, border: 'none', borderRadius: 14, fontWeight: 700, fontSize: '1.12em', boxShadow: game === 'tictactoe' ? '0 4px 16px #f59e4233' : '0 2px 8px #0001', transition: 'all 0.2s', padding: '0.8em 1.3em', outline: game === 'tictactoe' ? '2px solid #f59e42' : 'none', cursor: 'pointer', letterSpacing: 0.5 }}
+            className={`nav-button ${game === 'tictactoe' ? 'nav-button-active' : ''}`}
+            style={game === 'tictactoe' && isEffectivelyLightTheme() ? { background: 'linear-gradient(90deg, var(--primary-color), var(--secondary-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : {}}
             onClick={() => setGame('tictactoe')}
             aria-label="Play Tic-Tac-Toe"
           >
             Tic-Tac-Toe
           </button>
           <button
-            style={{ background: game === 'ludo' ? 'linear-gradient(90deg,#6366f1,#fbc2eb)' : '#f5f5f5', color: game === 'ludo' ? '#fff' : '#222', minWidth: 150, border: 'none', borderRadius: 14, fontWeight: 700, fontSize: '1.12em', boxShadow: game === 'ludo' ? '0 4px 16px #fbc2eb33' : '0 2px 8px #0001', transition: 'all 0.2s', padding: '0.8em 1.3em', outline: game === 'ludo' ? '2px solid #fbc2eb' : 'none', cursor: 'pointer', letterSpacing: 0.5 }}
+            className={`nav-button ${game === 'ludo' ? 'nav-button-active' : ''}`}
+            style={game === 'ludo' && isEffectivelyLightTheme() ? { background: 'linear-gradient(90deg, var(--primary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : {}}
             onClick={() => setGame('ludo')}
             aria-label="Play Ludo"
           >
             Ludo (Mini)
           </button>
           <button
-            style={{ background: game === 'sudoku' ? 'linear-gradient(90deg,#6366f1,#f43f5e)' : '#f5f5f5', color: game === 'sudoku' ? '#fff' : '#222', minWidth: 150, border: 'none', borderRadius: 14, fontWeight: 700, fontSize: '1.12em', boxShadow: game === 'sudoku' ? '0 4px 16px #f43f5e33' : '0 2px 8px #0001', transition: 'all 0.2s', padding: '0.8em 1.3em', outline: game === 'sudoku' ? '2px solid #f43f5e' : 'none', cursor: 'pointer', letterSpacing: 0.5 }}
+            className={`nav-button ${game === 'sudoku' ? 'nav-button-active' : ''}`}
+            style={game === 'sudoku' && isEffectivelyLightTheme() ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : {}}
             onClick={() => setGame('sudoku')}
             aria-label="Play Sudoku"
           >
             Sudoku (4x4)
           </button>
           <button
-            style={{ background: game === 'chess' ? 'linear-gradient(90deg,#6366f1,#e65100)' : '#f5f5f5', color: game === 'chess' ? '#fff' : '#222', minWidth: 150, border: 'none', borderRadius: 14, fontWeight: 700, fontSize: '1.12em', boxShadow: game === 'chess' ? '0 4px 16px #e6510033' : '0 2px 8px #0001', transition: 'all 0.2s', padding: '0.8em 1.3em', outline: game === 'chess' ? '2px solid #e65100' : 'none', cursor: 'pointer', letterSpacing: 0.5 }}
+            className={`nav-button ${game === 'chess' ? 'nav-button-active' : ''}`}
+            style={game === 'chess' && isEffectivelyLightTheme() ? { background: 'linear-gradient(90deg, var(--primary-color), var(--text-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : {}}
             onClick={() => setGame('chess')}
             aria-label="Play Chess"
           >
@@ -702,24 +850,11 @@ function App() {
           </button>
         </nav>
       </header>
-      <main style={{ minHeight: '70vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', zIndex: 1 }}>
+      <main className="app-main">
         {game === 'color-shape' ? <GamingPage /> : game === 'tictactoe' ? <TicTacToe /> : game === 'ludo' ? <Ludo /> : game === 'sudoku' ? <Sudoku /> : <Chess />}
       </main>
-      <footer style={{
-        width: '100%',
-        textAlign: 'center',
-        color: '#888',
-        fontSize: '1.12em',
-        marginTop: 48,
-        padding: '2.2em 0 1.3em',
-        background: 'rgba(255,255,255,0.93)',
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
-        boxShadow: '0 -6px 32px #a5b4fc33',
-        fontWeight: 500,
-        letterSpacing: 0.5,
-      }}>
-        &copy; {new Date().getFullYear()} <span style={{ color: '#6366f1', fontWeight: 700 }}>Gaming Hub</span> &mdash; Built with <span style={{ color: '#f59e42', fontWeight: 700 }}>Vite + React</span>
+      <footer className="app-footer">
+        &copy; {new Date().getFullYear()} <span className="brand-text">Gaming Hub</span> &mdash; Built with <span className="tech-text">Vite + React</span>
       </footer>
     </div>
   );
