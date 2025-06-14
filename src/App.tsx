@@ -632,7 +632,7 @@ function Chess() {
   }
 
   function restart() {
-    setBoard(initialBoard.map(row => [...row]));
+    setBoard(initialBoardSetup.standard.map(row => [...row])); // Corrected reference
     setSelected(null);
     setTurn('w');
     setMessage('');
