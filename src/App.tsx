@@ -273,56 +273,20 @@ function Ludo() {
   const [justMovedPlayer, setJustMovedPlayer] = useState<number | null>(null);
 
   function rollDice() {
-    if (winner !== null || isRolling) return;
-
-    setIsRolling(true);
-    setDisplayDice(null); // Clear previous display dice before starting animation
-
-    let rollCount = 0;
-    const rollInterval = setInterval(() => {
-      setDisplayDice(Math.floor(Math.random() * 6) + 1);
-      rollCount++;
-      if (rollCount > 10) { // Animate for around 10 * 80ms = 800ms
-        clearInterval(rollInterval);
-
-        const finalRoll = Math.floor(Math.random() * 6) + 1;
-        setDice(finalRoll);
-        const movedPlayer = currentPlayer; // Store current player before it updates
-
-        setPositions((prev) => {
-          const newPos = [...prev];
-          if (newPos[movedPlayer] + finalRoll <= boardSize) {
-            newPos[movedPlayer] += finalRoll;
-          }
-          if (newPos[movedPlayer] === boardSize) {
-            setWinner(movedPlayer);
-          }
-          return newPos;
-        });
-
-        setJustMovedPlayer(movedPlayer);
-        setTimeout(() => setJustMovedPlayer(null), 500); // Highlight duration
-
-        let gameJustWonOnThisTurn = false;
-        // Check if the current roll will lead to a win
-        if (positions[movedPlayer] + finalRoll === boardSize) {
-          gameJustWonOnThisTurn = true;
-        }
-        // Note: setWinner is called inside setPositions, which is async.
-        // gameJustWonOnThisTurn helps decide if player should change *based on this specific move's outcome*.
-
-        if (!gameJustWonOnThisTurn) {
-          // If this move itself isn't a winning one, then change the player.
-          // This also correctly handles cases where the board might be full resulting in a draw (though Ludo doesn't have draws this way)
-          // or if another player had already won in a multi-action turn (not applicable here).
-          setCurrentPlayer((prev) => (prev + 1) % 4);
-        }
-        // If gameJustWonOnThisTurn is true, the player who made the winning move remains the 'currentPlayer' visually for a moment,
-        // and setWinner inside setPositions will handle the actual win state.
-        // The useEffect for 'winner' can handle any post-win logic if needed.
-        setIsRolling(false);
+    if (winner !== null) return;
+    const roll = Math.floor(Math.random() * 6) + 1;
+    setDice(roll);
+    setPositions((prev) => {
+      const newPos = [...prev];
+      if (newPos[currentPlayer] + roll <= boardSize) {
+        newPos[currentPlayer] += roll;
       }
-    }, 80); // Update display dice every 80ms
+      if (newPos[currentPlayer] === boardSize) {
+        setWinner(currentPlayer);
+      }
+      return newPos;
+    });
+    setCurrentPlayer((prev) => (prev + 1) % 4);
   }
 
   function restart() {
@@ -487,23 +451,11 @@ function Sudoku() {
   };
 
   return (
-    <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}> {/* Retained maxWidth and specific borderRadius */}
-      <h2>Sudoku (4x4)</h2>
-      <div className="sudoku-difficulty-selector mb-2" style={{ display: 'flex', justifyContent: 'center', gap: '0.5em' }}>
-        {(['Easy', 'Medium', 'Hard'] as SudokuDifficulty[]).map(level => (
-          <button
-            key={level}
-            className={`game-button game-button-secondary ${difficulty === level ? 'game-button-active' : ''}`}
-            style={difficulty === level ? { backgroundColor: 'var(--primary-color)', color: 'var(--button-text-color)', borderColor: 'var(--primary-color)'} : {}}
-            onClick={() => handleDifficultyChange(level)}
-          >
-            {level}
-          </button>
-        ))}
-      </div>
-      <div className="sudoku-grid">
-        {board.map((row: number[], rIdx: number) =>
-          row.map((cell: number, cIdx: number) => (
+    <div className="card" style={{ maxWidth: 420, margin: '2em auto', boxShadow: '0 4px 24px 0 #0002', background: '#fff', borderRadius: 20, padding: '2em 1em' }}>
+      <h2 style={{ color: '#3f51b5', marginBottom: 18, fontSize: '2em', letterSpacing: 1 }}>Sudoku (4x4)</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 60px)', gap: 8, justifyContent: 'center', margin: '1.5em auto' }}>
+        {board.map((row, rIdx) =>
+          row.map((cell, cIdx) => (
             <button
               key={rIdx + '-' + cIdx}
               className={`
