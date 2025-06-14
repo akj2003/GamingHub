@@ -50,7 +50,11 @@ body {
   width: 100%;
   background: color-mix(in srgb, var(--card-background-color) 95%, transparent); /* Slightly transparent card background */
   box-shadow: 0 6px 32px color-mix(in srgb, var(--primary-color) 30%, transparent);
+<<<<<<< HEAD
   padding: 2em 1em 1.5em; /* Adjusted padding */
+=======
+  padding: 1em 1em 1.5em; /* Reduced top padding from 2em to 1em */
+>>>>>>> cb1956b2c77c6c54c46090b9306fa017e8da94dc
   margin-bottom: 32px; /* Adjusted margin */
   border-bottom-left-radius: 30px; /* Adjusted radius */
   border-bottom-right-radius: 30px; /* Adjusted radius */
@@ -565,15 +569,25 @@ body {
 .mt-2 { margin-top: 1rem; }
 .mt-3 { margin-top: 1.5rem; }
 
+<<<<<<< HEAD
 /* Responsive adjustments - These will likely need tweaking with the new theme */
 @media (max-width: 768px) {
   .app-header h1 {
     font-size: 2em; /* Adjusted for new base size */
+=======
+/* Responsive adjustments */
+
+/* Larger Tablets / Small Desktops */
+@media (max-width: 1024px) {
+  .app-header h1 {
+    font-size: 2.2em; /* Slightly smaller */
+>>>>>>> cb1956b2c77c6c54c46090b9306fa017e8da94dc
   }
   .app-header p {
     font-size: 1em;
   }
   .nav-button {
+<<<<<<< HEAD
     font-size: 0.9em; /* Adjusted */
     padding: 0.6em 0.9em; /* Adjusted */
   }
@@ -625,3 +639,255 @@ body {
     grid-template-columns: repeat(4, clamp(30px, 10vw, 45px)); /* Adjusted */
   }
 }
+=======
+    min-width: 120px; /* Slightly reduce min-width */
+    padding: 0.6em 1em;
+    font-size: 0.95em;
+  }
+  .game-card {
+    padding: 1.3em;
+  }
+
+  /* Adjust grid game cell sizes slightly if needed */
+  .tictactoe-grid {
+    grid-template-columns: repeat(3, clamp(60px, 15vw, 90px));
+    gap: clamp(6px, 1.2vw, 12px);
+  }
+   .tictactoe-cell {
+    font-size: clamp(1.8em, 8vw, 2.8em);
+    border-radius: 10px;
+  }
+
+  .sudoku-grid {
+    grid-template-columns: repeat(4, clamp(30px, 10vw, 50px));
+    gap: clamp(3px, 0.8vw, 5px);
+  }
+  .sudoku-cell {
+    font-size: clamp(1em, 4vw, 1.5em);
+    border-radius: 5px;
+  }
+   .sudoku-input-button {
+    min-width: clamp(35px, 8vw, 42px);
+    min-height: clamp(35px, 8vw, 42px);
+    font-size: clamp(0.9em, 3.5vw, 1em);
+  }
+
+
+  .chess-grid {
+    grid-template-columns: repeat(4, clamp(35px, 11vw, 55px));
+    border-radius: 6px;
+  }
+   .chess-cell {
+    font-size: clamp(1.3em, 6vw, 1.7em);
+  }
+
+  .ludo-board-cell {
+    width: clamp(26px, 5.5vw, 32px);
+    height: clamp(26px, 5.5vw, 32px);
+    border-radius: 5px;
+  }
+  .ludo-player-token {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
+
+/* Tablets and Large Phones */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 1.2em 1em 1em; /* Further reduce padding */
+    margin-bottom: 24px;
+  }
+  .app-header h1 {
+    font-size: 1.8em; /* Adjusted for new base size */
+  }
+  .app-header p {
+    font-size: 0.9em; /* Further reduce */
+  }
+  .app-header nav {
+    flex-direction: column; /* Stack nav buttons */
+    gap: 0.5em;
+    margin-top: 1em; /* Reduce top margin */
+  }
+  .nav-button {
+    min-width: 100%; /* Make buttons full width when stacked */
+    font-size: 0.9em;
+    padding: 0.7em 1em;
+  }
+  .game-card {
+    padding: 1em;
+    width: 95%; /* More width on small screens */
+    margin: 0.8em auto; /* Reduce vertical margin */
+  }
+  .game-card h1, .game-card h2 {
+    font-size: 1.5em; /* Smaller game titles */
+  }
+  .game-button {
+    font-size: 0.9em;
+    padding: 0.6em 1em;
+  }
+
+  /* Game specific adjustments for 768px */
+  .tictactoe-grid {
+    grid-template-columns: repeat(3, clamp(50px, 16vw, 80px));
+    gap: clamp(5px, 1vw, 10px);
+  }
+  .tictactoe-cell {
+    font-size: clamp(1.5em, 7vw, 2.5em);
+    border-radius: 8px;
+  }
+
+  .sudoku-grid {
+    grid-template-columns: repeat(4, clamp(25px, 9vw, 45px));
+    gap: clamp(3px, 0.6vw, 4px);
+  }
+  .sudoku-cell {
+    font-size: clamp(0.9em, 3.5vw, 1.3em);
+    border-radius: 4px;
+  }
+  .sudoku-input-button {
+    min-width: clamp(30px, 7vw, 38px);
+    min-height: clamp(30px, 7vw, 38px);
+    font-size: clamp(0.8em, 3vw, 0.9em);
+  }
+
+  .chess-grid {
+    grid-template-columns: repeat(4, clamp(30px, 10vw, 50px));
+    border-radius: 5px;
+  }
+  .chess-cell {
+    font-size: clamp(1.2em, 5.5vw, 1.6em);
+  }
+
+  .ludo-players {
+    gap: clamp(10px, 2vw, 16px);
+    margin-bottom: 16px;
+  }
+  .ludo-player-token {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+  .ludo-board-cell {
+    width: clamp(22px, 5vw, 28px);
+    height: clamp(22px, 5vw, 28px);
+    border-radius: 4px;
+  }
+  .gaming-page-option-button {
+    padding: 0.3em 0.6em;
+    font-size: 0.9em;
+    min-height: 32px;
+  }
+}
+
+/* Mobile Phones */
+@media (max-width: 480px) {
+  .app-header {
+    padding: 1em 0.8em 0.8em;
+    margin-bottom: 16px;
+  }
+  .app-header h1 {
+    font-size: 1.6em;
+  }
+  .app-header p {
+    font-size: 0.8em;
+    margin: 0.4em 0 0;
+  }
+   .app-header nav {
+    margin-top: 0.8em;
+  }
+  .nav-button {
+    font-size: 0.85em;
+    padding: 0.6em 0.8em;
+    border-radius: 8px;
+  }
+
+  .app-main {
+    padding: 0 0.5em 1em;
+  }
+  .game-card {
+    border-radius: 10px;
+    padding: 0.8em;
+    margin: 0.5em auto;
+  }
+  .game-card h1, .game-card h2 {
+    font-size: 1.3em;
+    margin-bottom: 0.5em;
+  }
+  .game-card p {
+    font-size: 0.9em;
+    margin-bottom: 1em;
+  }
+  .game-button {
+    font-size: 0.8em;
+    min-width: 80px;
+    padding: 0.5em 0.8em;
+  }
+
+  /* Game specific adjustments for 480px */
+  .tictactoe-grid {
+    grid-template-columns: repeat(3, clamp(45px, 15vw, 70px));
+    gap: clamp(4px, 1vw, 8px);
+  }
+   .tictactoe-cell {
+    font-size: clamp(1.3em, 6vw, 2.2em);
+  }
+
+  .sudoku-grid {
+    grid-template-columns: repeat(4, clamp(20px, 8vw, 40px));
+    gap: clamp(2px, 0.5vw, 3px);
+  }
+  .sudoku-cell {
+    font-size: clamp(0.8em, 3vw, 1.2em);
+  }
+  .sudoku-input-button {
+    min-width: clamp(28px, 6vw, 35px);
+    min-height: clamp(28px, 6vw, 35px);
+    font-size: clamp(0.7em, 2.5vw, 0.8em);
+  }
+
+  .chess-grid {
+    grid-template-columns: repeat(4, clamp(28px, 9vw, 45px));
+  }
+   .chess-cell {
+    font-size: clamp(1em, 5vw, 1.5em);
+  }
+
+  .ludo-players {
+    gap: clamp(8px, 1.5vw, 12px);
+    margin-bottom: 12px;
+  }
+  .ludo-player-token {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    border-width: 2px;
+  }
+   .ludo-player-name {
+    font-size: 0.9em;
+  }
+  .ludo-player-pos {
+    font-size: 0.8em;
+  }
+  .ludo-board-cell {
+    width: clamp(18px, 4vw, 24px);
+    height: clamp(18px, 4vw, 24px);
+    border-radius: 3px;
+  }
+
+  .gaming-page-color-display {
+    width: 40px;
+    height: 20px;
+    margin-left: 0.5em;
+  }
+  .gaming-page-option-button {
+    padding: 0.25em 0.5em;
+    font-size: 0.8em;
+    min-height: 30px;
+  }
+  .gaming-page-win-message {
+    font-size: 1.2em;
+  }
+}
+>>>>>>> cb1956b2c77c6c54c46090b9306fa017e8da94dc

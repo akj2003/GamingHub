@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import WinCelebration from './components/WinCelebration'; // Import WinCelebration
 // Importing styles for the app
 function GamingPage() {
   const [score, setScore] = useState<number>(0);
@@ -9,6 +10,7 @@ function GamingPage() {
   const [shapeOptions, setShapeOptions] = useState<string[]>([]);
   const [message, setMessage] = useState<string>('');
   const [step, setStep] = useState<'color' | 'shape' | 'win'>('color');
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const colorList = [
     'red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown', 'black', 'white',
@@ -55,6 +57,7 @@ function GamingPage() {
         if (newScore >= 10) {
           setStep('win');
           setMessage('🏆 You win! Congratulations!');
+          setShowCelebration(true); // Show celebration on win
         } else {
           setStep('shape');
           setMessage('Correct color! Now pick the shape.');
@@ -73,6 +76,7 @@ function GamingPage() {
         if (newScore >= 10) {
           setStep('win');
           setMessage('🏆 You win! Congratulations!');
+          setShowCelebration(true); // Show celebration on win
         } else {
           setMessage('Correct! Next round...');
           setTimeout(newRound, 1200);
@@ -86,23 +90,44 @@ function GamingPage() {
 
   function renderShape(shape: string, color: string) {
     const size = 60;
+    const commonSvgStyle = { display: 'block', margin: '0 auto' };
+    const commonDivStyle = { width: size, height: size, background: color, margin: '0 auto' };
+
     switch (shape) {
       case 'circle':
-        return <div style={{ width: size, height: size, borderRadius: '50%', background: color, margin: '0 auto' }} />;
+        return <div style={{ ...commonDivStyle, borderRadius: '50%' }} />;
       case 'square':
-        return <div style={{ width: size, height: size, background: color, margin: '0 auto' }} />;
+        return <div style={commonDivStyle} />;
       case 'triangle':
-        return <div style={{ width: 0, height: 0, borderLeft: `${size/2}px solid transparent`, borderRight: `${size/2}px solid transparent`, borderBottom: `${size}px solid ${color}`, margin: '0 auto' }} />;
+        return <div style={{ width: 0, height: 0, borderLeft: `${size / 2}px solid transparent`, borderRight: `${size / 2}px solid transparent`, borderBottom: `${size}px solid ${color}`, margin: '0 auto' }} />;
       case 'star':
-        return <svg width={size} height={size} viewBox="0 0 50 50" style={{ display: 'block', margin: '0 auto' }}><polygon points="25,2 31,18 48,18 34,29 39,46 25,36 11,46 16,29 2,18 19,18" fill={color} /></svg>;
+        // viewBox adjusted slightly for star points
+        return <svg width={size} height={size} viewBox="0 0 50 50" style={commonSvgStyle}><polygon points="25,2 31,18 48,18 34,29 39,46 25,36 11,46 16,29 2,18 19,18" fill={color} /></svg>;
       case 'hexagon':
-        return <svg width={size} height={size} viewBox="0 0 100 100" style={{ display: 'block', margin: '0 auto' }}><polygon points="50,10 90,30 90,70 50,90 10,70 10,30" fill={color} /></svg>;
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><polygon points="50,10 90,30 90,70 50,90 10,70 10,30" fill={color} /></svg>;
       case 'rectangle':
-        return <div style={{ width: size * 1.5, height: size * 0.7, background: color, margin: '0 auto' }} />;
+        return <div style={{ width: size * 1.5, height: size * 0.75, background: color, margin: '0 auto' }} />; // Adjusted height for better proportion
       case 'oval':
-        return <div style={{ width: size * 1.2, height: size * 0.7, background: color, borderRadius: '50%', margin: '0 auto' }} />;
+        return <div style={{ width: size * 1.25, height: size * 0.8, background: color, borderRadius: '50%', margin: '0 auto' }} />; // Adjusted for better proportion
       case 'diamond':
-        return <div style={{ width: size, height: size, background: color, transform: 'rotate(45deg)', margin: '0 auto' }} />;
+        // Diamond can be a rotated square. Using div for simplicity.
+        return <div style={{ ...commonDivStyle, transform: 'rotate(45deg)' }} />;
+      case 'pentagon':
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><polygon points="50,5 95,35 80,95 20,95 5,35" fill={color} /></svg>;
+      case 'heptagon':
+        // Heptagon points can be complex, using a reasonable approximation for a small icon
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><polygon points="50,5 89,25 95,65 68,95 32,95 5,65 11,25" fill={color} /></svg>;
+      case 'octagon':
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><polygon points="30,5 70,5 95,30 95,70 70,95 30,95 5,70 5,30" fill={color} /></svg>;
+      case 'cross':
+        // Using path for a filled cross
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><path d="M30,10 L70,10 L70,30 L90,30 L90,70 L70,70 L70,90 L30,90 L30,70 L10,70 L10,30 L30,30 Z" fill={color} /></svg>;
+      case 'arrow':
+        // Simple right-pointing arrow using path
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><path d="M5,35 L60,35 L60,15 L95,50 L60,85 L60,65 L5,65 Z" fill={color} /></svg>;
+      case 'heart':
+        // Heart shape using path
+        return <svg width={size} height={size} viewBox="0 0 100 100" style={commonSvgStyle}><path d="M50,30 C40,10 10,20 10,50 C10,80 50,95 50,95 C50,95 90,80 90,50 C90,20 60,10 50,30 Z" fill={color} /></svg>;
       default:
         return null;
     }
@@ -114,9 +139,11 @@ function GamingPage() {
   }
 
   return (
-    <div className="game-card" style={{ maxWidth: 420 }}>
-      <h1>🎨 Shape & Color Game</h1>
-      <p className="score-text"> {/* Score text 'b' tag color is handled by .game-card .score-text b in App.css */}
+    <>
+      {showCelebration && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <div className="game-card" style={{ maxWidth: 420 }}>
+        <h1>🎨 Shape & Color Game</h1>
+        <p className="score-text"> {/* Score text 'b' tag color is handled by .game-card .score-text b in App.css */}
         Score: <b>{score}</b> / 10
       </p>
       {step !== 'win' && (
@@ -194,6 +221,7 @@ function TicTacToe() {
   const [xIsNext, setXIsNext] = useState<boolean>(true);
   const [winner, setWinner] = useState<string | null>(null);
   const [draw, setDraw] = useState<boolean>(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   function calculateWinner(squares: string[]) {
     const lines = [
@@ -218,6 +246,7 @@ function TicTacToe() {
     const win = calculateWinner(newBoard);
     if (win) {
       setWinner(win);
+      setShowCelebration(true); // Show celebration on win
     } else if (newBoard.every((cell) => cell)) {
       setDraw(true);
     } else {
@@ -230,12 +259,15 @@ function TicTacToe() {
     setXIsNext(true);
     setWinner(null);
     setDraw(false);
+    setShowCelebration(false); // Hide celebration on restart
   }
 
   return (
-    <div className="game-card" style={{ maxWidth: 500 }}>
-      <h2>Tic-Tac-Toe</h2>
-      <div className="tictactoe-grid">
+    <>
+      {showCelebration && winner && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <div className="game-card" style={{ maxWidth: 500 }}>
+        <h2>Tic-Tac-Toe</h2>
+        <div className="tictactoe-grid">
         {board.map((cell, idx) => (
           <button
             key={idx}
@@ -262,133 +294,195 @@ function TicTacToe() {
 }
 
 function Ludo() {
-  const [positions, setPositions] = useState<number[]>([0, 0, 0, 0]);
+  const [numPlayers, setNumPlayers] = useState<number>(4);
+  const [gameStarted, setGameStarted] = useState<boolean>(false); // Default to false to show player selection
+  const [positions, setPositions] = useState<number[]>(Array(4).fill(0)); // Keep size 4 for color/name mapping
   const [currentPlayer, setCurrentPlayer] = useState<number>(0);
   const [dice, setDice] = useState<number | null>(null);
   const [winner, setWinner] = useState<number | null>(null);
-  const boardSize = 20; // Simple linear board for demo
+  const boardSize = 20;
 
   const [isRolling, setIsRolling] = useState<boolean>(false);
   const [displayDice, setDisplayDice] = useState<number | null>(null);
   const [justMovedPlayer, setJustMovedPlayer] = useState<number | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
+
+  const playerColors = ['#e53935', '#43a047', '#1e88e5', '#fbc02d']; // Indices 0,1,2,3
+  const playerNames = ['Red', 'Green', 'Blue', 'Yellow'];
+
+  function handlePlayerSelect(selectedNum: number) {
+    setNumPlayers(selectedNum);
+    // Restart function will set gameStarted to true
+    restart(selectedNum);
+  }
+
+  function restart(selectedNumPlayersToUse?: number) {
+    const playersToSetup = selectedNumPlayersToUse || numPlayers; // Use newly selected or current numPlayers
+
+    setPositions(Array(4).fill(0)); // Reset all 4 player positions
+    setCurrentPlayer(0);
+    setDice(null);
+    setWinner(null);
+    setShowCelebration(false);
+    setJustMovedPlayer(null);
+    setIsRolling(false);
+    setGameStarted(true); // Game is now officially started/restarted
+    if (selectedNumPlayersToUse) { // Ensure numPlayers state is also updated if this restart is from selection
+        setNumPlayers(playersToSetup);
+    }
+  }
+
+  useEffect(() => {
+    // This effect is for clearing dice when turn changes, only if game has started
+    if (gameStarted && !isRolling && winner === null) {
+      setDisplayDice(null);
+      setDice(null);
+    }
+  }, [currentPlayer, isRolling, winner, gameStarted, numPlayers]); // numPlayers added to ensure effect re-evaluates if it changes (though restart handles it)
 
   function rollDice() {
     if (winner !== null || isRolling) return;
 
     setIsRolling(true);
-    setDisplayDice(null); // Clear previous display dice before starting animation
+    setDisplayDice(null);
 
     let rollCount = 0;
     const rollInterval = setInterval(() => {
       setDisplayDice(Math.floor(Math.random() * 6) + 1);
       rollCount++;
-      if (rollCount > 10) { // Animate for around 10 * 80ms = 800ms
+      if (rollCount > 10) {
         clearInterval(rollInterval);
 
         const finalRoll = Math.floor(Math.random() * 6) + 1;
         setDice(finalRoll);
-        const movedPlayer = currentPlayer; // Store current player before it updates
+        const movedPlayer = currentPlayer;
 
-        setPositions((prev) => {
-          const newPos = [...prev];
-          if (newPos[movedPlayer] + finalRoll <= boardSize) {
-            newPos[movedPlayer] += finalRoll;
+        // This check MUST use the 'positions' state as it was *before* this dice roll's update
+        const gameWillBeWonThisTurn = (positions[movedPlayer] + finalRoll) === boardSize;
+
+        setPositions((previousPositions) => {
+          const updatedPositionsArray = [...previousPositions];
+          if (updatedPositionsArray[movedPlayer] + finalRoll <= boardSize) {
+            updatedPositionsArray[movedPlayer] += finalRoll;
           }
-          if (newPos[movedPlayer] === boardSize) {
+          // Check win condition based on the just-updated position
+          if (updatedPositionsArray[movedPlayer] === boardSize) {
             setWinner(movedPlayer);
+            setShowCelebration(true);
           }
-          return newPos;
+          return updatedPositionsArray;
         });
 
         setJustMovedPlayer(movedPlayer);
-        setTimeout(() => setJustMovedPlayer(null), 500); // Highlight duration
+        setTimeout(() => setJustMovedPlayer(null), 500);
 
-        if (winner === null && !(positions[movedPlayer] + finalRoll === boardSize && newPos[movedPlayer] === boardSize)) { // check if current player already won
-             setCurrentPlayer((prev) => (prev + 1) % 4);
+        // Turn change logic relies on gameWillBeWonThisTurn (calculated before setPositions)
+        // and the current winner state (which might be updated by setPositions if win occurred)
+        if (!gameWillBeWonThisTurn) { // If this roll wasn't a winning one
+            // Check winner state directly, as it might have been set by another player in a very quick succession (highly unlikely here but good practice)
+            if (winner === null) {
+                 setCurrentPlayer((prevPlayer) => (prevPlayer + 1) % numPlayers);
+            }
         }
+        // If it was a winning roll, winner state is set by setPositions, and turn shouldn't change.
         setIsRolling(false);
       }
-    }, 80); // Update display dice every 80ms
+    }, 80);
   }
 
-  function restart() {
-    setPositions([0, 0, 0, 0]);
-    setCurrentPlayer(0);
-    setDice(null);
-    setWinner(null);
-  }
-
-  const playerColors = ['#e53935', '#43a047', '#1e88e5', '#fbc02d'];
-  const playerNames = ['Red', 'Green', 'Blue', 'Yellow'];
-
-  // Reset dice display when current player changes and game is not over
-  useEffect(() => {
-    if (!isRolling && winner === null) {
-      setDisplayDice(null); // Clear dice for next player if not rolling
-      setDice(null); // Clear actual dice too
-    }
-  }, [currentPlayer, isRolling, winner]);
-
-
-  return (
-    <div className="game-card" style={{ maxWidth: 700, borderRadius: 24 }}> {/* Retained maxWidth and specific borderRadius */}
-      <h2>Ludo (Mini)</h2>
-      {/* Player tokens use inline styles for their unique game colors (playerColors array), which is fine and part of game logic */}
-      <div className="ludo-players mb-2">
-        {positions.map((pos, idx) => (
-          <div key={idx} className={`ludo-player-info ${currentPlayer === idx && winner === null && !isRolling ? 'ludo-player-active' : ''} ${justMovedPlayer === idx ? 'ludo-player-just-moved' : ''}`}>
-            <div className="ludo-player-token" style={{ background: playerColors[idx] }}>
-              {idx + 1}
-            </div>
-            <div className="ludo-player-name">{playerNames[idx]}</div>
-            <div className="ludo-player-pos">Pos: {pos}</div>
-          </div>
-        ))}
-      </div>
-      <div className="text-center mt-2 mb-2">
-        <div className="ludo-board">
-          {[...Array(4)].map((_, row) => (
-            <div key={row} className="ludo-board-row">
-              {[...Array(5)].map((_, col) => {
-                const i = row * 5 + col;
-                const playerHere = positions.findIndex((p) => p === i);
-                return (
-                  // Player token color on board is dynamic from game state
-                  <div key={col} className={`ludo-board-cell ${playerHere !== -1 ? 'ludo-board-cell-player' : ''}`} style={{ background: playerHere !== -1 ? playerColors[playerHere] : undefined, borderColor: playerHere !== -1 ? playerColors[playerHere] : 'var(--border-color)', boxShadow: playerHere !== -1 ? `0 1px 4px ${playerColors[playerHere]}99` : undefined }} />
-                );
-              })}
-            </div>
+  if (!gameStarted) {
+    return (
+      <div className="game-card" style={{ maxWidth: 700, borderRadius: 24 }}>
+        <h2>Ludo (Mini) - Select Players</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1em', margin: '2em 0' }}>
+          {[2, 3, 4].map(num => (
+            <button
+              key={num}
+              className="game-button game-button-primary"
+              style={{minWidth: '150px', fontSize: '1.1em'}}
+              onClick={() => handlePlayerSelect(num)}
+            >
+              {num} Players
+            </button>
           ))}
         </div>
-        {/* Status messages use player colors (dynamic) or default text color */}
-        <div className="mt-1 mb-1" style={{ fontSize: '1.1em', color: 'var(--text-color)', fontWeight: 600, minHeight: '1.5em' /* Ensure space for dice text */ }}>
-          {winner !== null ? (
-            <span style={{ color: playerColors[winner], fontWeight: 800 }}>{playerNames[winner]} wins!</span>
-          ) : (
-            <>
-              {isRolling && displayDice !== null && <span style={{ fontSize: '1.5em', fontWeight: 700, color: 'var(--secondary-color)' }}>⚅ {displayDice}</span>}
-              {!isRolling && dice !== null && <span>Dice: <b style={{ fontSize: '1.2em', color: 'var(--primary-color)' }}>{dice}</b> | </span>}
-              {!isRolling && <span style={{ color: playerColors[currentPlayer], fontWeight: 700}}>{playerNames[currentPlayer]}'s turn</span>}
-              {isRolling && <span style={{ color: playerColors[currentPlayer], fontWeight: 700}}>Rolling for {playerNames[currentPlayer]}...</span>}
-            </>
-          )}
-        </div>
-        <button
-          className={`game-button mb-1 ${winner !== null || isRolling ? '' : 'game-button-special'}`}
-          style={{ background: winner !== null || isRolling ? 'var(--disabled-bg-color)' : undefined, cursor: isRolling ? 'wait' : (winner !== null ? 'not-allowed' : 'pointer') }}
-          onClick={rollDice}
-          disabled={winner !== null || isRolling}
-        >
-          {isRolling ? 'Rolling...' : winner !== null ? 'Game Over' : 'Roll Dice'}
-        </button>
-        <button
-          className="game-button game-button-secondary" // Secondary for restart
-          onClick={restart}
-        >
-          Restart
-        </button>
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <>
+      {showCelebration && winner !== null && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <div className="game-card" style={{ maxWidth: 700, borderRadius: 24 }}>
+        <h2>Ludo (Mini - {numPlayers} Players)</h2>
+        <div className="ludo-players mb-2">
+          {Array.from({ length: numPlayers }).map((_, idx) => {
+            const pos = positions[idx];
+            return (
+              <div key={idx} className={`ludo-player-info ${currentPlayer === idx && winner === null && !isRolling ? 'ludo-player-active' : ''} ${justMovedPlayer === idx ? 'ludo-player-just-moved' : ''}`}>
+                <div className="ludo-player-token" style={{ background: playerColors[idx] }}>
+                  {idx + 1}
+                </div>
+                <div className="ludo-player-name">{playerNames[idx]}</div>
+                <div className="ludo-player-pos">Pos: {pos}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="text-center mt-2 mb-2">
+          <div className="ludo-board">
+            {[...Array(4)].map((_, row) => (
+              <div key={row} className="ludo-board-row">
+                {[...Array(5)].map((_, col) => {
+                  const i = row * 5 + col;
+                  // Ensure findIndex only considers active players by checking against numPlayers
+                  const playerHere = positions.findIndex((p, playerIdx) => playerIdx < numPlayers && p === i);
+                  return (
+                    <div key={col} className={`ludo-board-cell ${playerHere !== -1 ? 'ludo-board-cell-player' : ''}`} style={{ background: playerHere !== -1 ? playerColors[playerHere] : undefined, borderColor: playerHere !== -1 ? playerColors[playerHere] : 'var(--border-color)', boxShadow: playerHere !== -1 ? `0 1px 4px ${playerColors[playerHere]}99` : undefined }} />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+          <div className="mt-1 mb-1" style={{ fontSize: '1.1em', color: 'var(--text-color)', fontWeight: 600, minHeight: '1.5em' }}>
+            {winner !== null ? (
+              <span style={{ color: playerColors[winner], fontWeight: 800 }}>{playerNames[winner]} wins!</span>
+            ) : (
+              <>
+                {isRolling && displayDice !== null && <span style={{ fontSize: '1.5em', fontWeight: 700, color: 'var(--secondary-color)' }}>⚅ {displayDice}</span>}
+                {!isRolling && dice !== null && <span>Dice: <b style={{ fontSize: '1.2em', color: 'var(--primary-color)' }}>{dice}</b> | </span>}
+                {!isRolling && currentPlayer < numPlayers && <span style={{ color: playerColors[currentPlayer], fontWeight: 700}}>{playerNames[currentPlayer]}'s turn</span>}
+                {isRolling && currentPlayer < numPlayers && <span style={{ color: playerColors[currentPlayer], fontWeight: 700}}>Rolling for {playerNames[currentPlayer]}...</span>}
+              </>
+            )}
+          </div>
+          <button
+            className={`game-button mb-1 ${winner !== null || isRolling ? '' : 'game-button-special'}`}
+            style={{ background: winner !== null || isRolling ? 'var(--disabled-bg-color)' : undefined, cursor: isRolling ? 'wait' : (winner !== null ? 'not-allowed' : 'pointer') }}
+            onClick={rollDice}
+            disabled={winner !== null || isRolling}
+          >
+            {isRolling ? 'Rolling...' : winner !== null ? 'Game Over' : 'Roll Dice'}
+          </button>
+          <button
+            className="game-button game-button-secondary"
+            onClick={() => restart()}
+          >
+            Restart Game
+          </button>
+          <button
+            className="game-button game-button-secondary mt-1"
+            onClick={() => {
+              setGameStarted(false);
+              // Restart is not strictly needed here as selecting players again will call restart.
+            }}
+            style={{background: 'var(--error-color)', color: 'var(--button-text-color)', borderColor: 'var(--error-color)'}}
+          >
+            Change Players
+          </button>
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -428,6 +522,7 @@ function Sudoku() {
   const [selected, setSelected] = useState<[number, number] | null>(null);
   const [message, setMessage] = useState<string>('');
   const [completed, setCompleted] = useState<boolean>(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const getCurrentInitialBoard = () => sudokuBoards[difficulty];
 
@@ -437,6 +532,7 @@ function Sudoku() {
     setSelected(null);
     setMessage('');
     setCompleted(false);
+    setShowCelebration(false); // Also hide celebration when difficulty changes
   }, [difficulty]);
 
 
@@ -456,6 +552,7 @@ function Sudoku() {
     if (JSON.stringify(newBoard) === JSON.stringify(sudokuSolution)) {
       setCompleted(true);
       setMessage('🎉 Sudoku Completed!');
+      setShowCelebration(true); // Show celebration on completion
     } else {
       setMessage('');
     }
@@ -466,6 +563,7 @@ function Sudoku() {
     setSelected(null);
     setMessage('');
     setCompleted(false);
+    setShowCelebration(false); // Hide celebration on restart
   }
 
   const handleDifficultyChange = (newDifficulty: SudokuDifficulty) => {
@@ -473,9 +571,11 @@ function Sudoku() {
   };
 
   return (
-    <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}> {/* Retained maxWidth and specific borderRadius */}
-      <h2>Sudoku (4x4)</h2>
-      <div className="sudoku-difficulty-selector mb-2" style={{ display: 'flex', justifyContent: 'center', gap: '0.5em' }}>
+    <>
+      {showCelebration && completed && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}> {/* Retained maxWidth and specific borderRadius */}
+        <h2>Sudoku (4x4)</h2>
+        <div className="sudoku-difficulty-selector mb-2" style={{ display: 'flex', justifyContent: 'center', gap: '0.5em' }}>
         {(['Easy', 'Medium', 'Hard'] as SudokuDifficulty[]).map(level => (
           <button
             key={level}
@@ -550,6 +650,7 @@ function Chess() {
   const [turn, setTurn] = useState<'w' | 'b'>('w');
   const [message, setMessage] = useState<string>('');
   const [winner, setWinner] = useState<string | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   function isOwnPiece(piece: string) {
     return piece && piece[0] === turn;
@@ -620,8 +721,14 @@ function Chess() {
         setMessage('');
         // Check for win
         let flat = newBoard.flat();
-        if (!flat.includes('bK')) setWinner('White');
-        if (!flat.includes('wK')) setWinner('Black');
+        if (!flat.includes('bK')) {
+          setWinner('White');
+          setShowCelebration(true);
+        }
+        if (!flat.includes('wK')) {
+          setWinner('Black');
+          setShowCelebration(true);
+        }
       } else {
         setMessage('Invalid move');
         setSelected(null);
@@ -637,6 +744,7 @@ function Chess() {
     setTurn('w');
     setMessage('');
     setWinner(null);
+    setShowCelebration(false); // Hide celebration on restart
   }
 
   function renderPiece(piece: string) {
@@ -648,9 +756,11 @@ function Chess() {
   }
 
   return (
-    <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}> {/* Retained maxWidth and specific borderRadius */}
-      <h2>Chess (Mini 4x4)</h2>
-      <div className="chess-grid">
+    <>
+      {showCelebration && winner && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}> {/* Retained maxWidth and specific borderRadius */}
+        <h2>Chess (Mini 4x4)</h2>
+        <div className="chess-grid">
         {board.map((row, rIdx) =>
           row.map((cell, cIdx) => {
             const isSel = selected && selected[0] === rIdx && selected[1] === cIdx;
