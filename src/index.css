@@ -28,14 +28,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/*
-  The original file had a @media (prefers-color-scheme: light) block
-  and also a :root block outside of it that seemed to target dark mode.
-  Since we are focusing on a single, new light theme, I'm simplifying this.
-  If a dark theme switch were to be implemented, these variables would be
-  redefined within a [data-theme="dark"] selector.
-*/
-
 a {
   font-weight: 500;
   color: var(--primary-color);
@@ -47,8 +39,7 @@ a:hover {
 
 body {
   margin: 0;
-  /* display: flex; */ /* Removed */
-  /* place-items: center; */ /* Removed */
+  /* display: flex; place-items: center; */ /* Removing these as App.tsx handles layout */
   min-width: 320px;
   min-height: 100vh;
   background-color: var(--background-color); /* Ensure body background uses variable */
