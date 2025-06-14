@@ -289,23 +289,36 @@ function Ludo() {
         setDice(finalRoll);
         const movedPlayer = currentPlayer; // Store current player before it updates
 
-        setPositions((prev) => {
-          const newPos = [...prev];
-          if (newPos[movedPlayer] + finalRoll <= boardSize) {
-            newPos[movedPlayer] += finalRoll;
+        setPositions((previousPositions) => {
+          const updatedPositionsArray = [...previousPositions];
+          if (updatedPositionsArray[movedPlayer] + finalRoll <= boardSize) {
+            updatedPositionsArray[movedPlayer] += finalRoll;
           }
-          if (newPos[movedPlayer] === boardSize) {
+          if (updatedPositionsArray[movedPlayer] === boardSize) {
             setWinner(movedPlayer);
           }
-          return newPos;
+          return updatedPositionsArray;
         });
 
         setJustMovedPlayer(movedPlayer);
         setTimeout(() => setJustMovedPlayer(null), 500); // Highlight duration
 
-        if (winner === null && !(positions[movedPlayer] + finalRoll === boardSize && newPos[movedPlayer] === boardSize)) { // check if current player already won
-             setCurrentPlayer((prev) => (prev + 1) % 4);
+        // Determine if the current move will result in a win.
+        // This uses 'positions' (state before this specific roll's update) and 'finalRoll'.
+        const gameWillBeWonThisTurn = (positions[movedPlayer] + finalRoll) === boardSize;
+
+        // The setWinner call is inside the setPositions callback, which is asynchronous.
+        // So, we use 'gameWillBeWonThisTurn' (determined synchronously) for the turn change logic.
+        if (!gameWillBeWonThisTurn) {
+          // Only change player if the current player did not win on this turn.
+          // Also, ensure the game hasn't already been won by someone else in a very unlikely edge case (though rollDice has an early exit for winner !== null).
+          if (winner === null) {
+            setCurrentPlayer((prevPlayer) => (prevPlayer + 1) % 4);
+          }
         }
+        // If gameWillBeWonThisTurn is true, the player who made the winning move remains
+        // the 'currentPlayer' visually until any win-related UI updates occur.
+        // The 'winner' state itself is set within the setPositions callback.
         setIsRolling(false);
       }
     }, 80); // Update display dice every 80ms
@@ -488,8 +501,8 @@ function Sudoku() {
         ))}
       </div>
       <div className="sudoku-grid">
-        {board.map((row, rIdx) =>
-          row.map((cell, cIdx) => (
+        {board.map((row: number[], rIdx: number) =>
+          row.map((cell: number, cIdx: number) => (
             <button
               key={rIdx + '-' + cIdx}
               className={`
