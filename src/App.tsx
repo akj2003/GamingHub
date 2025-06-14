@@ -488,8 +488,8 @@ function Sudoku() {
         ))}
       </div>
       <div className="sudoku-grid">
-        {board.map((row, rIdx) =>
-          row.map((cell, cIdx) => (
+        {board.map((row: number[], rIdx: number) =>
+          row.map((cell: number, cIdx: number) => (
             <button
               key={rIdx + '-' + cIdx}
               className={`
