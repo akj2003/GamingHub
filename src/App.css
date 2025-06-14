@@ -20,11 +20,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* background gradient is a design choice, let's use a subtle one or solid color from palette */
-  background: var(--background-color); /* Simplified to solid background */
-  /* Or a subtle gradient if preferred:
-  background: linear-gradient(135deg, var(--background-color) 0%, color-mix(in srgb, var(--background-color) 80%, var(--primary-color) 20%) 100%);
-  */
+  background: var(--background-color);
   padding: 0;
   margin: 0;
   transition: background 0.5s;
@@ -35,29 +31,25 @@ body {
 /* Decorative SVGs - Update fills or remove if they don't fit the new theme */
 .decorative-svg-1 circle { fill: var(--primary-color); }
 .decorative-svg-2 circle { fill: var(--secondary-color); }
-.decorative-svg-3 circle { fill: var(--primary-color); opacity: 0.05; } /* Example adjustment */
+.decorative-svg-3 circle { fill: var(--primary-color); opacity: 0.05; }
 
 .decorative-svg-1, .decorative-svg-2, .decorative-svg-3 {
-   opacity: 0.1; /* Adjusted opacity for new theme */
+   opacity: 0.1;
 }
-.decorative-svg-1 { top: -100px; left: -150px; width: 380px; height: 380px; }
-.decorative-svg-2 { bottom: -120px; right: -120px; width: 350px; height: 350px; }
-.decorative-svg-3 { top: 60px; right: -80px; width: 280px; height: 280px; }
+.decorative-svg-1 { top: -100px; left: -150px; width: 380px; height: 380px; position: fixed; z-index: 0;}
+.decorative-svg-2 { bottom: -120px; right: -120px; width: 350px; height: 350px; position: fixed; z-index: 0;}
+.decorative-svg-3 { top: 60px; right: -80px; width: 280px; height: 280px; position: fixed; z-index: 0;}
 
 
 /* Header Styling */
 .app-header {
   width: 100%;
-  background: color-mix(in srgb, var(--card-background-color) 95%, transparent); /* Slightly transparent card background */
+  background: color-mix(in srgb, var(--card-background-color) 95%, transparent);
   box-shadow: 0 6px 32px color-mix(in srgb, var(--primary-color) 30%, transparent);
-<<<<<<< HEAD
-  padding: 2em 1em 1.5em; /* Adjusted padding */
-=======
-  padding: 1em 1em 1.5em; /* Reduced top padding from 2em to 1em */
->>>>>>> cb1956b2c77c6c54c46090b9306fa017e8da94dc
-  margin-bottom: 32px; /* Adjusted margin */
-  border-bottom-left-radius: 30px; /* Adjusted radius */
-  border-bottom-right-radius: 30px; /* Adjusted radius */
+  padding: 1em 1em 1.5em; /* RESOLUTION: Use this padding */
+  margin-bottom: 32px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -67,23 +59,22 @@ body {
 }
 
 .app-header h1 {
-  font-size: 2.5em; /* Synced with :root h1 */
-  /* Gradient text is a strong design statement. If keeping, use new palette colors */
+  font-size: 2.5em;
   background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), color-mix(in srgb, var(--primary-color) 60%, var(--error-color)), var(--primary-color));
   -webkit-background-clip: text;
   -moz-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
-  letter-spacing: 1.5px; /* Adjusted spacing */
-  font-weight: 900; /* Retained boldness */
+  letter-spacing: 1.5px;
+  font-weight: 900;
   text-shadow: 0 2px 16px color-mix(in srgb, var(--primary-color) 20%, transparent);
   text-align: center;
 }
 
 .app-header p {
-  color: var(--subtle-text-color); /* Use subtle text color */
-  font-size: 1.1em; /* Adjusted size */
+  color: var(--subtle-text-color);
+  font-size: 1.1em;
   margin: 0.6em 0 0;
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -94,17 +85,17 @@ body {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.8em; /* Adjusted gap */
-  margin-top: 24px; /* Adjusted margin */
+  gap: 0.8em;
+  margin-top: 24px;
 }
 
 .nav-button {
-  background-color: var(--card-background-color); /* Lighter background for non-active */
-  color: var(--primary-color); /* Primary color for text */
-  border: 1px solid var(--border-color); /* Subtle border */
+  background-color: var(--card-background-color);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
   min-width: 130px;
-  border-radius: 10px; /* Softer radius */
-  font-weight: 600; /* Adjusted weight */
+  border-radius: 10px;
+  font-weight: 600;
   font-size: 1em;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   transition: all 0.2s;
@@ -121,8 +112,8 @@ body {
 }
 
 .nav-button-active {
-  background-color: var(--primary-color); /* Primary color for active */
-  color: var(--button-text-color); /* White text for active */
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
   border-color: var(--primary-color);
   box-shadow: 0 4px 12px color-mix(in srgb, var(--primary-color) 30%, transparent);
 }
@@ -149,8 +140,8 @@ body {
 .app-footer {
   width: 100%;
   text-align: center;
-  color: var(--subtle-text-color); /* Subtle text for footer */
-  font-size: 1em; /* Adjusted size */
+  color: var(--subtle-text-color);
+  font-size: 1em;
   margin-top: 32px;
   padding: 1.8em 1em 1em;
   background: color-mix(in srgb, var(--card-background-color) 90%, transparent);
@@ -163,21 +154,21 @@ body {
 }
 
 .app-footer span.brand-text {
-  color: var(--primary-color); /* Use primary color */
+  color: var(--primary-color);
   font-weight: 700;
 }
 
 .app-footer span.tech-text {
-  color: var(--secondary-color); /* Use secondary color */
+  color: var(--secondary-color);
   font-weight: 700;
 }
 
 /* General Card Styling for Games */
 .game-card {
   background: var(--card-background-color);
-  border-radius: 12px; /* Softer radius */
+  border-radius: 12px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.07); /* Softer shadow */
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
   padding: 1.5em;
   margin: 1em auto;
   width: 90%;
@@ -189,24 +180,24 @@ body {
 }
 
 .game-card h1, .game-card h2 {
-  color: var(--primary-color); /* Headings in cards use primary color */
+  color: var(--primary-color);
   margin-top: 0;
-  margin-bottom: 0.75em; /* Adjusted margin */
+  margin-bottom: 0.75em;
   letter-spacing: 0.8px;
   text-align: center;
 }
 
 .game-card p {
-  font-size: 1em; /* Adjusted size */
-  color: var(--text-color); /* Standard text color */
+  font-size: 1em;
+  color: var(--text-color);
   margin-top: 0;
-  margin-bottom: 1.5em; /* Adjusted margin */
+  margin-bottom: 1.5em;
   text-align: center;
   line-height: 1.6;
 }
 
 .game-card .score-text b {
-  color: var(--success-color); /* Use success color for score */
+  color: var(--success-color);
   font-weight: 700;
 }
 
@@ -215,24 +206,23 @@ body {
   background-color: var(--primary-color);
   color: var(--button-text-color);
   min-width: 120px;
-  border: 1px solid transparent; /* No border by default for primary action */
+  border: 1px solid transparent;
   border-radius: 8px;
   font-weight: 600;
   font-size: 1em;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  padding: 0.7em 1.2em; /* Slightly more padding */
+  padding: 0.7em 1.2em;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s, box-shadow 0.1s;
   margin-top: 0.5em;
 }
 
 .game-button:hover {
-  background-color: color-mix(in srgb, var(--primary-color) 85%, black); /* Darken on hover */
+  background-color: color-mix(in srgb, var(--primary-color) 85%, black);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* Secondary button style (e.g., restart might be secondary to "Play Again") */
 .game-button-secondary {
   background-color: var(--card-background-color);
   color: var(--primary-color);
@@ -243,9 +233,8 @@ body {
   border-color: color-mix(in srgb, var(--primary-color) 85%, black);
 }
 
-
-.game-button-primary { /* This class seems to be for green buttons in the old code */
-  background-color: var(--success-color); /* Use success color */
+.game-button-primary {
+  background-color: var(--success-color);
   color: var(--button-text-color);
   border-color: transparent;
 }
@@ -253,7 +242,7 @@ body {
    background-color: color-mix(in srgb, var(--success-color) 85%, black);
 }
 
-.game-button-special { /* For unique game actions like 'Roll Dice' or other accents */
+.game-button-special {
   background-color: var(--secondary-color);
   color: var(--button-text-color);
   border-color: transparent;
@@ -262,11 +251,10 @@ body {
   background-color: color-mix(in srgb, var(--secondary-color) 85%, black);
 }
 
-
 /* TicTacToe Specific Grid */
 .tictactoe-grid {
   display: grid;
-  grid-template-columns: repeat(3, clamp(70px, 18vw, 100px)); /* Slightly smaller max */
+  grid-template-columns: repeat(3, clamp(70px, 18vw, 100px));
   gap: clamp(8px, 1.5vw, 15px);
   justify-content: center;
   margin: 1.5em auto;
@@ -277,10 +265,10 @@ body {
   aspect-ratio: 1 / 1;
   font-size: clamp(2em, 10vw, 3em);
   font-weight: 800;
-  border: 3px solid var(--border-color); /* Lighter border */
-  border-radius: 12px; /* Softer radius */
-  background: var(--card-background-color); /* Light background */
-  color: var(--subtle-text-color); /* Subtle color for empty cells */
+  border: 3px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--card-background-color);
+  color: var(--subtle-text-color);
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   transition: background 0.2s, color 0.2s, border-color 0.2s;
@@ -300,14 +288,12 @@ body {
 }
 
 .tictactoe-cell.x {
-  /* background: #e3f2fd; */ /* Old color */
   background-color: color-mix(in srgb, var(--primary-color) 20%, var(--card-background-color));
   color: var(--primary-color);
   border-color: var(--primary-color);
 }
 
 .tictactoe-cell.o {
-  /* background: #fce4ec; */ /* Old color */
   background-color: color-mix(in srgb, var(--secondary-color) 25%, var(--card-background-color));
   color: var(--secondary-color);
   border-color: var(--secondary-color);
@@ -316,7 +302,7 @@ body {
 /* Sudoku Specific Grid */
 .sudoku-grid {
   display: grid;
-  grid-template-columns: repeat(4, clamp(35px, 12vw, 55px)); /* Slightly smaller max */
+  grid-template-columns: repeat(4, clamp(35px, 12vw, 55px));
   gap: clamp(4px, 1vw, 6px);
   justify-content: center;
   margin: 1.5em auto;
@@ -327,8 +313,8 @@ body {
   aspect-ratio: 1 / 1;
   font-size: clamp(1.2em, 5vw, 1.6em);
   font-weight: 700;
-  border: 1px solid var(--border-color); /* Thinner border */
-  border-radius: 6px; /* Softer radius */
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
   background: var(--card-background-color);
   color: var(--text-color);
   cursor: pointer;
@@ -351,7 +337,7 @@ body {
   border-color: transparent;
 }
 .sudoku-cell-selected {
-  border-color: var(--success-color); /* Use success for selection */
+  border-color: var(--success-color);
   outline: 2px solid var(--success-color);
   background-color: color-mix(in srgb, var(--success-color) 15%, var(--card-background-color));
 }
@@ -359,7 +345,6 @@ body {
     cursor: not-allowed;
     background-color: var(--disabled-bg-color);
 }
-
 
 .sudoku-input-buttons {
   display: flex;
@@ -391,19 +376,19 @@ body {
 /* Chess Specific Grid */
 .chess-grid {
   display: grid;
-  grid-template-columns: repeat(4, clamp(38px, 13vw, 58px)); /* Slightly smaller max */
+  grid-template-columns: repeat(4, clamp(38px, 13vw, 58px));
   gap: 0;
   justify-content: center;
   margin: 1.5em auto;
-  border: 3px solid var(--primary-color); /* Primary color border for board */
-  border-radius: 8px; /* Softer radius */
+  border: 3px solid var(--primary-color);
+  border-radius: 8px;
   overflow: hidden;
 }
 
 .chess-cell {
   width: 100%;
   aspect-ratio: 1 / 1;
-  font-size: clamp(1.5em, 7vw, 1.8em); /* Slightly smaller font */
+  font-size: clamp(1.5em, 7vw, 1.8em);
   font-weight: 700;
   border: none;
   cursor: pointer;
@@ -415,20 +400,20 @@ body {
   padding: 0;
 }
 .chess-cell-light {
-  background: var(--card-background-color); /* Lighter squares */
+  background: var(--card-background-color);
 }
 .chess-cell-dark {
-  background: color-mix(in srgb, var(--primary-color) 20%, var(--card-background-color)); /* Light primary for dark squares */
+  background: color-mix(in srgb, var(--primary-color) 20%, var(--card-background-color));
 }
 .chess-cell-selected {
-   border: 3px solid var(--secondary-color); /* Use secondary for selection border */
-   background: color-mix(in srgb, var(--secondary-color) 30%, var(--card-background-color)) !important; /* Important to override light/dark background */
+   border: 3px solid var(--secondary-color);
+   background: color-mix(in srgb, var(--secondary-color) 30%, var(--card-background-color)) !important;
 }
-.chess-piece-white { /* King, Pawn etc */
+.chess-piece-white {
   color: var(--primary-color);
 }
 .chess-piece-black {
-  color: color-mix(in srgb, var(--text-color) 80%, black); /* Darker than default text */
+  color: color-mix(in srgb, var(--text-color) 80%, black);
 }
 .chess-cell:disabled {
   cursor: not-allowed;
@@ -446,21 +431,21 @@ body {
   text-align: center;
 }
 .ludo-player-token {
-  width: 42px; /* Slightly smaller */
+  width: 42px;
   height: 42px;
   border-radius: 50%;
-  margin: 0 auto 4px; /* Added bottom margin */
-  border: 3px solid var(--border-color); /* Default border */
+  margin: 0 auto 4px;
+  border: 3px solid var(--border-color);
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--button-text-color); /* White text on colored tokens */
+  color: var(--button-text-color);
   font-weight: 800;
-  font-size: 22px; /* Adjusted font size */
+  font-size: 22px;
 }
 .ludo-player-active .ludo-player-token {
-  border-color: var(--secondary-color); /* Highlight active player with secondary color */
+  border-color: var(--secondary-color);
   box-shadow: 0 0 12px color-mix(in srgb, var(--secondary-color) 50%, transparent);
 }
 
@@ -475,36 +460,36 @@ body {
 }
 
 .ludo-player-name {
-  font-size: 1em; /* Adjusted size */
+  font-size: 1em;
   color: var(--text-color);
   margin-top: 4px;
   font-weight: 600;
 }
 .ludo-player-pos {
-  font-size: 0.9em; /* Adjusted size */
+  font-size: 0.9em;
   color: var(--subtle-text-color);
 }
 .ludo-board {
   display: flex;
   flex-direction: column;
-  gap: 6px; /* Adjusted gap */
+  gap: 6px;
   margin-bottom: 12px;
   align-items: center;
 }
 .ludo-board-row {
   display: flex;
-  gap: 6px; /* Adjusted gap */
+  gap: 6px;
 }
 .ludo-board-cell {
-  width: clamp(28px, 6vw, 34px); /* Adjusted size */
+  width: clamp(28px, 6vw, 34px);
   height: clamp(28px, 6vw, 34px);
-  border: 1px solid var(--border-color); /* Thinner border */
-  border-radius: 6px; /* Softer radius */
-  background: color-mix(in srgb, var(--border-color) 40%, var(--card-background-color)); /* Very light background for empty cells */
-  margin: 1px; /* Adjusted margin */
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--border-color) 40%, var(--card-background-color));
+  margin: 1px;
 }
-.ludo-board-cell-player { /* Cell with a player token */
-  border-width: 2px; /* Make border more prominent if player is here */
+.ludo-board-cell-player {
+  border-width: 2px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
@@ -512,7 +497,7 @@ body {
 .gaming-page-color-display {
   display: inline-block;
   margin-left: 0.8em;
-  width: 50px; /* Adjusted size */
+  width: 50px;
   height: 25px;
   border: 2px solid var(--border-color);
   border-radius: 6px;
@@ -521,42 +506,39 @@ body {
 }
 .gaming-page-options-container {
   display: flex;
-  gap: 0.8em; /* Adjusted gap */
+  gap: 0.8em;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 12px;
 }
 .gaming-page-option-button {
-  /* min-width: 80px; Removed to allow content to dictate width more freely */
-  min-height: 36px; /* Maintain min-height for consistency */
+  min-height: 36px;
   border: 2px solid var(--border-color);
   border-radius: 6px;
   font-weight: 500;
-  font-size: 0.95em; /* Adjusted font size */
+  font-size: 0.95em;
   box-shadow: 0 1px 4px rgba(0,0,0,0.05);
   transition: transform 0.1s, border-color 0.1s;
   cursor: pointer;
-  padding: 0.4em 0.8em; /* Adjusted padding */
-  background-color: var(--card-background-color); /* Default bg */
-  color: var(--text-color); /* Default text */
+  padding: 0.4em 0.8em;
+  background-color: var(--card-background-color);
+  color: var(--text-color);
 }
 .gaming-page-option-button:hover {
   transform: translateY(-1px);
   border-color: var(--primary-color);
 }
-/* Specific styles for color buttons (background and text color) will remain inline in App.tsx as they are dynamic */
 
-.gaming-page-message { /* For messages like "Try again!" */
+.gaming-page-message {
   margin-top: 1em;
-  font-weight: 600; /* Bolder */
+  font-weight: 600;
   font-size: 1.05em;
-  /* Color will be set inline based on message type (error/success) */
 }
 .gaming-page-win-message {
   margin: 1.5em 0;
-  font-size: 1.4em; /* Adjusted size */
+  font-size: 1.4em;
   font-weight: 700;
-  color: var(--success-color); /* Use success color */
+  color: var(--success-color);
   text-align: center;
 }
 
@@ -569,78 +551,18 @@ body {
 .mt-2 { margin-top: 1rem; }
 .mt-3 { margin-top: 1.5rem; }
 
-<<<<<<< HEAD
-/* Responsive adjustments - These will likely need tweaking with the new theme */
-@media (max-width: 768px) {
-  .app-header h1 {
-    font-size: 2em; /* Adjusted for new base size */
-=======
 /* Responsive adjustments */
 
 /* Larger Tablets / Small Desktops */
 @media (max-width: 1024px) {
   .app-header h1 {
-    font-size: 2.2em; /* Slightly smaller */
->>>>>>> cb1956b2c77c6c54c46090b9306fa017e8da94dc
+    font-size: 2.2em;
   }
   .app-header p {
     font-size: 1em;
   }
   .nav-button {
-<<<<<<< HEAD
-    font-size: 0.9em; /* Adjusted */
-    padding: 0.6em 0.9em; /* Adjusted */
-  }
-  .game-card {
-    padding: 1.2em; /* Adjusted */
-  }
-  .game-card h1, .game-card h2 {
-    font-size: 1.6em;
-  }
-}
-
-@media (max-width: 480px) {
-  .app-header {
-    padding: 1.5em 1em 1em; /* Adjusted */
-    margin-bottom: 20px;
-  }
-  .app-header h1 {
-    font-size: 1.7em; /* Adjusted */
-  }
-  .app-header p {
-    font-size: 0.85em;
-  }
-  .nav-button {
-    font-size: 0.8em; /* Adjusted */
-    padding: 0.5em 0.7em;
-    border-radius: 8px;
-  }
-  .game-card {
-    border-radius: 10px; /* Adjusted */
-    padding: 1em;
-  }
-  .game-card h1, .game-card h2 {
-    font-size: 1.4em;
-  }
-  .game-button {
-    font-size: 0.85em;
-    min-width: 90px;
-    padding: 0.5em 0.7em;
-  }
-  .tictactoe-grid {
-    grid-template-columns: repeat(3, clamp(50px, 18vw, 80px)); /* Adjusted */
-    gap: clamp(6px, 1.2vw, 10px); /* Adjusted */
-  }
-  .sudoku-grid {
-    grid-template-columns: repeat(4, clamp(30px, 10vw, 45px)); /* Adjusted */
-    gap: clamp(3px, 0.8vw, 5px); /* Adjusted */
-  }
-  .chess-grid {
-    grid-template-columns: repeat(4, clamp(30px, 10vw, 45px)); /* Adjusted */
-  }
-}
-=======
-    min-width: 120px; /* Slightly reduce min-width */
+    min-width: 120px;
     padding: 0.6em 1em;
     font-size: 0.95em;
   }
@@ -648,7 +570,6 @@ body {
     padding: 1.3em;
   }
 
-  /* Adjust grid game cell sizes slightly if needed */
   .tictactoe-grid {
     grid-template-columns: repeat(3, clamp(60px, 15vw, 90px));
     gap: clamp(6px, 1.2vw, 12px);
@@ -671,7 +592,6 @@ body {
     min-height: clamp(35px, 8vw, 42px);
     font-size: clamp(0.9em, 3.5vw, 1em);
   }
-
 
   .chess-grid {
     grid-template-columns: repeat(4, clamp(35px, 11vw, 55px));
@@ -696,39 +616,38 @@ body {
 /* Tablets and Large Phones */
 @media (max-width: 768px) {
   .app-header {
-    padding: 1.2em 1em 1em; /* Further reduce padding */
+    padding: 1.2em 1em 1em;
     margin-bottom: 24px;
   }
   .app-header h1 {
-    font-size: 1.8em; /* Adjusted for new base size */
+    font-size: 1.8em;
   }
   .app-header p {
-    font-size: 0.9em; /* Further reduce */
+    font-size: 0.9em;
   }
   .app-header nav {
-    flex-direction: column; /* Stack nav buttons */
+    flex-direction: column;
     gap: 0.5em;
-    margin-top: 1em; /* Reduce top margin */
+    margin-top: 1em;
   }
   .nav-button {
-    min-width: 100%; /* Make buttons full width when stacked */
+    min-width: 100%;
     font-size: 0.9em;
     padding: 0.7em 1em;
   }
   .game-card {
     padding: 1em;
-    width: 95%; /* More width on small screens */
-    margin: 0.8em auto; /* Reduce vertical margin */
+    width: 95%;
+    margin: 0.8em auto;
   }
   .game-card h1, .game-card h2 {
-    font-size: 1.5em; /* Smaller game titles */
+    font-size: 1.5em;
   }
   .game-button {
     font-size: 0.9em;
     padding: 0.6em 1em;
   }
 
-  /* Game specific adjustments for 768px */
   .tictactoe-grid {
     grid-template-columns: repeat(3, clamp(50px, 16vw, 80px));
     gap: clamp(5px, 1vw, 10px);
@@ -825,7 +744,6 @@ body {
     padding: 0.5em 0.8em;
   }
 
-  /* Game specific adjustments for 480px */
   .tictactoe-grid {
     grid-template-columns: repeat(3, clamp(45px, 15vw, 70px));
     gap: clamp(4px, 1vw, 8px);
@@ -890,4 +808,3 @@ body {
     font-size: 1.2em;
   }
 }
->>>>>>> cb1956b2c77c6c54c46090b9306fa017e8da94dc

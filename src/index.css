@@ -47,12 +47,8 @@ a:hover {
 
 body {
   margin: 0;
-<<<<<<< HEAD
-  /* display: flex; place-items: center; */ /* Removing these as App.tsx handles layout */
-=======
   /* display: flex; */ /* Removed */
   /* place-items: center; */ /* Removed */
->>>>>>> cb1956b2c77c6c54c46090b9306fa017e8da94dc
   min-width: 320px;
   min-height: 100vh;
   background-color: var(--background-color); /* Ensure body background uses variable */
