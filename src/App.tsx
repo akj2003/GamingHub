@@ -273,20 +273,42 @@ function Ludo() {
   const [justMovedPlayer, setJustMovedPlayer] = useState<number | null>(null);
 
   function rollDice() {
-    if (winner !== null) return;
-    const roll = Math.floor(Math.random() * 6) + 1;
-    setDice(roll);
-    setPositions((prev) => {
-      const newPos = [...prev];
-      if (newPos[currentPlayer] + roll <= boardSize) {
-        newPos[currentPlayer] += roll;
+    if (winner !== null || isRolling) return;
+
+    setIsRolling(true);
+    setDisplayDice(null); // Clear previous display dice before starting animation
+
+    let rollCount = 0;
+    const rollInterval = setInterval(() => {
+      setDisplayDice(Math.floor(Math.random() * 6) + 1);
+      rollCount++;
+      if (rollCount > 10) { // Animate for around 10 * 80ms = 800ms
+        clearInterval(rollInterval);
+
+        const finalRoll = Math.floor(Math.random() * 6) + 1;
+        setDice(finalRoll);
+        const movedPlayer = currentPlayer; // Store current player before it updates
+
+        setPositions((prev) => {
+          const newPos = [...prev];
+          if (newPos[movedPlayer] + finalRoll <= boardSize) {
+            newPos[movedPlayer] += finalRoll;
+          }
+          if (newPos[movedPlayer] === boardSize) {
+            setWinner(movedPlayer);
+          }
+          return newPos;
+        });
+
+        setJustMovedPlayer(movedPlayer);
+        setTimeout(() => setJustMovedPlayer(null), 500); // Highlight duration
+
+        if (winner === null && !(positions[movedPlayer] + finalRoll === boardSize && newPos[movedPlayer] === boardSize)) { // check if current player already won
+             setCurrentPlayer((prev) => (prev + 1) % 4);
+        }
+        setIsRolling(false);
       }
-      if (newPos[currentPlayer] === boardSize) {
-        setWinner(currentPlayer);
-      }
-      return newPos;
-    });
-    setCurrentPlayer((prev) => (prev + 1) % 4);
+    }, 80); // Update display dice every 80ms
   }
 
   function restart() {
@@ -451,9 +473,21 @@ function Sudoku() {
   };
 
   return (
-    <div className="card" style={{ maxWidth: 420, margin: '2em auto', boxShadow: '0 4px 24px 0 #0002', background: '#fff', borderRadius: 20, padding: '2em 1em' }}>
-      <h2 style={{ color: '#3f51b5', marginBottom: 18, fontSize: '2em', letterSpacing: 1 }}>Sudoku (4x4)</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 60px)', gap: 8, justifyContent: 'center', margin: '1.5em auto' }}>
+    <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}> {/* Retained maxWidth and specific borderRadius */}
+      <h2>Sudoku (4x4)</h2>
+      <div className="sudoku-difficulty-selector mb-2" style={{ display: 'flex', justifyContent: 'center', gap: '0.5em' }}>
+        {(['Easy', 'Medium', 'Hard'] as SudokuDifficulty[]).map(level => (
+          <button
+            key={level}
+            className={`game-button game-button-secondary ${difficulty === level ? 'game-button-active' : ''}`}
+            style={difficulty === level ? { backgroundColor: 'var(--primary-color)', color: 'var(--button-text-color)', borderColor: 'var(--primary-color)'} : {}}
+            onClick={() => handleDifficultyChange(level)}
+          >
+            {level}
+          </button>
+        ))}
+      </div>
+      <div className="sudoku-grid">
         {board.map((row, rIdx) =>
           row.map((cell, cIdx) => (
             <button
