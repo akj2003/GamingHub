@@ -1,42 +1,914 @@
+/* Global Resets and Font */
+body {
+  margin: 0;
+  font-family: var(--font-family, 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif); /* Use variable from :root */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color); /* Use CSS variable */
+  color: var(--text-color); /* Use CSS variable */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* App Container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--background-color);
+  padding: 0;
+  margin: 0;
+  transition: background 0.5s;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Decorative SVGs - Update fills or remove if they don't fit the new theme */
+.decorative-svg-1 circle { fill: var(--primary-color); }
+.decorative-svg-2 circle { fill: var(--secondary-color); }
+.decorative-svg-3 circle { fill: var(--primary-color); opacity: 0.05; }
+
+.decorative-svg-1, .decorative-svg-2, .decorative-svg-3 {
+   opacity: 0.1;
+}
+.decorative-svg-1 { top: -100px; left: -150px; width: 380px; height: 380px; position: fixed; z-index: 0;}
+.decorative-svg-2 { bottom: -120px; right: -120px; width: 350px; height: 350px; position: fixed; z-index: 0;}
+.decorative-svg-3 { top: 60px; right: -80px; width: 280px; height: 280px; position: fixed; z-index: 0;}
+
+
+/* Header Styling */
+.app-header {
+  width: 100%;
+  background: color-mix(in srgb, var(--card-background-color) 95%, transparent);
+  box-shadow: 0 6px 32px color-mix(in srgb, var(--primary-color) 30%, transparent);
+  padding: 1em 1em 1.5em;
+  margin-bottom: 32px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+.app-header h1 {
+  font-size: 2.5em;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), color-mix(in srgb, var(--primary-color) 60%, var(--error-color)), var(--primary-color));
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+  letter-spacing: 1.5px;
+  font-weight: 900;
+  text-shadow: 0 2px 16px color-mix(in srgb, var(--primary-color) 20%, transparent);
   text-align: center;
 }
 
-.logo {
-  height: 6em;
+.app-header p {
+  color: var(--subtle-text-color);
+  font-size: 1.1em;
+  margin: 0.6em 0 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.app-header nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.8em;
+  margin-top: 24px;
+}
+
+.nav-button {
+  background-color: var(--card-background-color);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+  min-width: 130px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: all 0.2s ease-out; /* Ensure all properties transition smoothly */
+  padding: 0.7em 1.1em;
+  outline: none;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+.nav-button:hover {
+  background-color: color-mix(in srgb, var(--primary-color) 10%, var(--card-background-color));
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--text-color) 8%, transparent);
+}
+.nav-button:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 12%, transparent);
+  transition-duration: 0.05s;
+}
+
+.nav-button-active {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--primary-color) 30%, transparent);
+}
+.nav-button-active:hover {
+  background-color: color-mix(in srgb, var(--primary-color) 90%, black);
+  border-color: color-mix(in srgb, var(--primary-color) 90%, black);
+  transform: translateY(-2px); /* Keep consistent hover lift */
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--primary-color) 35%, transparent);
+}
+.nav-button-active:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--primary-color) 30%, transparent);
+  transition-duration: 0.05s;
+}
+
+/* Main Content Area */
+.app-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 1em 2em;
+  z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Footer Styling */
+.app-footer {
+  width: 100%;
+  text-align: center;
+  color: var(--subtle-text-color);
+  font-size: 1em;
+  margin-top: 32px;
+  padding: 1.8em 1em 1em;
+  background: color-mix(in srgb, var(--card-background-color) 90%, transparent);
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  box-shadow: 0 -6px 32px color-mix(in srgb, var(--border-color) 50%, transparent);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  box-sizing: border-box;
+}
+
+.app-footer span.brand-text {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.app-footer span.tech-text {
+  color: var(--secondary-color);
+  font-weight: 700;
+}
+
+/* General Card Styling for Games */
+.game-card {
+  background: var(--card-background-color);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
   padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+  margin: 1em auto;
+  width: 90%;
+  max-width: 500px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: border-color 0.2s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.game-card:hover {
+  border-color: var(--primary-color);
+  /* transform: translateY(-2px); Optional: slightly more lift */
+  /* box-shadow: 0 6px 20px rgba(0,0,0,0.08); Optional: slightly enhanced shadow */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+
+.game-card h1, .game-card h2 {
+  color: var(--primary-color);
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  letter-spacing: 0.8px;
+  text-align: center;
+}
+
+.game-card p {
+  font-size: 1em;
+  color: var(--text-color);
+  margin-top: 0;
+  margin-bottom: 1.5em;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.game-card .score-text b {
+  color: var(--success-color);
+  font-weight: 700;
+}
+
+/* Buttons within game cards */
+.game-button {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+  min-width: 120px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 0.7em 1.2em;
+  cursor: pointer;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+  margin-top: 0.5em;
+}
+
+.game-button:hover {
+  background-color: color-mix(in srgb, var(--primary-color) 85%, black);
+  transform: translateY(-2px); /* Enhanced lift */
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 18%, transparent); /* Shadow using text color for theme adaptability */
+}
+.game-button:active {
+  transform: translateY(0px); /* Pressed down from hover state */
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 15%, transparent);
+  transition-duration: 0.05s;
+}
+
+.game-button-secondary {
+  background-color: var(--card-background-color);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+.game-button-secondary:hover {
+  background-color: color-mix(in srgb, var(--primary-color) 10%, var(--card-background-color));
+  border-color: color-mix(in srgb, var(--primary-color) 85%, black);
+  transform: translateY(-2px); /* Consistent lift */
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 12%, transparent);
+}
+.game-button-secondary:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 10%, transparent);
+  transition-duration: 0.05s;
+}
+
+
+.game-button-primary {
+  background-color: var(--success-color);
+  color: var(--button-text-color);
+  border-color: transparent;
+}
+.game-button-primary:hover {
+   background-color: color-mix(in srgb, var(--success-color) 85%, black);
+   transform: translateY(-2px);
+   box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 18%, transparent);
+}
+.game-button-primary:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 15%, transparent);
+  transition-duration: 0.05s;
+}
+
+.game-button-special {
+  background-color: var(--secondary-color);
+  color: var(--button-text-color);
+  border-color: transparent;
+}
+.game-button-special:hover {
+  background-color: color-mix(in srgb, var(--secondary-color) 85%, black);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 18%, transparent);
+}
+.game-button-special:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 15%, transparent);
+  transition-duration: 0.05s;
+}
+
+/* TicTacToe Specific Grid */
+.tictactoe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, clamp(70px, 18vw, 100px));
+  gap: clamp(8px, 1.5vw, 15px);
+  justify-content: center;
+  margin: 1.5em auto;
+}
+
+.tictactoe-cell {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  font-size: clamp(2em, 10vw, 3em);
+  font-weight: 800;
+  border: 3px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--card-background-color);
+  color: var(--subtle-text-color);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.tictactoe-cell:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.tictactoe-cell:active {
+  transform: translateY(0px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition-duration: 0.05s;
+}
+
+
+.tictactoe-cell:disabled {
+  cursor: not-allowed;
+  background-color: var(--disabled-bg-color);
+  border-color: var(--disabled-bg-color);
+}
+
+.tictactoe-cell.x {
+  background-color: color-mix(in srgb, var(--primary-color) 20%, var(--card-background-color));
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.tictactoe-cell.o {
+  background-color: color-mix(in srgb, var(--secondary-color) 25%, var(--card-background-color));
+  color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+/* Sudoku Specific Grid */
+.sudoku-grid {
+  display: grid;
+  grid-template-columns: repeat(4, clamp(35px, 12vw, 55px));
+  gap: clamp(4px, 1vw, 6px);
+  justify-content: center;
+  margin: 1.5em auto;
+}
+
+.sudoku-cell {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  font-size: clamp(1.2em, 5vw, 1.6em);
+  font-weight: 700;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--card-background-color);
+  color: var(--text-color);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.sudoku-cell:hover:not(:disabled):not(.sudoku-cell-initial) {
+  border-color: var(--primary-color);
+  background-color: color-mix(in srgb, var(--primary-color) 5%, var(--card-background-color));
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.07);
+}
+.sudoku-cell:active:not(:disabled):not(.sudoku-cell-initial) {
+  transform: translateY(0px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition-duration: 0.05s;
+}
+
+.sudoku-cell-initial {
+  background: color-mix(in srgb, var(--primary-color) 15%, var(--card-background-color));
+  color: var(--primary-color);
+  font-weight: 800;
+  cursor: not-allowed;
+  border-color: transparent;
+}
+.sudoku-cell-selected {
+  border-color: var(--success-color);
+  outline: 2px solid var(--success-color);
+  background-color: color-mix(in srgb, var(--success-color) 15%, var(--card-background-color));
+}
+.sudoku-cell:disabled {
+    cursor: not-allowed;
+    background-color: var(--disabled-bg-color);
+}
+
+.sudoku-input-buttons {
+  display: flex;
+  justify-content: center;
+  gap: clamp(6px, 1.5vw, 10px);
+  margin: 1em 0;
+}
+.sudoku-input-button {
+  min-width: clamp(38px, 9vw, 46px);
+  min-height: clamp(38px, 9vw, 46px);
+  background: var(--primary-color);
+  color: var(--button-text-color);
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: clamp(1em, 4vw, 1.1em);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+}
+.sudoku-input-button:hover {
+  background-color: color-mix(in srgb, var(--primary-color) 85%, black);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 18%, transparent);
+}
+.sudoku-input-button:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 15%, transparent);
+  transition-duration: 0.05s;
+}
+.sudoku-input-button:disabled {
+  background-color: var(--disabled-bg-color);
+  color: var(--disabled-text-color);
+  cursor: not-allowed;
+  transform: none; /* Reset transform for disabled state */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Reset shadow for disabled state */
+}
+
+/* Chess Specific Grid */
+.chess-grid {
+  display: grid;
+  grid-template-columns: repeat(4, clamp(38px, 13vw, 58px));
+  gap: 0;
+  justify-content: center;
+  margin: 1.5em auto;
+  border: 3px solid var(--primary-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.chess-cell {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  font-size: clamp(1.5em, 7vw, 1.8em);
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: inset 0 0 1px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease-out, transform 0.15s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.chess-cell:hover:not(:disabled) {
+  transform: scale(1.05); /* Slight scale on hover for interactive cells */
+}
+.chess-cell:active:not(:disabled) {
+  transform: scale(0.98);
+  transition-duration: 0.05s;
+}
+
+.chess-cell-light {
+  background: var(--card-background-color);
+}
+.chess-cell-dark {
+  background: color-mix(in srgb, var(--primary-color) 20%, var(--card-background-color));
+}
+.chess-cell-selected {
+   border: 3px solid var(--secondary-color);
+   background: color-mix(in srgb, var(--secondary-color) 30%, var(--card-background-color)) !important;
+}
+.chess-piece-white {
+  color: var(--primary-color);
+}
+.chess-piece-black {
+  color: color-mix(in srgb, var(--text-color) 80%, black);
+}
+.chess-cell:disabled {
+  cursor: not-allowed;
+}
+
+/* Ludo Game Specifics */
+.ludo-players {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(12px, 2.5vw, 20px);
+  margin-bottom: 20px;
+}
+.ludo-player-info {
+  text-align: center;
+}
+.ludo-player-token {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  margin: 0 auto 4px;
+  border: 3px solid var(--border-color);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--button-text-color);
+  font-weight: 800;
+  font-size: 22px;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; /* Added for smooth animation */
+}
+.ludo-player-active .ludo-player-token {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--secondary-color) 50%, transparent);
+  transform: scale(1.1); /* Active player token slightly larger */
+}
+
+@keyframes tokenMoveHighlight {
+  0% { transform: scale(1.1); box-shadow: 0 0 15px color-mix(in srgb, var(--success-color) 70%, transparent); }
+  50% { transform: scale(1.25); box-shadow: 0 0 25px color-mix(in srgb, var(--success-color) 90%, transparent); }
+  100% { transform: scale(1.1); box-shadow: 0 0 15px color-mix(in srgb, var(--success-color) 70%, transparent); }
+}
+
+.ludo-player-just-moved .ludo-player-token {
+  animation: tokenMoveHighlight 0.5s ease-in-out;
+}
+
+.ludo-player-name {
+  font-size: 1em;
+  color: var(--text-color);
+  margin-top: 4px;
+  font-weight: 600;
+}
+.ludo-player-pos {
+  font-size: 0.9em;
+  color: var(--subtle-text-color);
+}
+.ludo-board {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+.ludo-board-row {
+  display: flex;
+  gap: 6px;
+}
+.ludo-board-cell {
+  width: clamp(28px, 6vw, 34px);
+  height: clamp(28px, 6vw, 34px);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--border-color) 40%, var(--card-background-color));
+  margin: 1px;
+}
+.ludo-board-cell-player {
+  border-width: 2px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* GamingPage (Color-Shape Game) Specifics */
+.gaming-page-color-display {
+  display: inline-block;
+  margin-left: 0.8em;
+  width: 50px;
+  height: 25px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  vertical-align: middle;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.gaming-page-options-container {
+  display: flex;
+  gap: 0.8em;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.gaming-page-option-button {
+  min-height: 36px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95em;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+  cursor: pointer;
+  padding: 0.4em 0.8em;
+  background-color: var(--card-background-color);
+  color: var(--text-color);
+}
+.gaming-page-option-button:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-color);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+.gaming-page-option-button:active {
+  transform: translateY(0px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition-duration: 0.05s;
+}
+
+.gaming-page-message {
+  margin-top: 1em;
+  font-weight: 600;
+  font-size: 1.05em;
+}
+.gaming-page-win-message {
+  margin: 1.5em 0;
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--success-color);
+  text-align: center;
+}
+
+/* Utility classes */
+.text-center { text-align: center; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+
+/* Icon alignment in buttons */
+.game-button span, .nav-button span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.nav-button svg, .game-button svg {
+  width: 1em;
+  height: 1em;
+  /* margin-right: 0.5em; Already handled by gap in span */
+  vertical-align: -0.125em;
+  fill: currentColor;
+}
+
+
+/* Responsive adjustments */
+
+/* Larger Tablets / Small Desktops */
+@media (max-width: 1024px) {
+  .app-header h1 {
+    font-size: 2.2em;
   }
-  to {
-    transform: rotate(360deg);
+  .app-header p {
+    font-size: 1em;
+  }
+  .nav-button {
+    min-width: 120px;
+    padding: 0.6em 1em;
+    font-size: 0.95em;
+  }
+  .game-card {
+    padding: 1.3em;
+  }
+
+  .tictactoe-grid {
+    grid-template-columns: repeat(3, clamp(60px, 15vw, 90px));
+    gap: clamp(6px, 1.2vw, 12px);
+  }
+   .tictactoe-cell {
+    font-size: clamp(1.8em, 8vw, 2.8em);
+    border-radius: 10px;
+  }
+
+  .sudoku-grid {
+    grid-template-columns: repeat(4, clamp(30px, 10vw, 50px));
+    gap: clamp(3px, 0.8vw, 5px);
+  }
+  .sudoku-cell {
+    font-size: clamp(1em, 4vw, 1.5em);
+    border-radius: 5px;
+  }
+   .sudoku-input-button {
+    min-width: clamp(35px, 8vw, 42px);
+    min-height: clamp(35px, 8vw, 42px);
+    font-size: clamp(0.9em, 3.5vw, 1em);
+  }
+
+  .chess-grid {
+    grid-template-columns: repeat(4, clamp(35px, 11vw, 55px));
+    border-radius: 6px;
+  }
+   .chess-cell {
+    font-size: clamp(1.3em, 6vw, 1.7em);
+  }
+
+  .ludo-board-cell {
+    width: clamp(26px, 5.5vw, 32px);
+    height: clamp(26px, 5.5vw, 32px);
+    border-radius: 5px;
+  }
+  .ludo-player-token {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+/* Tablets and Large Phones */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 1.2em 1em 1em;
+    margin-bottom: 24px;
+  }
+  .app-header h1 {
+    font-size: 1.8em;
+  }
+  .app-header p {
+    font-size: 0.9em;
+  }
+  .app-header nav {
+    flex-direction: column;
+    gap: 0.5em;
+    margin-top: 1em;
+  }
+  .nav-button {
+    min-width: 100%;
+    font-size: 0.9em;
+    padding: 0.7em 1em;
+  }
+  .game-card {
+    padding: 1em;
+    width: 95%;
+    margin: 0.8em auto;
+  }
+  .game-card h1, .game-card h2 {
+    font-size: 1.5em;
+  }
+  .game-button {
+    font-size: 0.9em;
+    padding: 0.6em 1em;
+  }
+
+  .tictactoe-grid {
+    grid-template-columns: repeat(3, clamp(50px, 16vw, 80px));
+    gap: clamp(5px, 1vw, 10px);
+  }
+  .tictactoe-cell {
+    font-size: clamp(1.5em, 7vw, 2.5em);
+    border-radius: 8px;
+  }
+
+  .sudoku-grid {
+    grid-template-columns: repeat(4, clamp(25px, 9vw, 45px));
+    gap: clamp(3px, 0.6vw, 4px);
+  }
+  .sudoku-cell {
+    font-size: clamp(0.9em, 3.5vw, 1.3em);
+    border-radius: 4px;
+  }
+  .sudoku-input-button {
+    min-width: clamp(30px, 7vw, 38px);
+    min-height: clamp(30px, 7vw, 38px);
+    font-size: clamp(0.8em, 3vw, 0.9em);
+  }
+
+  .chess-grid {
+    grid-template-columns: repeat(4, clamp(30px, 10vw, 50px));
+    border-radius: 5px;
+  }
+  .chess-cell {
+    font-size: clamp(1.2em, 5.5vw, 1.6em);
+  }
+
+  .ludo-players {
+    gap: clamp(10px, 2vw, 16px);
+    margin-bottom: 16px;
+  }
+  .ludo-player-token {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+  .ludo-board-cell {
+    width: clamp(22px, 5vw, 28px);
+    height: clamp(22px, 5vw, 28px);
+    border-radius: 4px;
+  }
+  .gaming-page-option-button {
+    padding: 0.3em 0.6em;
+    font-size: 0.9em;
+    min-height: 32px;
   }
 }
 
-.card {
-  padding: 2em;
-}
+/* Mobile Phones */
+@media (max-width: 480px) {
+  .app-header {
+    padding: 1em 0.8em 0.8em;
+    margin-bottom: 16px;
+  }
+  .app-header h1 {
+    font-size: 1.6em;
+  }
+  .app-header p {
+    font-size: 0.8em;
+    margin: 0.4em 0 0;
+  }
+   .app-header nav {
+    margin-top: 0.8em;
+  }
+  .nav-button {
+    font-size: 0.85em;
+    padding: 0.6em 0.8em;
+    border-radius: 8px;
+  }
 
-.read-the-docs {
-  color: #888;
+  .app-main {
+    padding: 0 0.5em 1em;
+  }
+  .game-card {
+    border-radius: 10px;
+    padding: 0.8em;
+    margin: 0.5em auto;
+  }
+  .game-card h1, .game-card h2 {
+    font-size: 1.3em;
+    margin-bottom: 0.5em;
+  }
+  .game-card p {
+    font-size: 0.9em;
+    margin-bottom: 1em;
+  }
+  .game-button {
+    font-size: 0.8em;
+    min-width: 80px;
+    padding: 0.5em 0.8em;
+  }
+
+  .tictactoe-grid {
+    grid-template-columns: repeat(3, clamp(45px, 15vw, 70px));
+    gap: clamp(4px, 1vw, 8px);
+  }
+   .tictactoe-cell {
+    font-size: clamp(1.3em, 6vw, 2.2em);
+  }
+
+  .sudoku-grid {
+    grid-template-columns: repeat(4, clamp(20px, 8vw, 40px));
+    gap: clamp(2px, 0.5vw, 3px);
+  }
+  .sudoku-cell {
+    font-size: clamp(0.8em, 3vw, 1.2em);
+  }
+  .sudoku-input-button {
+    min-width: clamp(28px, 6vw, 35px);
+    min-height: clamp(28px, 6vw, 35px);
+    font-size: clamp(0.7em, 2.5vw, 0.8em);
+  }
+
+  .chess-grid {
+    grid-template-columns: repeat(4, clamp(28px, 9vw, 45px));
+  }
+   .chess-cell {
+    font-size: clamp(1em, 5vw, 1.5em);
+  }
+
+  .ludo-players {
+    gap: clamp(8px, 1.5vw, 12px);
+    margin-bottom: 12px;
+  }
+  .ludo-player-token {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    border-width: 2px;
+  }
+   .ludo-player-name {
+    font-size: 0.9em;
+  }
+  .ludo-player-pos {
+    font-size: 0.8em;
+  }
+  .ludo-board-cell {
+    width: clamp(18px, 4vw, 24px);
+    height: clamp(18px, 4vw, 24px);
+    border-radius: 3px;
+  }
+
+  .gaming-page-color-display {
+    width: 40px;
+    height: 20px;
+    margin-left: 0.5em;
+  }
+  .gaming-page-option-button {
+    padding: 0.25em 0.5em;
+    font-size: 0.8em;
+    min-height: 30px;
+  }
+  .gaming-page-win-message {
+    font-size: 1.2em;
+  }
 }
