@@ -1,42 +1,3 @@
-/* src/components/WinCelebration.css */
-.win-celebration-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.75); /* Darker overlay for better contrast */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000; /* Very high z-index to be on top of everything */
-  cursor: pointer;
-  animation: fadeInOverlay 0.3s ease-out;
-}
-
-.win-celebration-content {
-  background-color: var(--card-background-color); /* Use theme variable */
-  padding: 30px 40px; /* Adjusted padding */
-  border-radius: 12px; /* Consistent with game-card */
-  text-align: center;
-  color: var(--text-color); /* Use theme variable */
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15); /* Adjusted shadow */
-  transform: scale(0.8); /* Initial state for pop-in */
-  animation: popInContent 0.3s 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Smoother pop-in */
-}
-
-.win-celebration-content h1 {
-  font-size: 2.8em; /* Adjusted size */
-  color: var(--primary-color); /* Use theme variable */
-  margin-top: 0; /* Reset margin */
-  margin-bottom: 0.5em;
-}
-
-.win-celebration-content p {
-  font-size: 1.1em;
-  margin-bottom: 0.5em;
-}
-
 /* Keyframes for animations */
 @keyframes fadeInOverlay {
   from { opacity: 0; }
@@ -44,42 +5,168 @@
 }
 
 @keyframes popInContent {
-  from { transform: scale(0.8); opacity: 0; }
+  from { transform: scale(0.85); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 
-/* Responsive adjustments for WinCelebration */
-@media (max-width: 768px) {
-  .win-celebration-content {
-    padding: 25px 30px; /* Reduce padding */
-    /* max-width: 80vw; */ /* Ensure it's not too wide */
-  }
-  .win-celebration-content h1 {
-    font-size: 2.2em; /* Reduce font size */
-  }
-  .win-celebration-content p {
-    font-size: 1em;
-  }
-  .win-celebration-content p:last-child { /* Smaller text for dismiss message */
-    font-size: 0.7em;
-    margin-top: 15px; /* Add some space for the smaller text */
-  }
+/* Shared styles for modal overlays */
+.instructions-modal-overlay,
+.win-celebration-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.70); /* Adjusted alpha for consistency */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeInOverlay 0.25s ease-out forwards;
+  cursor: pointer; /* Allow closing by clicking overlay */
 }
 
+/* Shared styles for modal content boxes */
+.instructions-modal-content,
+.win-celebration-content {
+  background: var(--card-background-color);
+  color: var(--text-color);
+  padding: 25px 30px;
+  border-radius: 12px;
+  width: 90%;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  transform: scale(0.9);
+  animation: popInContent 0.25s 0.05s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  cursor: default;
+  text-align: center; /* Center content for win celebration */
+}
+
+/* Specific to Instructions Modal */
+.instructions-modal-content {
+  max-width: 550px;
+  text-align: left; /* Instructions are usually better left-aligned */
+}
+.instructions-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+}
+.instructions-modal-header h2 {
+  margin: 0;
+  font-size: 1.6em;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+.instructions-modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 2.2em;
+  cursor: pointer;
+  color: var(--subtle-text-color);
+  padding: 0 8px;
+  line-height: 1;
+  transition: color 0.2s ease-out;
+}
+.instructions-modal-close-btn:hover {
+  color: var(--secondary-color);
+}
+.instructions-modal-body {
+  max-height: 65vh;
+  overflow-y: auto;
+  line-height: 1.65;
+  padding-right: 5px; /* For scrollbar */
+}
+.instructions-modal-body ul {
+  padding-left: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.instructions-modal-body li {
+  margin-bottom: 0.6em;
+}
+.instructions-modal-body p {
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+.instructions-modal-body p:last-child {
+    margin-bottom: 0;
+}
+
+/* Specific to Win Celebration Modal */
+.win-celebration-content {
+  max-width: 480px; /* Slightly narrower than instructions */
+}
+.win-celebration-icon {
+  font-size: 4em;
+  display: block;
+  margin-bottom: 0.2em;
+  animation: popInContent 0.5s 0.1s ease-out forwards; /* Can reuse or define new */
+}
+.win-celebration-content h1 {
+  font-size: 2.2em;
+  color: var(--primary-color);
+  margin-top: 0.2em;
+  margin-bottom: 0.4em;
+}
+.win-celebration-score {
+  font-size: 1.4em;
+  color: var(--secondary-color);
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+.win-celebration-content p { /* General paragraph in win celebration */
+  font-size: 1.1em;
+  margin-bottom: 0.8em;
+}
+.win-celebration-content p:last-child { /* Specifically for the "Congratulations!" if it's last */
+    margin-bottom: 0;
+}
+
+.win-celebration-actions {
+  margin-top: 1.8em;
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap; /* Allow wrapping if buttons are too wide */
+}
+.win-celebration-actions .game-button {
+  min-width: 170px; /* Adjusted min-width */
+  font-size: 1em;
+}
+
+/* Responsive adjustments for Win Celebration */
 @media (max-width: 480px) {
   .win-celebration-content {
-    padding: 20px 15px; /* Further reduce padding */
-    width: 85vw;
-    max-width: 320px; /* Max width for very small screens */
+    padding: 20px 15px;
+    width: 90vw;
+    max-width: 320px;
   }
   .win-celebration-content h1 {
-    font-size: 1.8em; /* Further reduce font size */
+    font-size: 1.8em;
   }
-  .win-celebration-content p {
-    font-size: 0.9em;
+  .win-celebration-icon {
+    font-size: 3em;
   }
-   .win-celebration-content p:last-child {
-    font-size: 0.65em;
-    margin-top: 10px;
+  .win-celebration-score {
+    font-size: 1.2em;
+  }
+   .win-celebration-actions {
+    flex-direction: column; /* Stack buttons on small screens */
+    width: 100%;
+    gap: 0.8em;
+  }
+  .win-celebration-actions .game-button {
+    width: 100%;
+    min-width: unset;
+    font-size: 1em;
+    margin-bottom: 0.5em;
+  }
+   .win-celebration-actions .game-button:last-child {
+    margin-bottom: 0;
   }
 }
