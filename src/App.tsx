@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import WinCelebration from './components/WinCelebration';
+import InstructionsModal from './components/InstructionsModal';
 
 // SVG Icon for TicTacToe
 const TicTacToeIcon = () => (
@@ -8,7 +9,6 @@ const TicTacToeIcon = () => (
     <path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V7zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V7zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2z"/>
   </svg>
 );
-
 
 function GamingPage() {
   const [score, setScore] = useState<number>(0);
@@ -19,6 +19,7 @@ function GamingPage() {
   const [message, setMessage] = useState<string>('');
   const [step, setStep] = useState<'color' | 'shape' | 'win'>('color');
   const [showCelebration, setShowCelebration] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const colorList = [
     'red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown', 'black', 'white',
@@ -140,11 +141,28 @@ function GamingPage() {
 
   return (
     <>
-      {showCelebration && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <WinCelebration
+        isOpen={showCelebration}
+        onClose={() => setShowCelebration(false)}
+        onPlayAgain={restartGame}
+        score={score}
+        gameTitle="Shape & Color"
+      />
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        title="🎨 Shape & Color Game - Instructions"
+      >
+        <ul>
+          <li>Identify the color of the displayed sample.</li>
+          <li>If correct, you'll then need to identify the shape that matches the sample.</li>
+          <li>Score 10 points to win the game!</li>
+        </ul>
+      </InstructionsModal>
       <div className="game-card" style={{ maxWidth: 420 }}>
         <h1><span role="img" aria-label="Palette icon">🎨</span> Shape & Color Game</h1>
         <p className="score-text">
-          Score: <b>{score}</b> / 10
+          Score: <b aria-live="polite">{score}</b> / 10
         </p>
         {step !== 'win' && (
           <button
@@ -154,6 +172,7 @@ function GamingPage() {
             <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
           </button>
         )}
+         <button className="game-button game-button-secondary mb-2" onClick={() => setShowInstructions(true)}><span>❓ Instructions</span></button>
         {step === 'color' && (
           <>
             <div className="mt-2 mb-1" style={{ fontSize: '1.2em', fontWeight: 600, color: 'var(--text-color)' }}>
@@ -207,7 +226,7 @@ function GamingPage() {
             </button>
           </div>
         )}
-        {message && <p className="gaming-page-message" style={{ color: message.includes('win') ? 'var(--success-color)' : message.includes('Try again') || message.includes('Invalid') ? 'var(--error-color)' : 'var(--text-color)' }}>{message}</p>}
+        {message && <div role="status" aria-live="polite"><p className="gaming-page-message" style={{ color: message.includes('win') ? 'var(--success-color)' : message.includes('Try again') || message.includes('Invalid') ? 'var(--error-color)' : 'var(--text-color)' }}>{message}</p></div>}
       </div>
     </>
   );
@@ -219,6 +238,7 @@ function TicTacToe() {
   const [winner, setWinner] = useState<string | null>(null);
   const [draw, setDraw] = useState<boolean>(false);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   function calculateWinner(squares: string[]) {
     const lines = [
@@ -261,10 +281,26 @@ function TicTacToe() {
 
   return (
     <>
-      {showCelebration && winner && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <WinCelebration
+        isOpen={showCelebration && !!winner}
+        onClose={() => setShowCelebration(false)}
+        onPlayAgain={restart}
+        gameTitle="Tic-Tac-Toe"
+      />
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        title="🏁 Tic-Tac-Toe - Instructions"
+      >
+        <ul>
+          <li>Players take turns marking a square in a 3x3 grid.</li>
+          <li>The player who first places three of their marks in a horizontal, vertical, or diagonal row wins.</li>
+          <li>If all squares are filled and no one wins, the game is a draw.</li>
+        </ul>
+      </InstructionsModal>
       <div className="game-card" style={{ maxWidth: 500 }}>
         <h2><span role="img" aria-label="Chequered flag icon">🏁</span> Tic-Tac-Toe</h2>
-        <div className="tictactoe-grid">
+        <div className="tictactoe-grid" role="grid">
           {board.map((cell, idx) => (
             <button
               key={idx}
@@ -278,12 +314,13 @@ function TicTacToe() {
             </button>
           ))}
         </div>
-        <div className="mt-1 mb-1" style={{ fontWeight: 600, fontSize: '1.3em', color: winner ? 'var(--success-color)' : draw ? 'var(--error-color)' : 'var(--text-color)', letterSpacing: 0.5 }}>
+        <div role="status" aria-live="polite" className="mt-1 mb-1" style={{ fontWeight: 600, fontSize: '1.3em', color: winner ? 'var(--success-color)' : draw ? 'var(--error-color)' : 'var(--text-color)', letterSpacing: 0.5 }}>
           {winner ? `Winner: ${winner}` : draw ? 'Draw!' : `Next: ${xIsNext ? 'X' : 'O'}`}
         </div>
         <button className="game-button game-button-secondary" onClick={restart}>
           <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
         </button>
+        <button className="game-button game-button-secondary mt-1" onClick={() => setShowInstructions(true)}><span>❓ Instructions</span></button>
       </div>
     </>
   );
@@ -302,6 +339,7 @@ function Ludo() {
   const [displayDice, setDisplayDice] = useState<number | null>(null);
   const [justMovedPlayer, setJustMovedPlayer] = useState<number | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const playerColors = ['#e53935', '#43a047', '#1e88e5', '#fbc02d'];
   const playerNames = ['Red', 'Green', 'Blue', 'Yellow'];
@@ -382,9 +420,22 @@ function Ludo() {
 
   if (!gameStarted) {
     return (
+      <>
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        title="🎲 Ludo (Mini) - Instructions"
+      >
+        <ul>
+          <li>Players take turns rolling a dice.</li>
+          <li>Move your token along the linear board according to the dice roll.</li>
+          <li>Be the first player to land exactly on step 20 to win! You must roll the exact number required.</li>
+          <li>Number of players can be selected before starting.</li>
+        </ul>
+      </InstructionsModal>
       <div className="game-card" style={{ maxWidth: 700, borderRadius: 24 }}>
         <h2><span role="img" aria-label="Dice icon">🎲</span> Ludo (Mini) - Select Players</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1em', margin: '2em 0' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1em', margin: '1em 0' }}>
           {[2, 3, 4].map(num => (
             <button
               key={num}
@@ -396,13 +447,32 @@ function Ludo() {
             </button>
           ))}
         </div>
+        <button className="game-button game-button-secondary" onClick={() => setShowInstructions(true)}><span>❓ Instructions</span></button>
       </div>
+      </>
     );
   }
 
   return (
     <>
-      {showCelebration && winner !== null && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <WinCelebration
+        isOpen={showCelebration && winner !== null}
+        onClose={() => setShowCelebration(false)}
+        onPlayAgain={restart}
+        gameTitle={`Ludo (${numPlayers}P)`}
+      />
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        title="🎲 Ludo (Mini) - Instructions"
+      >
+        <ul>
+          <li>Players take turns rolling a dice.</li>
+          <li>Move your token along the linear board according to the dice roll.</li>
+          <li>Be the first player to land exactly on step 20 to win! You must roll the exact number required.</li>
+          <li>Number of players can be selected before starting.</li>
+        </ul>
+      </InstructionsModal>
       <div className="game-card" style={{ maxWidth: 700, borderRadius: 24 }}>
         <h2><span role="img" aria-label="Dice icon">🎲</span> Ludo (Mini - {numPlayers} Players)</h2>
         <div className="ludo-players mb-2">
@@ -420,20 +490,21 @@ function Ludo() {
           })}
         </div>
         <div className="text-center mt-2 mb-2">
-          <div className="ludo-board">
+          <div className="ludo-board" role="grid">
             {[...Array(4)].map((_, row) => (
-              <div key={row} className="ludo-board-row">
+              <div key={row} className="ludo-board-row" role="row">
                 {[...Array(5)].map((_, col) => {
                   const i = row * 5 + col;
                   const playerHere = positions.findIndex((p, playerIdx) => playerIdx < numPlayers && p === i);
                   return (
-                    <div key={col} className={`ludo-board-cell ${playerHere !== -1 ? 'ludo-board-cell-player' : ''}`} style={{ background: playerHere !== -1 ? playerColors[playerHere] : undefined, borderColor: playerHere !== -1 ? playerColors[playerHere] : 'var(--border-color)', boxShadow: playerHere !== -1 ? `0 1px 4px ${playerColors[playerHere]}99` : undefined }} />
+                    <div key={col} className={`ludo-board-cell ${playerHere !== -1 ? 'ludo-board-cell-player' : ''}`} style={{ background: playerHere !== -1 ? playerColors[playerHere] : undefined, borderColor: playerHere !== -1 ? playerColors[playerHere] : 'var(--border-color)', boxShadow: playerHere !== -1 ? `0 1px 4px ${playerColors[playerHere]}99` : undefined }} role="gridcell" aria-label={`Cell ${i+1}`}>
+                    </div>
                   );
                 })}
               </div>
             ))}
           </div>
-          <div className="mt-1 mb-1" style={{ fontSize: '1.1em', color: 'var(--text-color)', fontWeight: 600, minHeight: '1.5em' }}>
+          <div role="status" aria-live="polite" className="mt-1 mb-1" style={{ fontSize: '1.1em', color: 'var(--text-color)', fontWeight: 600, minHeight: '1.5em' }}>
             {winner !== null ? (
               <span style={{ color: playerColors[winner], fontWeight: 800 }}>{playerNames[winner]} wins!</span>
             ) : (
@@ -468,6 +539,7 @@ function Ludo() {
           >
             <span><span role="img" aria-label="Settings icon">⚙️</span> Change Players</span>
           </button>
+           <button className="game-button game-button-secondary mt-1" onClick={() => setShowInstructions(true)}><span>❓ Instructions</span></button>
         </div>
       </div>
     </>
@@ -511,6 +583,7 @@ function Sudoku() {
   const [message, setMessage] = useState<string>('');
   const [completed, setCompleted] = useState<boolean>(false);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const getCurrentInitialBoard = () => sudokuBoards[difficulty];
 
@@ -559,7 +632,24 @@ function Sudoku() {
 
   return (
     <>
-      {showCelebration && completed && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <WinCelebration
+        isOpen={showCelebration && completed}
+        onClose={() => setShowCelebration(false)}
+        onPlayAgain={restart}
+        gameTitle="Sudoku (4x4)"
+      />
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        title="🔢 Sudoku (4x4) - Instructions"
+      >
+        <ul>
+          <li>Fill the 4x4 grid.</li>
+          <li>Each row, each column, and each of the four 2x2 subgrids must contain all digits from 1 to 4 without repetition.</li>
+          <li>Select an empty cell, then click a number button (1-4) to place it.</li>
+          <li>Pre-filled cells cannot be changed. Choose your difficulty!</li>
+        </ul>
+      </InstructionsModal>
       <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}>
         <h2><span role="img" aria-label="Numeric input icon">🔢</span> Sudoku (4x4)</h2>
         <div className="sudoku-difficulty-selector mb-2" style={{ display: 'flex', justifyContent: 'center', gap: '0.5em' }}>
@@ -574,7 +664,7 @@ function Sudoku() {
             </button>
           ))}
         </div>
-        <div className="sudoku-grid">
+        <div className="sudoku-grid" role="grid">
           {board.map((row: number[], rIdx: number) =>
             row.map((cell: number, cIdx: number) => (
               <button
@@ -605,12 +695,15 @@ function Sudoku() {
             </button>
           ))}
         </div>
-        <div className="mt-1 mb-1" style={{ fontWeight: 600, fontSize: '1.1em', color: completed ? 'var(--success-color)' : 'var(--text-color)', letterSpacing: 0.5 }}>
+        <div role="status" aria-live="polite" className="mt-1 mb-1" style={{ fontWeight: 600, fontSize: '1.1em', color: completed ? 'var(--success-color)' : 'var(--text-color)', letterSpacing: 0.5 }}>
           {message}
         </div>
-        <button className="game-button game-button-secondary" onClick={restart}>
-          <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
-        </button>
+        <div style={{display: 'flex', gap: '1em', justifyContent: 'center', width: '100%'}}>
+          <button className="game-button game-button-secondary" onClick={restart}>
+            <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
+          </button>
+          <button className="game-button game-button-secondary" onClick={() => setShowInstructions(true)}><span>❓ Instructions</span></button>
+        </div>
       </div>
     </>
   );
@@ -631,6 +724,7 @@ function Chess() {
   const [message, setMessage] = useState<string>('');
   const [winner, setWinner] = useState<string | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   function isOwnPiece(piece: string) {
     return piece && piece[0] === turn;
@@ -731,10 +825,28 @@ function Chess() {
 
   return (
     <>
-      {showCelebration && winner && <WinCelebration onClose={() => setShowCelebration(false)} />}
+      <WinCelebration
+        isOpen={showCelebration && !!winner}
+        onClose={() => setShowCelebration(false)}
+        onPlayAgain={restart}
+        gameTitle="Chess (Mini 4x4)"
+      />
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        title="♟️ Chess (Mini 4x4) - Instructions"
+      >
+        <ul>
+          <li>This is a simplified 4x4 version of Chess.</li>
+          <li>Pawns (♙♟️) move one step forward. They capture one step diagonally forward.</li>
+          <li>Rooks (♖♜) move any number of clear squares horizontally or vertically.</li>
+          <li>Kings (♔♚) move one square in any direction.</li>
+          <li>The goal is to capture the opponent's King.</li>
+        </ul>
+      </InstructionsModal>
       <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}>
         <h2><span role="img" aria-label="Chess pawn icon">♟️</span> Chess (Mini 4x4)</h2>
-        <div className="chess-grid">
+        <div className="chess-grid" role="grid">
           {board.map((row, rIdx) =>
             row.map((cell, cIdx) => {
               const isSel = selected && selected[0] === rIdx && selected[1] === cIdx;
@@ -750,6 +862,7 @@ function Chess() {
                   onClick={() => handleCellClick(rIdx, cIdx)}
                   aria-label={`Chess cell ${rIdx + 1},${cIdx + 1}`}
                   disabled={!!winner}
+                  // role="gridcell"
                 >
                   {renderPiece(cell)}
                 </button>
@@ -757,12 +870,15 @@ function Chess() {
             })
           )}
         </div>
-        <div className="mt-1 mb-1" style={{ fontWeight: 600, fontSize: '1.1em', color: winner ? 'var(--success-color)' : 'var(--text-color)', letterSpacing: 0.5 }}>
+        <div role="status" aria-live="polite" className="mt-1 mb-1" style={{ fontWeight: 600, fontSize: '1.1em', color: winner ? 'var(--success-color)' : 'var(--text-color)', letterSpacing: 0.5 }}>
           {winner ? `${winner} wins!` : message || `${turn === 'w' ? 'White' : 'Black'}'s turn`}
         </div>
-        <button className="game-button game-button-secondary" onClick={restart}>
-          <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
-        </button>
+        <div style={{display: 'flex', gap: '1em', justifyContent: 'center', width: '100%'}}>
+          <button className="game-button game-button-secondary" onClick={restart}>
+            <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
+          </button>
+          <button className="game-button game-button-secondary" onClick={() => setShowInstructions(true)}><span>❓ Instructions</span></button>
+        </div>
       </div>
     </>
   );
@@ -802,8 +918,8 @@ function App() {
             fontSize: '0.9em',
             minWidth: 'auto'
         }}
-        aria-label={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-        title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+        aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+        title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
         >
           <span>{theme === 'light' ? '🌙' : '☀️'}</span>
         </button>

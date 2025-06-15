@@ -93,21 +93,24 @@ body {
   background-color: var(--card-background-color);
   color: var(--primary-color);
   border: 1px solid var(--border-color);
+  border-bottom: 3px solid transparent; /* Reserve space for active indicator */
   min-width: 130px;
   border-radius: 10px;
   font-weight: 600;
   font-size: 1em;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  transition: all 0.2s ease-out; /* Ensure all properties transition smoothly */
+  transition: all 0.2s ease-out;
   padding: 0.7em 1.1em;
   outline: none;
   cursor: pointer;
   letter-spacing: 0.5px;
   text-align: center;
+  box-sizing: border-box;
 }
 .nav-button:hover {
   background-color: color-mix(in srgb, var(--primary-color) 10%, var(--card-background-color));
-  border-color: var(--primary-color);
+  border-color: var(--primary-color); /* Hover border for top, left, right */
+  border-bottom-color: var(--primary-color); /* Hover border for bottom if not active */
   color: var(--primary-color);
   transform: translateY(-2px);
   box-shadow: 0 4px 10px color-mix(in srgb, var(--text-color) 8%, transparent);
@@ -119,22 +122,26 @@ body {
 }
 
 .nav-button-active {
-  background-color: var(--primary-color);
-  color: var(--button-text-color);
-  border-color: var(--primary-color);
+  /* background (gradient) and color are set by inline styles in App.tsx */
+  /* border-color for top/left/right is transparent via inline style in App.tsx */
+  border-bottom: 3px solid var(--secondary-color); /* Distinctive active indicator */
   box-shadow: 0 4px 12px color-mix(in srgb, var(--primary-color) 30%, transparent);
+  /* padding-bottom: calc(0.7em - 3px); /* Adjust if border was outside padding box. Not needed with border-box. */
 }
 .nav-button-active:hover {
-  background-color: color-mix(in srgb, var(--primary-color) 90%, black);
-  border-color: color-mix(in srgb, var(--primary-color) 90%, black);
-  transform: translateY(-2px); /* Keep consistent hover lift */
+  /* background-color is inline, but we can adjust other properties */
+  /* border-color for top/left/right is transparent via inline style */
+  border-bottom-color: color-mix(in srgb, var(--secondary-color) 80%, black); /* Darken active border on hover */
+  transform: translateY(-2px);
   box-shadow: 0 6px 14px color-mix(in srgb, var(--primary-color) 35%, transparent);
 }
 .nav-button-active:active {
   transform: translateY(0px);
   box-shadow: 0 2px 8px color-mix(in srgb, var(--primary-color) 30%, transparent);
+  border-bottom-color: var(--secondary-color); /* Keep active color on press */
   transition-duration: 0.05s;
 }
+
 
 /* Main Content Area */
 .app-main {
@@ -194,8 +201,6 @@ body {
 }
 .game-card:hover {
   border-color: var(--primary-color);
-  /* transform: translateY(-2px); Optional: slightly more lift */
-  /* box-shadow: 0 6px 20px rgba(0,0,0,0.08); Optional: slightly enhanced shadow */
 }
 
 
@@ -239,11 +244,11 @@ body {
 
 .game-button:hover {
   background-color: color-mix(in srgb, var(--primary-color) 85%, black);
-  transform: translateY(-2px); /* Enhanced lift */
-  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 18%, transparent); /* Shadow using text color for theme adaptability */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 18%, transparent);
 }
 .game-button:active {
-  transform: translateY(0px); /* Pressed down from hover state */
+  transform: translateY(0px);
   box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 15%, transparent);
   transition-duration: 0.05s;
 }
@@ -256,7 +261,7 @@ body {
 .game-button-secondary:hover {
   background-color: color-mix(in srgb, var(--primary-color) 10%, var(--card-background-color));
   border-color: color-mix(in srgb, var(--primary-color) 85%, black);
-  transform: translateY(-2px); /* Consistent lift */
+  transform: translateY(-2px);
   box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 12%, transparent);
 }
 .game-button-secondary:active {
@@ -442,8 +447,8 @@ body {
   background-color: var(--disabled-bg-color);
   color: var(--disabled-text-color);
   cursor: not-allowed;
-  transform: none; /* Reset transform for disabled state */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Reset shadow for disabled state */
+  transform: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 /* Chess Specific Grid */
@@ -473,7 +478,7 @@ body {
   padding: 0;
 }
 .chess-cell:hover:not(:disabled) {
-  transform: scale(1.05); /* Slight scale on hover for interactive cells */
+  transform: scale(1.05);
 }
 .chess-cell:active:not(:disabled) {
   transform: scale(0.98);
@@ -524,12 +529,12 @@ body {
   color: var(--button-text-color);
   font-weight: 800;
   font-size: 22px;
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; /* Added for smooth animation */
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 .ludo-player-active .ludo-player-token {
   border-color: var(--secondary-color);
   box-shadow: 0 0 12px color-mix(in srgb, var(--secondary-color) 50%, transparent);
-  transform: scale(1.1); /* Active player token slightly larger */
+  transform: scale(1.1);
 }
 
 @keyframes tokenMoveHighlight {
