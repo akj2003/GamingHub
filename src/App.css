@@ -46,7 +46,7 @@ body {
   width: 100%;
   background: color-mix(in srgb, var(--card-background-color) 95%, transparent);
   box-shadow: 0 6px 32px color-mix(in srgb, var(--primary-color) 30%, transparent);
-  padding: 1em 1em 1.5em; /* RESOLUTION: Use this padding */
+  padding: 1em 1em 1.5em;
   margin-bottom: 32px;
   border-bottom-left-radius: 30px;
   border-bottom-right-radius: 30px;
@@ -98,7 +98,7 @@ body {
   font-weight: 600;
   font-size: 1em;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  transition: all 0.2s;
+  transition: all 0.2s ease-out; /* Ensure all properties transition smoothly */
   padding: 0.7em 1.1em;
   outline: none;
   cursor: pointer;
@@ -109,6 +109,13 @@ body {
   background-color: color-mix(in srgb, var(--primary-color) 10%, var(--card-background-color));
   border-color: var(--primary-color);
   color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--text-color) 8%, transparent);
+}
+.nav-button:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 12%, transparent);
+  transition-duration: 0.05s;
 }
 
 .nav-button-active {
@@ -120,8 +127,14 @@ body {
 .nav-button-active:hover {
   background-color: color-mix(in srgb, var(--primary-color) 90%, black);
   border-color: color-mix(in srgb, var(--primary-color) 90%, black);
+  transform: translateY(-2px); /* Keep consistent hover lift */
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--primary-color) 35%, transparent);
 }
-
+.nav-button-active:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--primary-color) 30%, transparent);
+  transition-duration: 0.05s;
+}
 
 /* Main Content Area */
 .app-main {
@@ -177,7 +190,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: border-color 0.2s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
+.game-card:hover {
+  border-color: var(--primary-color);
+  /* transform: translateY(-2px); Optional: slightly more lift */
+  /* box-shadow: 0 6px 20px rgba(0,0,0,0.08); Optional: slightly enhanced shadow */
+}
+
 
 .game-card h1, .game-card h2 {
   color: var(--primary-color);
@@ -213,14 +233,19 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   padding: 0.7em 1.2em;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s, box-shadow 0.1s;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
   margin-top: 0.5em;
 }
 
 .game-button:hover {
   background-color: color-mix(in srgb, var(--primary-color) 85%, black);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transform: translateY(-2px); /* Enhanced lift */
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 18%, transparent); /* Shadow using text color for theme adaptability */
+}
+.game-button:active {
+  transform: translateY(0px); /* Pressed down from hover state */
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 15%, transparent);
+  transition-duration: 0.05s;
 }
 
 .game-button-secondary {
@@ -231,7 +256,15 @@ body {
 .game-button-secondary:hover {
   background-color: color-mix(in srgb, var(--primary-color) 10%, var(--card-background-color));
   border-color: color-mix(in srgb, var(--primary-color) 85%, black);
+  transform: translateY(-2px); /* Consistent lift */
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 12%, transparent);
 }
+.game-button-secondary:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 10%, transparent);
+  transition-duration: 0.05s;
+}
+
 
 .game-button-primary {
   background-color: var(--success-color);
@@ -240,6 +273,13 @@ body {
 }
 .game-button-primary:hover {
    background-color: color-mix(in srgb, var(--success-color) 85%, black);
+   transform: translateY(-2px);
+   box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 18%, transparent);
+}
+.game-button-primary:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 15%, transparent);
+  transition-duration: 0.05s;
 }
 
 .game-button-special {
@@ -249,6 +289,13 @@ body {
 }
 .game-button-special:hover {
   background-color: color-mix(in srgb, var(--secondary-color) 85%, black);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 18%, transparent);
+}
+.game-button-special:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 15%, transparent);
+  transition-duration: 0.05s;
 }
 
 /* TicTacToe Specific Grid */
@@ -271,7 +318,7 @@ body {
   color: var(--subtle-text-color);
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition: background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-out;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -279,7 +326,15 @@ body {
 }
 .tictactoe-cell:hover {
   border-color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
+.tictactoe-cell:active {
+  transform: translateY(0px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition-duration: 0.05s;
+}
+
 
 .tictactoe-cell:disabled {
   cursor: not-allowed;
@@ -319,16 +374,24 @@ body {
   color: var(--text-color);
   cursor: pointer;
   box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition: background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out, transform 0.15s ease-out, box-shadow 0.15s ease-out;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
 }
-.sudoku-cell:hover {
+.sudoku-cell:hover:not(:disabled):not(.sudoku-cell-initial) {
   border-color: var(--primary-color);
   background-color: color-mix(in srgb, var(--primary-color) 5%, var(--card-background-color));
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.07);
 }
+.sudoku-cell:active:not(:disabled):not(.sudoku-cell-initial) {
+  transform: translateY(0px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition-duration: 0.05s;
+}
+
 .sudoku-cell-initial {
   background: color-mix(in srgb, var(--primary-color) 15%, var(--card-background-color));
   color: var(--primary-color);
@@ -363,14 +426,24 @@ body {
   font-size: clamp(1em, 4vw, 1.1em);
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   cursor: pointer;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
 }
 .sudoku-input-button:hover {
   background-color: color-mix(in srgb, var(--primary-color) 85%, black);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 18%, transparent);
+}
+.sudoku-input-button:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--text-color) 15%, transparent);
+  transition-duration: 0.05s;
 }
 .sudoku-input-button:disabled {
   background-color: var(--disabled-bg-color);
   color: var(--disabled-text-color);
   cursor: not-allowed;
+  transform: none; /* Reset transform for disabled state */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Reset shadow for disabled state */
 }
 
 /* Chess Specific Grid */
@@ -393,12 +466,20 @@ body {
   border: none;
   cursor: pointer;
   box-shadow: inset 0 0 1px rgba(0,0,0,0.05);
-  transition: background 0.2s, color 0.2s;
+  transition: background-color 0.2s ease-out, transform 0.15s ease-out;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
 }
+.chess-cell:hover:not(:disabled) {
+  transform: scale(1.05); /* Slight scale on hover for interactive cells */
+}
+.chess-cell:active:not(:disabled) {
+  transform: scale(0.98);
+  transition-duration: 0.05s;
+}
+
 .chess-cell-light {
   background: var(--card-background-color);
 }
@@ -443,10 +524,12 @@ body {
   color: var(--button-text-color);
   font-weight: 800;
   font-size: 22px;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; /* Added for smooth animation */
 }
 .ludo-player-active .ludo-player-token {
   border-color: var(--secondary-color);
   box-shadow: 0 0 12px color-mix(in srgb, var(--secondary-color) 50%, transparent);
+  transform: scale(1.1); /* Active player token slightly larger */
 }
 
 @keyframes tokenMoveHighlight {
@@ -518,15 +601,21 @@ body {
   font-weight: 500;
   font-size: 0.95em;
   box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  transition: transform 0.1s, border-color 0.1s;
+  transition: transform 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
   cursor: pointer;
   padding: 0.4em 0.8em;
   background-color: var(--card-background-color);
   color: var(--text-color);
 }
 .gaming-page-option-button:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   border-color: var(--primary-color);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+.gaming-page-option-button:active {
+  transform: translateY(0px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition-duration: 0.05s;
 }
 
 .gaming-page-message {
@@ -550,6 +639,21 @@ body {
 .mt-1 { margin-top: 0.5rem; }
 .mt-2 { margin-top: 1rem; }
 .mt-3 { margin-top: 1.5rem; }
+
+/* Icon alignment in buttons */
+.game-button span, .nav-button span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.nav-button svg, .game-button svg {
+  width: 1em;
+  height: 1em;
+  /* margin-right: 0.5em; Already handled by gap in span */
+  vertical-align: -0.125em;
+  fill: currentColor;
+}
+
 
 /* Responsive adjustments */
 

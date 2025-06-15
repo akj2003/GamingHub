@@ -2,14 +2,6 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import WinCelebration from './components/WinCelebration';
 
-// SVG Icon for TicTacToe
-const TicTacToeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
-    <path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V7zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V7zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2z"/>
-  </svg>
-);
-
-
 function GamingPage() {
   const [score, setScore] = useState<number>(0);
   const [currentColor, setCurrentColor] = useState<string>('');
@@ -142,7 +134,7 @@ function GamingPage() {
     <>
       {showCelebration && <WinCelebration onClose={() => setShowCelebration(false)} />}
       <div className="game-card" style={{ maxWidth: 420 }}>
-        <h1><span role="img" aria-label="Palette icon">🎨</span> Shape & Color Game</h1>
+        <h1>🎨 Shape & Color Game</h1>
         <p className="score-text">
           Score: <b>{score}</b> / 10
         </p>
@@ -151,7 +143,7 @@ function GamingPage() {
             className="game-button game-button-secondary mb-2"
             onClick={restartGame}
           >
-            <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
+            Restart
           </button>
         )}
         {step === 'color' && (
@@ -203,7 +195,7 @@ function GamingPage() {
               className="game-button game-button-primary mt-2"
               onClick={restartGame}
             >
-              <span><span role="img" aria-label="Restart icon">🔄</span> Play Again</span>
+              Play Again
             </button>
           </div>
         )}
@@ -263,7 +255,7 @@ function TicTacToe() {
     <>
       {showCelebration && winner && <WinCelebration onClose={() => setShowCelebration(false)} />}
       <div className="game-card" style={{ maxWidth: 500 }}>
-        <h2><span role="img" aria-label="Chequered flag icon">🏁</span> Tic-Tac-Toe</h2>
+        <h2>Tic-Tac-Toe</h2>
         <div className="tictactoe-grid">
           {board.map((cell, idx) => (
             <button
@@ -282,7 +274,7 @@ function TicTacToe() {
           {winner ? `Winner: ${winner}` : draw ? 'Draw!' : `Next: ${xIsNext ? 'X' : 'O'}`}
         </div>
         <button className="game-button game-button-secondary" onClick={restart}>
-          <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
+          Restart
         </button>
       </div>
     </>
@@ -307,12 +299,13 @@ function Ludo() {
   const playerNames = ['Red', 'Green', 'Blue', 'Yellow'];
 
   function handlePlayerSelect(selectedNum: number) {
+    // setNumPlayers(selectedNum); // This is handled by restart
     restart(selectedNum);
   }
 
   function restart(selectedNumPlayersToUse?: number) {
     const playersToSetup = selectedNumPlayersToUse || numPlayers;
-    setNumPlayers(playersToSetup);
+    setNumPlayers(playersToSetup); // Ensure numPlayers state is updated first
 
     setPositions(Array(4).fill(0));
     setCurrentPlayer(0);
@@ -324,7 +317,7 @@ function Ludo() {
     setDisplayDice(null);
     setGameStarted(true);
   }
-  
+
   useEffect(() => {
     if (gameStarted && !isRolling && winner === null) {
       setDisplayDice(null);
@@ -360,6 +353,7 @@ function Ludo() {
           if (updatedPositionsArray[movedPlayer] + finalRoll <= boardSize) {
             updatedPositionsArray[movedPlayer] += finalRoll;
           }
+          // Check win condition based on the just-updated position
           if (updatedPositionsArray[movedPlayer] === boardSize) {
             setWinner(movedPlayer);
             setShowCelebration(true);
@@ -383,7 +377,7 @@ function Ludo() {
   if (!gameStarted) {
     return (
       <div className="game-card" style={{ maxWidth: 700, borderRadius: 24 }}>
-        <h2><span role="img" aria-label="Dice icon">🎲</span> Ludo (Mini) - Select Players</h2>
+        <h2>Ludo (Mini) - Select Players</h2>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1em', margin: '2em 0' }}>
           {[2, 3, 4].map(num => (
             <button
@@ -392,7 +386,7 @@ function Ludo() {
               style={{ minWidth: '150px', fontSize: '1.1em' }}
               onClick={() => handlePlayerSelect(num)}
             >
-              <span><span role="img" aria-label="Players icon">👥</span> {num} Players</span>
+              {num} Players
             </button>
           ))}
         </div>
@@ -404,7 +398,7 @@ function Ludo() {
     <>
       {showCelebration && winner !== null && <WinCelebration onClose={() => setShowCelebration(false)} />}
       <div className="game-card" style={{ maxWidth: 700, borderRadius: 24 }}>
-        <h2><span role="img" aria-label="Dice icon">🎲</span> Ludo (Mini - {numPlayers} Players)</h2>
+        <h2>Ludo (Mini - {numPlayers} Players)</h2>
         <div className="ludo-players mb-2">
           {Array.from({ length: numPlayers }).map((_, idx) => {
             const pos = positions[idx];
@@ -451,13 +445,13 @@ function Ludo() {
             onClick={rollDice}
             disabled={winner !== null || isRolling}
           >
-            <span><span role="img" aria-label="Dice icon">🎲</span> {isRolling ? 'Rolling...' : winner !== null ? 'Game Over' : 'Roll Dice'}</span>
+            {isRolling ? 'Rolling...' : winner !== null ? 'Game Over' : 'Roll Dice'}
           </button>
           <button
             className="game-button game-button-secondary"
             onClick={() => restart()}
           >
-            <span><span role="img" aria-label="Restart icon">🔄</span> Restart Game</span>
+            Restart Game
           </button>
           <button
             className="game-button game-button-secondary mt-1"
@@ -466,7 +460,7 @@ function Ludo() {
             }}
             style={{ background: 'var(--error-color)', color: 'var(--button-text-color)', borderColor: 'var(--error-color)' }}
           >
-            <span><span role="img" aria-label="Settings icon">⚙️</span> Change Players</span>
+            Change Players
           </button>
         </div>
       </div>
@@ -561,7 +555,7 @@ function Sudoku() {
     <>
       {showCelebration && completed && <WinCelebration onClose={() => setShowCelebration(false)} />}
       <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}>
-        <h2><span role="img" aria-label="Numeric input icon">🔢</span> Sudoku (4x4)</h2>
+        <h2>Sudoku (4x4)</h2>
         <div className="sudoku-difficulty-selector mb-2" style={{ display: 'flex', justifyContent: 'center', gap: '0.5em' }}>
           {(['Easy', 'Medium', 'Hard'] as SudokuDifficulty[]).map(level => (
             <button
@@ -570,7 +564,7 @@ function Sudoku() {
               style={difficulty === level ? { backgroundColor: 'var(--primary-color)', color: 'var(--button-text-color)', borderColor: 'var(--primary-color)' } : {}}
               onClick={() => handleDifficultyChange(level)}
             >
-              <span><span role="img" aria-label={`${level} difficulty`}>{level === 'Easy' ? '🙂' : level === 'Medium' ? '😐' : '🤔'}</span> {level}</span>
+              {level}
             </button>
           ))}
         </div>
@@ -609,7 +603,7 @@ function Sudoku() {
           {message}
         </div>
         <button className="game-button game-button-secondary" onClick={restart}>
-          <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
+          Restart
         </button>
       </div>
     </>
@@ -733,7 +727,7 @@ function Chess() {
     <>
       {showCelebration && winner && <WinCelebration onClose={() => setShowCelebration(false)} />}
       <div className="game-card" style={{ maxWidth: 420, borderRadius: 20 }}>
-        <h2><span role="img" aria-label="Chess pawn icon">♟️</span> Chess (Mini 4x4)</h2>
+        <h2>Chess (Mini 4x4)</h2>
         <div className="chess-grid">
           {board.map((row, rIdx) =>
             row.map((cell, cIdx) => {
@@ -761,7 +755,7 @@ function Chess() {
           {winner ? `${winner} wins!` : message || `${turn === 'w' ? 'White' : 'Black'}'s turn`}
         </div>
         <button className="game-button game-button-secondary" onClick={restart}>
-          <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
+          Restart
         </button>
       </div>
     </>
@@ -770,19 +764,8 @@ function Chess() {
 
 function App() {
   const [game, setGame] = useState<'color-shape' | 'tictactoe' | 'ludo' | 'sudoku' | 'chess'>('color-shape');
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return savedTheme || (prefersDark ? 'dark' : 'light');
-  });
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  const isEffectivelyLightTheme = () => {
+    return true;
   };
 
   return (
@@ -791,22 +774,6 @@ function App() {
       <svg className="decorative-svg-2" width="350" height="350" viewBox="0 0 350 350"><circle cx="175" cy="175" r="175" /></svg>
       <svg className="decorative-svg-3" width="280" height="280" viewBox="0 0 280 280"><circle cx="140" cy="140" r="140" /></svg>
       <header className="app-header">
-      <button
-        onClick={toggleTheme}
-        className="game-button game-button-secondary theme-toggle-button"
-        style={{
-            position: 'absolute',
-            top: '1em',
-            right: '1em',
-            padding: '0.5em 0.8em',
-            fontSize: '0.9em',
-            minWidth: 'auto'
-        }}
-        aria-label={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-        title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-        >
-          <span>{theme === 'light' ? '🌙' : '☀️'}</span>
-        </button>
         <h1>
           🎲 Gaming Hub
         </h1>
@@ -816,43 +783,43 @@ function App() {
         <nav>
           <button
             className={`nav-button ${game === 'color-shape' ? 'nav-button-active' : ''}`}
-            style={game === 'color-shape' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--success-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'color-shape' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--success-color))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+            style={game === 'color-shape' && isEffectivelyLightTheme() ? { background: 'linear-gradient(90deg, var(--primary-color), var(--success-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : {}}
             onClick={() => setGame('color-shape')}
             aria-label="Play Shape & Color Game"
           >
-            <span><span role="img" aria-label="Palette icon">🎨</span> Shape & Color Game</span>
+            Shape & Color Game
           </button>
           <button
             className={`nav-button ${game === 'tictactoe' ? 'nav-button-active' : ''}`}
-            style={game === 'tictactoe' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--secondary-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'tictactoe' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--secondary-color))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+            style={game === 'tictactoe' && isEffectivelyLightTheme() ? { background: 'linear-gradient(90deg, var(--primary-color), var(--secondary-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : {}}
             onClick={() => setGame('tictactoe')}
             aria-label="Play Tic-Tac-Toe"
           >
-            <span><TicTacToeIcon /> Tic-Tac-Toe</span>
+            Tic-Tac-Toe
           </button>
           <button
             className={`nav-button ${game === 'ludo' ? 'nav-button-active' : ''}`}
-            style={game === 'ludo' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'ludo' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}: {}}
+            style={game === 'ludo' && isEffectivelyLightTheme() ? { background: 'linear-gradient(90deg, var(--primary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : {}}
             onClick={() => setGame('ludo')}
             aria-label="Play Ludo"
           >
-            <span><span role="img" aria-label="Dice icon">🎲</span> Ludo (Mini)</span>
+            Ludo (Mini)
           </button>
           <button
             className={`nav-button ${game === 'sudoku' ? 'nav-button-active' : ''}`}
-            style={game === 'sudoku' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'sudoku' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}: {}}
+            style={game === 'sudoku' && isEffectivelyLightTheme() ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : {}}
             onClick={() => setGame('sudoku')}
             aria-label="Play Sudoku"
           >
-            <span><span role="img" aria-label="Numeric input icon">🔢</span> Sudoku (4x4)</span>
+            Sudoku (4x4)
           </button>
           <button
             className={`nav-button ${game === 'chess' ? 'nav-button-active' : ''}`}
-            style={game === 'chess' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--text-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'chess' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--text-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}: {}}
+            style={game === 'chess' && isEffectivelyLightTheme() ? { background: 'linear-gradient(90deg, var(--primary-color), var(--text-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : {}}
             onClick={() => setGame('chess')}
             aria-label="Play Chess"
           >
-            <span><span role="img" aria-label="Chess pawn icon">♟️</span> Chess (Mini)</span>
+            Chess (Mini)
           </button>
         </nav>
       </header>
@@ -867,4 +834,3 @@ function App() {
 }
 
 export default App;
-//updated code
