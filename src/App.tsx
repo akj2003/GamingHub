@@ -884,8 +884,603 @@ function Chess() {
   );
 }
 
+// Memory Game Component
+const MemoryGame = () => {
+  const cardValues = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  const initialCards = [...cardValues, ...cardValues]
+    .sort(() => Math.random() - 0.5)
+    .map((value, index) => ({ id: index, value, isFlipped: false, isMatched: false }));
+
+  const [cards, setCards] = useState(initialCards);
+  const [flippedCards, setFlippedCards] = useState<number[]>([]);
+  const [matchedPairs, setMatchedPairs] = useState<number>(0);
+  const [moves, setMoves] = useState<number>(0);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
+
+  useEffect(() => {
+    if (flippedCards.length === 2) {
+      const [firstCardIndex, secondCardIndex] = flippedCards;
+      const firstCard = cards[firstCardIndex];
+      const secondCard = cards[secondCardIndex];
+
+      if (firstCard.value === secondCard.value) {
+        setCards(prevCards =>
+          prevCards.map(card =>
+            card.id === firstCard.id || card.id === secondCard.id
+              ? { ...card, isMatched: true, isFlipped: true }
+              : card
+          )
+        );
+        setMatchedPairs(prev => prev + 1);
+        setFlippedCards([]);
+      } else {
+        setTimeout(() => {
+          setCards(prevCards =>
+            prevCards.map(card =>
+              card.id === firstCard.id || card.id === secondCard.id
+                ? { ...card, isFlipped: false }
+                : card
+            )
+          );
+          setFlippedCards([]);
+        }, 1000);
+      }
+      setMoves(prevMoves => prevMoves + 1);
+    }
+  }, [flippedCards, cards]);
+
+  useEffect(() => {
+    if (matchedPairs === cardValues.length) {
+      setShowCelebration(true);
+    }
+  }, [matchedPairs, cardValues.length]);
+
+  const handleCardClick = (index: number) => {
+    if (flippedCards.length === 2 || cards[index].isFlipped || cards[index].isMatched) {
+      return;
+    }
+
+    setCards(prevCards =>
+      prevCards.map(card =>
+        card.id === index ? { ...card, isFlipped: true } : card
+      )
+    );
+    setFlippedCards(prevFlipped => [...prevFlipped, index]);
+  };
+
+  const restartGame = () => {
+    setCards(
+      [...cardValues, ...cardValues]
+        .sort(() => Math.random() - 0.5)
+        .map((value, index) => ({ id: index, value, isFlipped: false, isMatched: false }))
+    );
+    setFlippedCards([]);
+    setMatchedPairs(0);
+    setMoves(0);
+    setShowCelebration(false);
+  };
+
+  return (
+    <>
+      <WinCelebration
+        isOpen={showCelebration}
+        onClose={() => setShowCelebration(false)}
+        onPlayAgain={restartGame}
+        score={moves} // Or some other score metric if desired
+        gameTitle="Memory Game"
+      />
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        title="🧠 Memory Game - Instructions"
+      >
+        <ul>
+          <li>Flip two cards at a time to find a matching pair.</li>
+          <li>If the cards match, they stay face up.</li>
+          <li>If they don't match, they flip back down after a short delay.</li>
+          <li>Match all pairs to win the game!</li>
+        </ul>
+      </InstructionsModal>
+      <div className="game-card" style={{ maxWidth: 500 }}>
+        <h2><span role="img" aria-label="Brain icon">🧠</span> Memory Game</h2>
+        <p className="score-text">Moves: <b aria-live="polite">{moves}</b></p>
+        <div className="memory-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', margin: '20px 0' }}>
+          {cards.map((card, index) => (
+            <button
+              key={card.id}
+              className={`memory-card ${card.isFlipped ? 'flipped' : ''} ${card.isMatched ? 'matched' : ''}`}
+              onClick={() => handleCardClick(index)}
+              disabled={card.isFlipped || card.isMatched}
+              style={{
+                width: '80px',
+                height: '80px',
+                fontSize: '2em',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                border: '2px solid var(--border-color)',
+                borderRadius: '8px',
+                background: card.isFlipped || card.isMatched ? 'var(--card-bg-flipped)' : 'var(--button-bg-color)',
+                color: card.isFlipped || card.isMatched ? 'var(--text-color)' : 'transparent',
+                transition: 'transform 0.3s, background-color 0.3s',
+                transform: card.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+              aria-label={card.isFlipped || card.isMatched ? `Card ${card.value}` : `Hidden card ${index + 1}`}
+            >
+              <span style={{ transform: card.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}> {/* Counter-rotate text */}
+                {card.isFlipped || card.isMatched ? card.value : '?'}
+              </span>
+            </button>
+          ))}
+        </div>
+        <button className="game-button game-button-secondary" onClick={restartGame}>
+          <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
+        </button>
+        <button className="game-button game-button-secondary mt-1" onClick={() => setShowInstructions(true)}><span>❓ Instructions</span></button>
+      </div>
+    </>
+  );
+};
+
+// Hangman Game Component
+const HangmanGame = () => {
+  const wordList = ["REACT", "JAVASCRIPT", "HANGMAN", "DEVELOPER", "COMPONENT", "TYPESCRIPT", "STYLES", "KEYBOARD"];
+  const maxIncorrectGuesses = 6; // Standard Hangman has 6 parts (head, body, 2 arms, 2 legs)
+
+  const [selectedWord, setSelectedWord] = useState('');
+  const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
+  const [incorrectGuesses, setIncorrectGuesses] = useState(0);
+  const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [showWinCelebration, setShowWinCelebration] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+
+  const initializeGame = () => {
+    const newWord = wordList[Math.floor(Math.random() * wordList.length)];
+    setSelectedWord(newWord);
+    setGuessedLetters([]);
+    setIncorrectGuesses(0);
+    setGameStatus('playing');
+    setShowWinCelebration(false);
+    setInputValue('');
+  };
+
+  useEffect(() => {
+    initializeGame();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleGuess = (letter: string) => {
+    const upperLetter = letter.toUpperCase();
+    // Basic validation for single alphabet character
+    if (!upperLetter || guessedLetters.includes(upperLetter) || gameStatus !== 'playing' || !/^[A-Z]$/.test(upperLetter)) {
+      setInputValue('');
+      return;
+    }
+
+    setGuessedLetters(prev => [...prev, upperLetter]);
+    setInputValue('');
+
+    if (selectedWord.includes(upperLetter)) {
+      const wordIsGuessed = selectedWord.split('').every(char => [...guessedLetters, upperLetter].includes(char));
+      if (wordIsGuessed) {
+        setGameStatus('won');
+        setShowWinCelebration(true);
+      }
+    } else {
+      setIncorrectGuesses(prev => {
+        const newIncorrectCount = prev + 1;
+        if (newIncorrectCount >= maxIncorrectGuesses) {
+          setGameStatus('lost');
+        }
+        return newIncorrectCount;
+      });
+    }
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Allow only single alphabetic character, convert to uppercase
+    const value = event.target.value;
+    if (value.length <= 1 && /^[A-Za-z]*$/.test(value)) {
+        setInputValue(value.toUpperCase());
+    } else if (value === '') {
+        setInputValue('');
+    }
+  };
+
+  const handleInputSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (inputValue) {
+      handleGuess(inputValue);
+    }
+  };
+
+  const displayWord = selectedWord
+    .split('')
+    .map(letter => (guessedLetters.includes(letter) ? letter : '_'))
+    .join(' ');
+
+  // SVG parts for the Hangman
+  const hangmanSvgParts = [
+    (key: React.Key) => <circle key={key} cx="70" cy="50" r="10" stroke="var(--text-color)" strokeWidth="2" fill="none" />, // Head
+    (key: React.Key) => <line key={key} x1="70" y1="60" x2="70" y2="100" stroke="var(--text-color)" strokeWidth="2" />,   // Body
+    (key: React.Key) => <line key={key} x1="70" y1="70" x2="50" y2="90" stroke="var(--text-color)" strokeWidth="2" />,   // Left Arm
+    (key: React.Key) => <line key={key} x1="70" y1="70" x2="90" y2="90" stroke="var(--text-color)" strokeWidth="2" />,   // Right Arm
+    (key: React.Key) => <line key={key} x1="70" y1="100" x2="50" y2="120" stroke="var(--text-color)" strokeWidth="2" />, // Left Leg
+    (key: React.Key) => <line key={key} x1="70" y1="100" x2="90" y2="120" stroke="var(--text-color)" strokeWidth="2" />, // Right Leg
+  ];
+
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+
+  return (
+    <>
+      <WinCelebration
+        isOpen={showWinCelebration && gameStatus === 'won'}
+        onClose={() => setShowWinCelebration(false)}
+        onPlayAgain={initializeGame}
+        gameTitle="Hangman"
+      />
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        title="🤔 Hangman - Instructions"
+      >
+        <ul>
+          <li>Guess the hidden word one letter at a time.</li>
+          <li>Each incorrect guess adds a part to the hangman figure.</li>
+          <li>You have {maxIncorrectGuesses} incorrect guesses before you lose.</li>
+          <li>Guess all letters in the word to win!</li>
+          <li>You can use the on-screen keyboard or type a letter into the input field and press Enter or Guess.</li>
+        </ul>
+      </InstructionsModal>
+
+      <div className="game-card" style={{ maxWidth: 600, textAlign: 'center' }}>
+        <h2><span role="img" aria-label="Thinking face icon">🤔</span> Hangman</h2>
+
+        <svg width="140" height="160" viewBox="0 0 140 160" className="hangman-svg" style={{ margin: '10px auto', display: 'block' }}>
+          {/* Gallows structure */}
+          <line x1="10" y1="150" x2="100" y2="150" stroke="var(--text-color)" strokeWidth="2" /> {/* Base */}
+          <line x1="30" y1="150" x2="30" y2="20" stroke="var(--text-color)" strokeWidth="2" />  {/* Post */}
+          <line x1="30" y1="20" x2="70" y2="20" stroke="var(--text-color)" strokeWidth="2" />   {/* Beam */}
+          <line x1="70" y1="20" x2="70" y2="40" stroke="var(--text-color)" strokeWidth="1" />   {/* Rope */}
+          {/* Hangman Parts based on incorrect guesses */}
+          {hangmanSvgParts.slice(0, incorrectGuesses).map((part, i) => part(`hangman-part-${i}`))}
+        </svg>
+
+        <p className="score-text" style={{ fontSize: '2em', letterSpacing: '0.1em', margin: '20px 0', fontWeight: 'bold', color: gameStatus === 'lost' ? 'var(--error-color)' : 'var(--text-color)' }}>
+          {displayWord}
+        </p>
+
+        {gameStatus === 'playing' && (
+          <form onSubmit={handleInputSubmit} style={{ margin: '20px 0' }}>
+            <input
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              maxLength={1}
+              className="game-input"
+              style={{ width: '80px', height: '40px', marginRight: '10px', textAlign:'center', textTransform: 'uppercase', fontSize: '1.2em', padding: '0.5em' }}
+              placeholder="Letter"
+              aria-label="Guess a letter"
+              disabled={gameStatus !== 'playing'}
+              autoFocus
+            />
+            <button type="submit" className="game-button game-button-primary" style={{padding: '0.7em 1.2em', fontSize: '1em'}} disabled={gameStatus !== 'playing' || !inputValue.match(/^[A-Z]$/)}>
+              <span>Guess</span>
+            </button>
+          </form>
+        )}
+
+        {gameStatus === 'playing' && (
+          <div className="hangman-alphabet-keyboard" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '5px', margin: '20px 0', maxWidth: '450px', marginInline: 'auto' }}>
+            {alphabet.map(letter => (
+              <button
+                key={letter}
+                onClick={() => handleGuess(letter)}
+                disabled={guessedLetters.includes(letter) || gameStatus !== 'playing'}
+                className="game-button game-button-secondary"
+                style={{
+                  minWidth: '40px',
+                  minHeight: '40px',
+                  padding: '0.5em',
+                  fontSize: '1em',
+                  backgroundColor: guessedLetters.includes(letter) ? (selectedWord.includes(letter) ? 'var(--success-color)' : 'var(--error-color)') : undefined,
+                  color: guessedLetters.includes(letter) ? 'var(--button-text-color)' : undefined,
+                  opacity: guessedLetters.includes(letter) ? 0.65 : 1,
+                  borderStyle: guessedLetters.includes(letter) ? 'solid' : undefined,
+                  borderColor: guessedLetters.includes(letter) ? (selectedWord.includes(letter) ? 'var(--success-color)' : 'var(--error-color)') : undefined,
+                }}
+              >
+                {letter}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <p className="score-text" style={{fontSize: '1.1em'}}>
+          Incorrect Guesses: {incorrectGuesses} / {maxIncorrectGuesses}
+        </p>
+
+        {gameStatus === 'lost' && (
+          <div className="gaming-page-message mt-2" style={{ color: 'var(--error-color)', fontSize: '1.3em', fontWeight: 'bold' }}>
+            😞 Game Over! The word was: <b style={{color: 'var(--primary-color)'}}>{selectedWord}</b>
+          </div>
+        )}
+        {gameStatus === 'won' && (
+           <div className="gaming-page-message mt-2" style={{ color: 'var(--success-color)', fontSize: '1.3em', fontWeight: 'bold' }}>
+            🎉 Congratulations! You guessed the word!
+          </div>
+        )}
+
+        <div style={{marginTop: '20px'}}>
+          <button className="game-button game-button-secondary" onClick={initializeGame}>
+            <span><span role="img" aria-label="Restart icon">🔄</span> {(gameStatus === 'playing' && (guessedLetters.length > 0 || incorrectGuesses > 0)) ? 'Restart Game' : 'New Word'}</span>
+          </button>
+          <button className="game-button game-button-secondary mt-1 ml-1" onClick={() => setShowInstructions(true)}><span>❓ Instructions</span></button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+// Minesweeper Game Component
+const MinesweeperGame = () => {
+  const gridSize = 8;
+  const numMines = 10;
+
+  type Cell = {
+    isMine: boolean;
+    isRevealed: boolean;
+    isFlagged: boolean;
+    adjacentMines: number;
+  };
+
+  const createEmptyGrid = (): Cell[][] =>
+    Array(gridSize)
+      .fill(null)
+      .map(() =>
+        Array(gridSize)
+          .fill(null)
+          .map(() => ({
+            isMine: false,
+            isRevealed: false,
+            isFlagged: false,
+            adjacentMines: 0,
+          }))
+      );
+
+  const [grid, setGrid] = useState<Cell[][]>(createEmptyGrid());
+  const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [showWinCelebration, setShowWinCelebration] = useState(false);
+  const [flagMode, setFlagMode] = useState(false);
+  const [flagsPlaced, setFlagsPlaced] = useState(0);
+
+  const initializeGrid = () => {
+    let newGrid = createEmptyGrid();
+    let minesPlaced = 0;
+    while (minesPlaced < numMines) {
+      const row = Math.floor(Math.random() * gridSize);
+      const col = Math.floor(Math.random() * gridSize);
+      if (!newGrid[row][col].isMine) {
+        newGrid[row][col].isMine = true;
+        minesPlaced++;
+      }
+    }
+
+    for (let row = 0; row < gridSize; row++) {
+      for (let col = 0; col < gridSize; col++) {
+        if (!newGrid[row][col].isMine) {
+          let mineCount = 0;
+          for (let rOffset = -1; rOffset <= 1; rOffset++) {
+            for (let cOffset = -1; cOffset <= 1; cOffset++) {
+              if (rOffset === 0 && cOffset === 0) continue;
+              const newRow = row + rOffset;
+              const newCol = col + cOffset;
+              if (newRow >= 0 && newRow < gridSize && newCol >= 0 && newCol < gridSize && newGrid[newRow][newCol].isMine) {
+                mineCount++;
+              }
+            }
+          }
+          newGrid[row][col].adjacentMines = mineCount;
+        }
+      }
+    }
+    setGrid(newGrid);
+    setGameStatus('playing');
+    setShowWinCelebration(false);
+    setFlagsPlaced(0);
+    setFlagMode(false);
+  };
+
+  useEffect(() => {
+    initializeGrid();
+  }, []);
+
+  const revealCell = (row: number, col: number, currentGrid: Cell[][]): Cell[][] => {
+    if (row < 0 || row >= gridSize || col < 0 || col >= gridSize || currentGrid[row][col].isRevealed || currentGrid[row][col].isFlagged) {
+      return currentGrid;
+    }
+
+    let newGrid = currentGrid.map(r => r.map(c => ({ ...c })));
+    newGrid[row][col].isRevealed = true;
+
+    if (newGrid[row][col].adjacentMines === 0 && !newGrid[row][col].isMine) {
+      for (let rOffset = -1; rOffset <= 1; rOffset++) {
+        for (let cOffset = -1; cOffset <= 1; cOffset++) {
+          if (rOffset === 0 && cOffset === 0) continue;
+          newGrid = revealCell(row + rOffset, col + cOffset, newGrid);
+        }
+      }
+    }
+    return newGrid;
+  };
+
+  const handleCellClick = (row: number, col: number) => {
+    if (gameStatus !== 'playing' || grid[row][col].isRevealed) return;
+
+    if (flagMode) {
+      if (grid[row][col].isRevealed) return;
+      const newGrid = grid.map(r => r.map(c => ({ ...c })));
+      const cell = newGrid[row][col];
+      if (!cell.isFlagged && flagsPlaced >= numMines) return; // Don't place more flags than mines
+
+      cell.isFlagged = !cell.isFlagged;
+      setFlagsPlaced(prev => prev + (cell.isFlagged ? 1 : -1));
+      setGrid(newGrid);
+    } else {
+      if (grid[row][col].isFlagged) return;
+
+      if (grid[row][col].isMine) {
+        setGameStatus('lost');
+        // Reveal all mines
+        const finalGrid = grid.map(r => r.map(c => c.isMine ? { ...c, isRevealed: true } : c));
+        setGrid(finalGrid);
+        return;
+      }
+
+      const revealedGrid = revealCell(row, col, grid);
+      setGrid(revealedGrid);
+
+      // Check for win condition
+      let revealedNonMineCells = 0;
+      let totalNonMineCells = gridSize * gridSize - numMines;
+      for (let r = 0; r < gridSize; r++) {
+        for (let c = 0; c < gridSize; c++) {
+          if (revealedGrid[r][c].isRevealed && !revealedGrid[r][c].isMine) {
+            revealedNonMineCells++;
+          }
+        }
+      }
+
+      if (revealedNonMineCells === totalNonMineCells) {
+        setGameStatus('won');
+        setShowWinCelebration(true);
+         // Auto-flag remaining mines on win
+        const finalGridWithFlags = revealedGrid.map(r => r.map(c => c.isMine && !c.isFlagged ? { ...c, isFlagged: true } : c));
+        setGrid(finalGridWithFlags);
+        setFlagsPlaced(numMines);
+      }
+    }
+  };
+
+  const toggleFlagMode = () => {
+    if (gameStatus === 'playing') {
+      setFlagMode(prev => !prev);
+    }
+  };
+
+  return (
+    <>
+      <WinCelebration
+        isOpen={showWinCelebration && gameStatus === 'won'}
+        onClose={() => setShowWinCelebration(false)}
+        onPlayAgain={initializeGrid}
+        gameTitle="Minesweeper"
+      />
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        title="💣 Minesweeper - Instructions"
+      >
+        <ul>
+          <li>Click on a cell to reveal it.</li>
+          <li>If a cell contains a mine, you lose!</li>
+          <li>If a cell is empty, it will show the number of mines in its adjacent cells (including diagonals).</li>
+          <li>If an empty cell has 0 adjacent mines, it will automatically clear surrounding empty cells.</li>
+          <li>Use the "Toggle Flag" button to switch to flag mode. Click a cell to place or remove a flag.</li>
+          <li>Flag all mines or reveal all non-mine cells to win.</li>
+          <li>The counter shows remaining mines (total mines - flags placed).</li>
+        </ul>
+      </InstructionsModal>
+
+      <div className="game-card" style={{ maxWidth: 500, textAlign: 'center' }}>
+        <h2><span role="img" aria-label="Bomb icon">💣</span> Minesweeper</h2>
+
+        <div className="minesweeper-controls" style={{ marginBlock: '15px', display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+          <button
+            className={`game-button game-button-secondary ${flagMode ? 'game-button-active' : ''}`}
+            onClick={toggleFlagMode}
+            disabled={gameStatus !== 'playing'}
+            style={flagMode ? { backgroundColor: 'var(--accent-color1)', color: 'var(--button-text-color)', borderColor: 'var(--accent-color1)'} : {}}
+          >
+            <span><span role="img" aria-label="Flag icon">🚩</span> {flagMode ? 'Flag Mode (ON)' : 'Flag Mode (OFF)'}</span>
+          </button>
+          <p className="score-text" style={{ margin: 0, fontSize: '1.1em' }}>
+            Mines: {numMines - flagsPlaced}
+          </p>
+        </div>
+
+        <div
+          className="minesweeper-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
+            gap: '2px',
+            margin: '20px auto',
+            maxWidth: `${gridSize * 35}px`, // Adjust cell size if needed
+            pointerEvents: gameStatus !== 'playing' ? 'none' : 'auto',
+          }}
+        >
+          {grid.map((rowItems, rowIndex) =>
+            rowItems.map((cell, colIndex) => (
+              <button
+                key={`${rowIndex}-${colIndex}`}
+                onClick={() => handleCellClick(rowIndex, colIndex)}
+                className={`minesweeper-cell ${cell.isRevealed ? 'revealed' : ''} ${cell.isFlagged ? 'flagged' : ''} ${cell.isMine && cell.isRevealed ? 'mine' : ''}`}
+                disabled={cell.isRevealed && !cell.isMine && !flagMode} // Allow clicking revealed only if it's not a mine, for potential future features like chording
+                style={{
+                  width: '35px',
+                  height: '35px',
+                  fontSize: '1em',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '4px',
+                  backgroundColor: cell.isRevealed
+                    ? (cell.isMine ? 'var(--error-color)' : 'var(--disabled-bg-color)')
+                    : (cell.isFlagged ? 'var(--warning-bg-color)' : 'var(--button-bg-color)'),
+                  color: cell.isRevealed && !cell.isMine && cell.adjacentMines > 0 ? `var(--mine-count-${cell.adjacentMines})` : (cell.isFlagged || (cell.isMine && cell.isRevealed) ? 'var(--button-text-color)' : 'var(--text-color)'),
+                  transition: 'background-color 0.2s ease',
+                }}
+                aria-label={`Cell ${rowIndex + 1}, ${colIndex + 1}${cell.isFlagged ? ', Flagged' : ''}${cell.isRevealed ? (cell.isMine ? ', Mine' : `, ${cell.adjacentMines} adjacent mines`) : ', Hidden'}`}
+              >
+                {cell.isFlagged ? '🚩' : cell.isRevealed ? (cell.isMine ? '💣' : (cell.adjacentMines > 0 ? cell.adjacentMines : '')) : ''}
+              </button>
+            ))
+          )}
+        </div>
+
+        {gameStatus === 'lost' && (
+          <div className="gaming-page-message mt-2" style={{ color: 'var(--error-color)', fontSize: '1.3em', fontWeight: 'bold' }}>
+            😞 Game Over! You hit a mine.
+          </div>
+        )}
+        {gameStatus === 'won' && (
+           <div className="gaming-page-message mt-2" style={{ color: 'var(--success-color)', fontSize: '1.3em', fontWeight: 'bold' }}>
+            🎉 Congratulations! You cleared all mines!
+          </div>
+        )}
+
+        <div style={{marginTop: '20px'}}>
+          <button className="game-button game-button-secondary" onClick={initializeGrid}>
+            <span><span role="img" aria-label="Restart icon">🔄</span> Restart Game</span>
+          </button>
+          <button className="game-button game-button-secondary mt-1 ml-1" onClick={() => setShowInstructions(true)}><span>❓ Instructions</span></button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+
 function App() {
-  const [game, setGame] = useState<'color-shape' | 'tictactoe' | 'ludo' | 'sudoku' | 'chess'>('color-shape');
+  const [game, setGame] = useState<'color-shape' | 'tictactoe' | 'ludo' | 'sudoku' | 'chess' | 'memory' | 'hangman' | 'minesweeper'>('color-shape');
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -970,10 +1565,34 @@ function App() {
           >
             <span><span role="img" aria-label="Chess pawn icon">♟️</span> Chess (Mini)</span>
           </button>
+          <button
+            className={`nav-button ${game === 'memory' ? 'nav-button-active' : ''}`}
+            style={game === 'memory' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'memory' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+            onClick={() => setGame('memory')}
+            aria-label="Play Memory Game"
+          >
+            <span><span role="img" aria-label="Brain icon">🧠</span> Memory Game</span>
+          </button>
+          <button
+            className={`nav-button ${game === 'hangman' ? 'nav-button-active' : ''}`}
+            style={game === 'hangman' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'hangman' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+            onClick={() => setGame('hangman')}
+            aria-label="Play Hangman Game"
+          >
+            <span><span role="img" aria-label="Thinking face icon">🤔</span> Hangman</span>
+          </button>
+          <button
+            className={`nav-button ${game === 'minesweeper' ? 'nav-button-active' : ''}`}
+            style={game === 'minesweeper' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'minesweeper' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+            onClick={() => setGame('minesweeper')}
+            aria-label="Play Minesweeper Game"
+          >
+            <span><span role="img" aria-label="Bomb icon">💣</span> Minesweeper</span>
+          </button>
         </nav>
       </header>
       <main className="app-main">
-        {game === 'color-shape' ? <GamingPage /> : game === 'tictactoe' ? <TicTacToe /> : game === 'ludo' ? <Ludo /> : game === 'sudoku' ? <Sudoku /> : <Chess />}
+        {game === 'color-shape' ? <GamingPage /> : game === 'tictactoe' ? <TicTacToe /> : game === 'ludo' ? <Ludo /> : game === 'sudoku' ? <Sudoku /> : game === 'chess' ? <Chess /> : game === 'memory' ? <MemoryGame /> : game === 'hangman' ? <HangmanGame /> : <MinesweeperGame />}
       </main>
       <footer className="app-footer">
         &copy; {new Date().getFullYear()} <span className="brand-text">Gaming Hub</span> &mdash; Built with <span className="tech-text">Vite + React</span>
