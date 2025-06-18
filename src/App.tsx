@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import { useAuth } from './contexts/AuthContext'; // AuthProvider import removed
-import Login from './components/Login'; // Import Login component
 import WinCelebration from './components/WinCelebration';
 import InstructionsModal from './components/InstructionsModal';
 
@@ -1482,7 +1481,7 @@ const MinesweeperGame = () => {
 
 
 function App() {
-  const { currentUser, logout } = useAuth(); // Use auth hook
+  useAuth(); // Use auth hook
   const [game, setGame] = useState<'color-shape' | 'tictactoe' | 'ludo' | 'sudoku' | 'chess' | 'memory' | 'hangman' | 'minesweeper'>('color-shape');
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
