@@ -5,45 +5,43 @@ import App from './App';
 import { AuthProvider } from './contexts/AuthContext'; // To wrap App
 import { vi, describe, test, expect, beforeEach } from 'vitest';
 
-// --- Mock 'firebase/auth' ---
-let mockOnAuthStateChangedCallback: ((user: any) => void) | null = null;
+// 1. Define the mock function instances and shared variables for tests FIRST
 const mockUser = { uid: '123', email: 'test@example.com', displayName: 'Test User' };
-const mockSignOut = vi.fn(() => Promise.resolve());
-const mockSignInWithPopup = vi.fn(() => Promise.resolve({ user: mockUser }));
+const mockSignInWithPopupFn = vi.fn(); // Renamed to avoid confusion
+const mockSignOutFn = vi.fn();
+let capturedOnAuthStateChangedCallback: ((user: any) => void) | null = null;
 
+// 2. Now, mock 'firebase/auth' using these pre-defined functions
 vi.mock('firebase/auth', async (importOriginal) => {
   const actual = await importOriginal<typeof import('firebase/auth')>();
   return {
-    ...actual, // Spread to keep other exports like GoogleAuthProvider
-    getAuth: vi.fn(() => ({
-      // Mock any specific properties of the auth object if needed by AuthContext
-    })),
-    onAuthStateChanged: vi.fn((_auth: any, callback: (user: any) => void) => {
-      mockOnAuthStateChangedCallback = callback; // Capture the callback
-      // Tests will manually trigger this callback to simulate auth states
+    ...actual,
+    getAuth: vi.fn(() => ({})),
+    onAuthStateChanged: vi.fn((auth: any, callback: (user: any) => void) => {
+      capturedOnAuthStateChangedCallback = callback;
       return vi.fn(); // Return a mock unsubscribe function
     }),
-    signInWithPopup: mockSignInWithPopup,
-    signOut: mockSignOut,
-    GoogleAuthProvider: vi.fn().mockImplementation(() => ({
-      // Mock any properties of GoogleAuthProvider instance if needed
-    })),
+    signInWithPopup: mockSignInWithPopupFn, // Use the function defined above
+    signOut: mockSignOutFn, // Use the function defined above
+    GoogleAuthProvider: vi.fn().mockImplementation(() => ({})),
   };
 });
 
-// Mock Login component as its internals are not the focus of App.test.tsx
+// Mock Login component (remains the same)
 vi.mock('./components/Login', () => ({
   default: () => <div data-testid="login-component">Login Component Mock</div>,
 }));
 
 describe('App Component', () => {
   beforeEach(() => {
-    // Reset call counts for these mocks before each test
-    mockSignInWithPopup.mockClear();
-    mockSignOut.mockClear();
-    // Nullify the callback so each test run correctly captures the new one from AuthProvider
-    mockOnAuthStateChangedCallback = null;
+    // Reset mocks and callback before each test
+    mockSignInWithPopupFn.mockClear().mockResolvedValue({ user: mockUser });
+    mockSignOutFn.mockClear().mockResolvedValue(undefined);
+    capturedOnAuthStateChangedCallback = null;
   });
+
+  // Test cases remain largely the same but use the new mock variable names
+  // (e.g., capturedOnAuthStateChangedCallback, mockSignInWithPopupFn, mockSignOutFn)
 
   test('shows loading screen initially when onAuthStateChanged has not yet fired', () => {
     render(
@@ -51,7 +49,6 @@ describe('App Component', () => {
         <App />
       </AuthProvider>
     );
-    // At this point, AuthContext loading is true, and onAuthStateChanged mock has not called back
     expect(screen.getByText('Loading Application...')).toBeInTheDocument();
   });
 
@@ -61,13 +58,11 @@ describe('App Component', () => {
         <App />
       </AuthProvider>
     );
-    // Simulate Firebase finishing loading and finding no user
     act(() => {
-      if (mockOnAuthStateChangedCallback) {
-        mockOnAuthStateChangedCallback(null);
+      if (capturedOnAuthStateChangedCallback) {
+        capturedOnAuthStateChangedCallback(null);
       }
     });
-
     await waitFor(() => {
       expect(screen.getByTestId('login-component')).toBeInTheDocument();
     });
@@ -81,16 +76,14 @@ describe('App Component', () => {
         <App />
       </AuthProvider>
     );
-    // Simulate Firebase finishing loading and finding a user
     act(() => {
-      if (mockOnAuthStateChangedCallback) {
-        mockOnAuthStateChangedCallback(mockUser);
+      if (capturedOnAuthStateChangedCallback) {
+        capturedOnAuthStateChangedCallback(mockUser);
       }
     });
-
     await waitFor(() => {
       expect(screen.getByText(`Hi, ${mockUser.displayName}`)).toBeInTheDocument();
-      expect(screen.getByText('🎲 Gaming Hub')).toBeInTheDocument(); // Main title
+      expect(screen.getByText('🎲 Gaming Hub')).toBeInTheDocument();
     });
     expect(screen.queryByTestId('login-component')).not.toBeInTheDocument();
     expect(screen.queryByText('Loading Application...')).not.toBeInTheDocument();
@@ -103,8 +96,8 @@ describe('App Component', () => {
         <App />
       </AuthProvider>
     );
-    act(() => { // Ensure logged out state after initial load
-      if (mockOnAuthStateChangedCallback) mockOnAuthStateChangedCallback(null);
+    act(() => {
+      if (capturedOnAuthStateChangedCallback) capturedOnAuthStateChangedCallback(null);
     });
     await waitFor(() => expect(screen.getByTestId('login-component')).toBeInTheDocument());
 
@@ -112,7 +105,7 @@ describe('App Component', () => {
     await act(async () => {
       await userEvent.click(loginHeaderButton);
     });
-    expect(mockSignInWithPopup).toHaveBeenCalledTimes(1);
+    expect(mockSignInWithPopupFn).toHaveBeenCalledTimes(1); // Use updated mock name
   });
 
   test('Logout button calls signOut', async () => {
@@ -121,8 +114,8 @@ describe('App Component', () => {
         <App />
       </AuthProvider>
     );
-    act(() => { // Log in the user
-      if (mockOnAuthStateChangedCallback) mockOnAuthStateChangedCallback(mockUser);
+    act(() => {
+      if (capturedOnAuthStateChangedCallback) capturedOnAuthStateChangedCallback(mockUser);
     });
     await waitFor(() => expect(screen.getByText(`Hi, ${mockUser.displayName}`)).toBeInTheDocument());
 
@@ -130,6 +123,6 @@ describe('App Component', () => {
     await act(async () => {
       await userEvent.click(logoutButton);
     });
-    expect(mockSignOut).toHaveBeenCalledTimes(1);
+    expect(mockSignOutFn).toHaveBeenCalledTimes(1); // Use updated mock name
   });
 });
