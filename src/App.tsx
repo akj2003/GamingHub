@@ -1481,7 +1481,7 @@ const MinesweeperGame = () => {
 
 
 function App() {
-  useAuth(); // Use auth hook
+  const { currentUser, logout, loading, signInWithGoogle } = useAuth(); // signInWithGoogle added
   const [game, setGame] = useState<'color-shape' | 'tictactoe' | 'ludo' | 'sudoku' | 'chess' | 'memory' | 'hangman' | 'minesweeper'>('color-shape');
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -1498,108 +1498,174 @@ function App() {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
 
+  if (loading) {
+    return (
+      <div id="root" className="app-container">
+        <header className="app-header">
+          {/* Keep header controls (theme toggle, potentially placeholder for user info) */}
+          <div className="header-controls" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '10px', gap: '15px', position: 'relative', zIndex: 10 }}>
+            {/* Theme toggle can stay */}
+            <button onClick={toggleTheme} className="game-button game-button-secondary theme-toggle-button" style={{ padding: '0.5em 0.8em', fontSize: '0.9em', minWidth: 'auto' }}>
+              <span>{theme === 'light' ? '🌙' : '☀️'}</span>
+            </button>
+          </div>
+        </header>
+        <main className="app-main" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+          <div>
+            <h2>Loading Application...</h2>
+            <p>Please wait while we check your authentication status.</p>
+            {/* Optional: Add a simple spinner CSS animation here if desired */}
+          </div>
+        </main>
+        <footer className="app-footer">
+          &copy; {new Date().getFullYear()} <span className="brand-text">Gaming Hub</span> &mdash; Built with <span className="tech-text">Vite + React</span>
+        </footer>
+      </div>
+    );
+  }
+
+  // If not loading, proceed to render based on currentUser
   return (
+    // AuthProvider wrapper removed
     <div id="root" className="app-container">
       <svg className="decorative-svg-1" width="380" height="380" viewBox="0 0 380 380"><circle cx="190" cy="190" r="190" /></svg>
       <svg className="decorative-svg-2" width="350" height="350" viewBox="0 0 350 350"><circle cx="175" cy="175" r="175" /></svg>
-      <svg className="decorative-svg-3" width="280" height="280" viewBox="0 0 280 280"><circle cx="140" cy="140" r="140" /></svg>
-      <header className="app-header">
-      <button
-        onClick={toggleTheme}
-        className="game-button game-button-secondary theme-toggle-button"
-        style={{
-            position: 'absolute',
-            top: '1em',
-            right: '1em',
-            padding: '0.5em 0.8em',
-            fontSize: '0.9em',
-            minWidth: 'auto'
-        }}
-        aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-        title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-        >
-          <span>{theme === 'light' ? '🌙' : '☀️'}</span>
-        </button>
-        <h1>
-          🎲 Gaming Hub
-        </h1>
-        <p>
-          Enjoy a collection of classic and modern games with a beautiful, immersive UI!
-        </p>
-        <nav>
-          <button
-            className={`nav-button ${game === 'color-shape' ? 'nav-button-active' : ''}`}
-            style={game === 'color-shape' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--success-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'color-shape' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--success-color))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
-            onClick={() => setGame('color-shape')}
-            aria-label="Play Shape & Color Game"
-          >
-            <span><span role="img" aria-label="Palette icon">🎨</span> Shape & Color Game</span>
-          </button>
-          <button
-            className={`nav-button ${game === 'tictactoe' ? 'nav-button-active' : ''}`}
-            style={game === 'tictactoe' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--secondary-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'tictactoe' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--secondary-color))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
-            onClick={() => setGame('tictactoe')}
-            aria-label="Play Tic-Tac-Toe"
-          >
-            <span><TicTacToeIcon /> Tic-Tac-Toe</span>
-          </button>
-          <button
-            className={`nav-button ${game === 'ludo' ? 'nav-button-active' : ''}`}
-            style={game === 'ludo' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'ludo' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}: {}}
-            onClick={() => setGame('ludo')}
-            aria-label="Play Ludo"
-          >
-            <span><span role="img" aria-label="Dice icon">🎲</span> Ludo (Mini)</span>
-          </button>
-          <button
-            className={`nav-button ${game === 'sudoku' ? 'nav-button-active' : ''}`}
-            style={game === 'sudoku' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'sudoku' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}: {}}
-            onClick={() => setGame('sudoku')}
-            aria-label="Play Sudoku"
-          >
-            <span><span role="img" aria-label="Numeric input icon">🔢</span> Sudoku (4x4)</span>
-          </button>
-          <button
-            className={`nav-button ${game === 'chess' ? 'nav-button-active' : ''}`}
-            style={game === 'chess' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--text-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'chess' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--text-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}: {}}
-            onClick={() => setGame('chess')}
-            aria-label="Play Chess"
-          >
-            <span><span role="img" aria-label="Chess pawn icon">♟️</span> Chess (Mini)</span>
-          </button>
-          <button
-            className={`nav-button ${game === 'memory' ? 'nav-button-active' : ''}`}
-            style={game === 'memory' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'memory' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
-            onClick={() => setGame('memory')}
-            aria-label="Play Memory Game"
-          >
-            <span><span role="img" aria-label="Brain icon">🧠</span> Memory Game</span>
-          </button>
-          <button
-            className={`nav-button ${game === 'hangman' ? 'nav-button-active' : ''}`}
-            style={game === 'hangman' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'hangman' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
-            onClick={() => setGame('hangman')}
-            aria-label="Play Hangman Game"
-          >
-            <span><span role="img" aria-label="Thinking face icon">🤔</span> Hangman</span>
-          </button>
-          <button
-            className={`nav-button ${game === 'minesweeper' ? 'nav-button-active' : ''}`}
-            style={game === 'minesweeper' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'minesweeper' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
-            onClick={() => setGame('minesweeper')}
-            aria-label="Play Minesweeper Game"
-          >
-            <span><span role="img" aria-label="Bomb icon">💣</span> Minesweeper</span>
-          </button>
-        </nav>
-      </header>
-      <main className="app-main">
-        {game === 'color-shape' ? <GamingPage /> : game === 'tictactoe' ? <TicTacToe /> : game === 'ludo' ? <Ludo /> : game === 'sudoku' ? <Sudoku /> : game === 'chess' ? <Chess /> : game === 'memory' ? <MemoryGame /> : game === 'hangman' ? <HangmanGame /> : <MinesweeperGame />}
-      </main>
-      <footer className="app-footer">
-        &copy; {new Date().getFullYear()} <span className="brand-text">Gaming Hub</span> &mdash; Built with <span className="tech-text">Vite + React</span>
-      </footer>
-    </div>
+        <svg className="decorative-svg-3" width="280" height="280" viewBox="0 0 280 280"><circle cx="140" cy="140" r="140" /></svg>
+        <header className="app-header">
+          <div className="header-controls" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '10px', gap: '15px', position: 'relative', zIndex: 10 }}>
+            {currentUser ? (
+              <>
+                <span style={{ color: 'var(--text-color)', fontSize: '0.9em' }}>
+                  Hi, {currentUser.displayName || currentUser.email}!
+                </span>
+                <button
+                  onClick={logout}
+                  className="game-button game-button-secondary"
+                  style={{ padding: '0.5em 1em', fontSize: '0.9em', minWidth: 'auto' }}
+                  title="Logout"
+                  aria-label="Logout"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={signInWithGoogle} // Call signInWithGoogle
+                className="game-button google-login-button" // Can reuse class from Login.css or create a new one
+                style={{ padding: '0.5em 1em', fontSize: '0.9em', minWidth: 'auto' }} // Basic styling
+                title="Login with Google"
+                aria-label="Login with Google"
+              >
+                {/* Using text, but could add SVG icon similar to Login.tsx if Login.css is imported/styles are global */}
+                Login with Google
+              </button>
+            )}
+            <button
+              onClick={toggleTheme}
+              className="game-button game-button-secondary theme-toggle-button"
+              style={{
+                  padding: '0.5em 0.8em',
+                  fontSize: '0.9em',
+                  minWidth: 'auto'
+                  // Removed absolute positioning
+              }}
+              aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+              title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+            >
+              <span>{theme === 'light' ? '🌙' : '☀️'}</span>
+            </button>
+          </div>
+
+          {/* Conditional part of the header and main content */}
+          {currentUser ? (
+            <>
+              <h1>🎲 Gaming Hub</h1>
+              <p>Enjoy a collection of classic and modern games with a beautiful, immersive UI!</p>
+              <nav>
+                <button
+                  className={`nav-button ${game === 'color-shape' ? 'nav-button-active' : ''}`}
+                  style={game === 'color-shape' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--success-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'color-shape' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--success-color))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+                  onClick={() => setGame('color-shape')}
+                  aria-label="Play Shape & Color Game"
+                >
+                  <span><span role="img" aria-label="Palette icon">🎨</span> Shape & Color Game</span>
+                </button>
+                <button
+                  className={`nav-button ${game === 'tictactoe' ? 'nav-button-active' : ''}`}
+                  style={game === 'tictactoe' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--secondary-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'tictactoe' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--secondary-color))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+                  onClick={() => setGame('tictactoe')}
+                  aria-label="Play Tic-Tac-Toe"
+                >
+                  <span><TicTacToeIcon /> Tic-Tac-Toe</span>
+                </button>
+                <button
+                  className={`nav-button ${game === 'ludo' ? 'nav-button-active' : ''}`}
+                  style={game === 'ludo' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'ludo' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}: {}}
+                  onClick={() => setGame('ludo')}
+                  aria-label="Play Ludo"
+                >
+                  <span><span role="img" aria-label="Dice icon">🎲</span> Ludo (Mini)</span>
+                </button>
+                <button
+                  className={`nav-button ${game === 'sudoku' ? 'nav-button-active' : ''}`}
+                  style={game === 'sudoku' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'sudoku' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}: {}}
+                  onClick={() => setGame('sudoku')}
+                  aria-label="Play Sudoku"
+                >
+                  <span><span role="img" aria-label="Numeric input icon">🔢</span> Sudoku (4x4)</span>
+                </button>
+                <button
+                  className={`nav-button ${game === 'chess' ? 'nav-button-active' : ''}`}
+                  style={game === 'chess' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--text-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'chess' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--text-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}: {}}
+                  onClick={() => setGame('chess')}
+                  aria-label="Play Chess"
+                >
+                  <span><span role="img" aria-label="Chess pawn icon">♟️</span> Chess (Mini)</span>
+                </button>
+                <button
+                  className={`nav-button ${game === 'memory' ? 'nav-button-active' : ''}`}
+                  style={game === 'memory' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'memory' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+                  onClick={() => setGame('memory')}
+                  aria-label="Play Memory Game"
+                >
+                  <span><span role="img" aria-label="Brain icon">🧠</span> Memory Game</span>
+                </button>
+                <button
+                  className={`nav-button ${game === 'hangman' ? 'nav-button-active' : ''}`}
+                  style={game === 'hangman' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'hangman' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+                  onClick={() => setGame('hangman')}
+                  aria-label="Play Hangman Game"
+                >
+                  <span><span role="img" aria-label="Thinking face icon">🤔</span> Hangman</span>
+                </button>
+                <button
+                  className={`nav-button ${game === 'minesweeper' ? 'nav-button-active' : ''}`}
+                  style={game === 'minesweeper' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'minesweeper' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+                  onClick={() => setGame('minesweeper')}
+                  aria-label="Play Minesweeper Game"
+                >
+                  <span><span role="img" aria-label="Bomb icon">💣</span> Minesweeper</span>
+                </button>
+              </nav>
+            </>
+          ) : null} {/* Or some other minimal content if the header structure requires it when logged out */}
+        </header>
+
+        {currentUser ? (
+          <main className="app-main">
+            {game === 'color-shape' ? <GamingPage /> : game === 'tictactoe' ? <TicTacToe /> : game === 'ludo' ? <Ludo /> : game === 'sudoku' ? <Sudoku /> : game === 'chess' ? <Chess /> : game === 'memory' ? <MemoryGame /> : game === 'hangman' ? <HangmanGame /> : <MinesweeperGame />}
+          </main>
+        ) : (
+          <main className="app-main"> {/* Use app-main for consistent styling if Login is also inside it */}
+            <Login />
+          </main>
+        )}
+
+        <footer className="app-footer">
+          &copy; {new Date().getFullYear()} <span className="brand-text">Gaming Hub</span> &mdash; Built with <span className="tech-text">Vite + React</span>
+        </footer>
+      </div>
+    // Closing AuthProvider wrapper removed
   );
 }
 
