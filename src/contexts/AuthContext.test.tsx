@@ -1,28 +1,37 @@
 /// <reference types="vitest/globals" />
-// src/contexts/AuthContext.test.tsx
 import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AuthProvider, useAuth } from './AuthContext';
 import { vi } from 'vitest';
 
-// 1. Define the mock function instances and shared variables for tests FIRST
-const mockUser = { uid: '123', email: 'test@example.com', displayName: 'Test User' };
-const mockSignInWithPopupFn = vi.fn(); // Renamed to avoid confusion if re-imported
-const mockSignOutFn = vi.fn();
+// Declare variables that will hold the mock functions.
+// These will be populated by the vi.mock factory.
+let mockSignInWithPopupFn: ReturnType<typeof vi.fn>;
+let mockSignOutFn: ReturnType<typeof vi.fn>;
 let capturedOnAuthStateChangedCallback: ((user: any) => void) | null = null;
 
-// 2. Now, mock 'firebase/auth' using these pre-defined functions
+const mockUser = { uid: '123', email: 'test@example.com', displayName: 'Test User' };
+
 vi.mock('firebase/auth', async (importOriginal) => {
   const actual = await importOriginal<typeof import('firebase/auth')>();
+
+  // Create the mock functions INSIDE the factory
+  const signInPopupInstance = vi.fn();
+  const signOutInstance = vi.fn();
+
+  // Assign them to the module-scoped variables so tests can access the same instances
+  mockSignInWithPopupFn = signInPopupInstance;
+  mockSignOutFn = signOutInstance;
+
   return {
     ...actual,
     getAuth: vi.fn(() => ({})),
-    onAuthStateChanged: vi.fn((_auth: any, callback: (user: any) => void) => { // Changed 'auth' to '_auth'
+    onAuthStateChanged: vi.fn((_auth: any, callback: (user: any) => void) => {
       capturedOnAuthStateChangedCallback = callback;
-      return vi.fn(); // Return a mock unsubscribe function
+      return vi.fn();
     }),
-    signInWithPopup: mockSignInWithPopupFn, // Use the function defined above
-    signOut: mockSignOutFn, // Use the function defined above
+    signInWithPopup: signInPopupInstance, // Use the factory-scoped instance for the mock's return
+    signOut: signOutInstance,           // Use the factory-scoped instance for the mock's return
     GoogleAuthProvider: vi.fn().mockImplementation(() => ({})),
   };
 });
@@ -47,14 +56,14 @@ const TestConsumerComponent = () => {
 
 describe('AuthContext', () => {
   beforeEach(() => {
-    // Reset mocks and callback before each test
-    mockSignInWithPopupFn.mockClear().mockResolvedValue({ user: mockUser }); // Default to successful login
-    mockSignOutFn.mockClear().mockResolvedValue(undefined); // Default to successful logout
+    // It's crucial that these mock functions are defined before beforeEach runs.
+    // The vi.mock factory ensures they are.
+    mockSignInWithPopupFn.mockClear().mockResolvedValue({ user: mockUser });
+    mockSignOutFn.mockClear().mockResolvedValue(undefined);
     capturedOnAuthStateChangedCallback = null;
   });
 
-  // Test cases remain largely the same but use `mockSignInWithPopupFn`, `mockSignOutFn`,
-  // and `capturedOnAuthStateChangedCallback`
+  // Test cases remain the same (they already use mockSignInWithPopupFn, mockSignOutFn, etc.)
 
   test('initial state is loading and no user', () => {
     let authHookValues: any;
@@ -73,9 +82,6 @@ describe('AuthContext', () => {
         <TestConsumerComponent />
       </AuthProvider>
     );
-    // AuthProvider's internal loading state makes it render nothing until its onAuthStateChanged runs.
-    // The TestConsumerComponent then shows "Loading..." from its own useAuth().loading.
-    // The initial assertion for "Loading..." from TestConsumerComponent is correct.
     expect(screen.getByText('Loading...')).toBeInTheDocument();
 
     act(() => {
@@ -98,14 +104,14 @@ describe('AuthContext', () => {
     );
     act(() => {
       if (capturedOnAuthStateChangedCallback) {
-        capturedOnAuthStateChangedCallback(mockUser); // Login first
+        capturedOnAuthStateChangedCallback(mockUser);
       }
     });
     await waitFor(() => expect(screen.getByText(`User: ${mockUser.displayName}`)).toBeInTheDocument());
 
     act(() => {
       if (capturedOnAuthStateChangedCallback) {
-        capturedOnAuthStateChangedCallback(null); // Then log out via auth state change
+        capturedOnAuthStateChangedCallback(null);
       }
     });
     await waitFor(() => expect(screen.getByText('Login with Google')).toBeInTheDocument());
@@ -117,7 +123,7 @@ describe('AuthContext', () => {
         <TestConsumerComponent />
       </AuthProvider>
     );
-    act(() => { // Ensure initial logged-out state is processed
+    act(() => {
       if (capturedOnAuthStateChangedCallback) capturedOnAuthStateChangedCallback(null);
     });
     await waitFor(() => expect(screen.getByText('Login with Google')).toBeInTheDocument());
@@ -128,7 +134,6 @@ describe('AuthContext', () => {
     });
 
     expect(mockSignInWithPopupFn).toHaveBeenCalledTimes(1);
-    // Simulate onAuthStateChanged being called by Firebase after successful popup
     act(() => {
       if (capturedOnAuthStateChangedCallback) {
         capturedOnAuthStateChangedCallback(mockUser);
@@ -143,7 +148,7 @@ describe('AuthContext', () => {
         <TestConsumerComponent />
       </AuthProvider>
     );
-    act(() => { // Start logged in
+    act(() => {
       if (capturedOnAuthStateChangedCallback) {
         capturedOnAuthStateChangedCallback(mockUser);
       }
@@ -156,7 +161,6 @@ describe('AuthContext', () => {
     });
 
     expect(mockSignOutFn).toHaveBeenCalledTimes(1);
-    // Simulate onAuthStateChanged being called by Firebase after successful sign out
     act(() => {
       if (capturedOnAuthStateChangedCallback) {
         capturedOnAuthStateChangedCallback(null);
