@@ -115,3 +115,21 @@ This application uses Firebase for Google authentication. To enable this functio
 *   Ensure that the domain from which you are serving your application (e.g., `localhost` for local development, or your deployment domain) is listed. Firebase usually adds `localhost` by default.
 
 Once these steps are completed, the Google Sign-In functionality should work in your local environment or deployment.
+
+## Deployment Notes
+
+After running `npm run build`, the application will be in the `dist` folder. When deploying this folder:
+
+1.  **Serve from Root or Configure Base Path**:
+    *   This project is configured with `base: './'` in `vite.config.ts`, which makes asset paths relative. This should work well for most static hosting platforms, whether served from the root or a subdirectory.
+    *   If you were to change `base` to `'/'` (the default), ensure your application is served from the root of your domain (e.g., `yourdomain.com`, not `yourdomain.com/some-app/`) or that your server correctly handles root-relative paths.
+
+2.  **SPA Fallback / `index.html`**:
+    *   For Single Page Applications (SPAs) like this one, your web server must be configured to serve the `dist/index.html` file for any routes that don't match a static file in the `dist` directory. This is often called a "fallback" or "rewrite" rule.
+    *   Consult your hosting provider's documentation for how to set this up (e.g., for Netlify, Vercel, GitHub Pages, Firebase Hosting, AWS S3/CloudFront, Nginx, Apache).
+
+3.  **MIME Types**:
+    *   Ensure your server is correctly configured to serve JavaScript files (`.js`) with the `application/javascript` (or `text/javascript`) MIME type. CSS files (`.css`) should be `text/css`, etc. Most modern static hosting providers handle this automatically.
+
+4.  **Console Error - Raw File Content**:
+    *   If you deploy and see a blank page, and the browser's developer console shows the *content* of one of your source files (like `AuthContext.tsx` or `main.tsx`), it strongly indicates an issue with how JavaScript files are being served by your hosting environment (often an incorrect MIME type or the server not finding the built JS files and incorrectly serving the source or `index.html` as plain text for the JS request). Double-check your server configuration and MIME type settings.
