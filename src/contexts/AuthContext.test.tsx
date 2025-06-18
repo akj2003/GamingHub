@@ -1,9 +1,8 @@
 // src/contexts/AuthContext.test.tsx
 import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { AuthProvider, useAuth } from './AuthContext';
-import { vi } from 'vitest'; // Vitest's utility for mocking
+import { beforeEach, describe, expect, test, vi } from 'vitest'; // Vitest's utility for mocking
 
 // --- Mock 'firebase/auth' ---
 // This is the core of testing AuthContext
@@ -19,7 +18,7 @@ vi.mock('firebase/auth', async (importOriginal) => {
     getAuth: vi.fn(() => ({
       // Mock whatever getAuth() returns that your AuthContext uses, if any beyond onAuthStateChanged itself
     })),
-    onAuthStateChanged: vi.fn((auth: any, callback: (user: any) => void) => {
+    onAuthStateChanged: vi.fn((_: any, callback: (user: any) => void) => {
       mockOnAuthStateChangedCallback = callback; // Store the callback
       // Simulate initial state (no user, then Firebase initializes)
       // In a real scenario, Firebase might take a moment, then call this.
