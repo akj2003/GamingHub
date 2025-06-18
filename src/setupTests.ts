@@ -1,5 +1,6 @@
 // src/setupTests.ts
 import '@testing-library/jest-dom';
+import { beforeAll, afterEach, afterAll } from 'vitest';
 import { server } from './mocks/server'; // Import the server
 
 // Establish API mocking before all tests.

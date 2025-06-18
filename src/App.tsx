@@ -3,6 +3,7 @@ import './App.css';
 import { useAuth } from './contexts/AuthContext'; // AuthProvider import removed
 import WinCelebration from './components/WinCelebration';
 import InstructionsModal from './components/InstructionsModal';
+import Login from './components/Login';
 
 // SVG Icon for TicTacToe
 const TicTacToeIcon = () => (
