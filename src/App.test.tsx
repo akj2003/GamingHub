@@ -1,10 +1,9 @@
 // src/App.test.tsx
 import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import App from './App';
 import { AuthProvider } from './contexts/AuthContext'; // To wrap App
-import { vi } from 'vitest';
+import { vi, describe, test, expect, beforeEach } from 'vitest';
 
 // --- Mock 'firebase/auth' ---
 let mockOnAuthStateChangedCallback: ((user: any) => void) | null = null;
@@ -19,7 +18,7 @@ vi.mock('firebase/auth', async (importOriginal) => {
     getAuth: vi.fn(() => ({
       // Mock any specific properties of the auth object if needed by AuthContext
     })),
-    onAuthStateChanged: vi.fn((auth: any, callback: (user: any) => void) => {
+    onAuthStateChanged: vi.fn((_auth: any, callback: (user: any) => void) => {
       mockOnAuthStateChangedCallback = callback; // Capture the callback
       // Tests will manually trigger this callback to simulate auth states
       return vi.fn(); // Return a mock unsubscribe function

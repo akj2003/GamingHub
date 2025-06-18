@@ -24,7 +24,7 @@ let mockUser: { uid: string; email: string; displayName?: string } | null = null
 
 export const handlers = [
   // Example: Mocking a generic auth check endpoint (IF Firebase made one like this)
-  http.get('/api/auth/status', ({ request }) => {
+  http.get('/api/auth/status', () => {
     if (mockUser) {
       return HttpResponse.json({ loggedIn: true, user: mockUser });
     }
@@ -32,7 +32,7 @@ export const handlers = [
   }),
 
   // Example: Mocking a login endpoint
-  http.post('/api/auth/login', async ({ request }) => {
+  http.post('/api/auth/login', async () => {
     // In a real scenario, you might extract credentials from request.json()
     mockUser = { uid: '123', email: 'test@example.com', displayName: 'Test User' };
     // This wouldn't automatically trigger onAuthStateChanged in real Firebase.
@@ -40,7 +40,7 @@ export const handlers = [
     return HttpResponse.json(mockUser);
   }),
 
-  http.post('/api/auth/logout', ({ request }) => {
+  http.post('/api/auth/logout', () => {
     mockUser = null;
     return HttpResponse.json({ success: true });
   }),
