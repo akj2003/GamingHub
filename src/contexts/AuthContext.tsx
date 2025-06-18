@@ -2,27 +2,12 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import {
   getAuth,
   onAuthStateChanged,
-<<<<<<< HEAD
-<<<<<<< HEAD
-  User,
-=======
   // User, // Removed from here
->>>>>>> feat/google-authentication
-=======
-  // User, // Removed from here
->>>>>>> feat/google-authentication
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 import type { User } from 'firebase/auth'; // Added as type-only import
->>>>>>> feat/google-authentication
-=======
-import type { User } from 'firebase/auth'; // Added as type-only import
->>>>>>> feat/google-authentication
 import firebaseApp from '../firebase-config'; // Ensure this path is correct
 
 // Define the shape of the context value
