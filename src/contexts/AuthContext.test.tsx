@@ -1,3 +1,4 @@
+/// <reference types="vitest/globals" />
 // src/contexts/AuthContext.test.tsx
 import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -17,7 +18,7 @@ vi.mock('firebase/auth', async (importOriginal) => {
   return {
     ...actual,
     getAuth: vi.fn(() => ({})),
-    onAuthStateChanged: vi.fn((auth: any, callback: (user: any) => void) => {
+    onAuthStateChanged: vi.fn((_auth: any, callback: (user: any) => void) => { // Changed 'auth' to '_auth'
       capturedOnAuthStateChangedCallback = callback;
       return vi.fn(); // Return a mock unsubscribe function
     }),
