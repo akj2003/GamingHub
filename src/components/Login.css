@@ -3,67 +3,102 @@
   align-items: center;
   justify-content: center;
   min-height: 80vh; /* Adjust as needed to fit within your app layout */
-  padding: 20px;
+  padding: var(--space-lg);
   box-sizing: border-box;
 }
 
 .login-card {
-  background-color: var(--card-bg-color, #ffffff);
-  padding: 30px 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  background-color: var(--card-background-color); /* Use global theme variable */
+  padding: var(--space-xl) var(--space-2xl); /* Use global spacing */
+  border-radius: var(--radius-md); /* Use global radius */
+  box-shadow: var(--glass-shadow); /* Use global shadow for consistency */
   text-align: center;
   max-width: 400px;
   width: 100%;
-  border: 1px solid var(--border-color, #e0e0e0);
+  border: 1px solid var(--border-color); /* Use global theme variable */
 }
 
 .login-title {
-  font-size: 2em;
-  color: var(--primary-color, #333);
-  margin-bottom: 10px;
+  font-size: 2em; /* Existing size, consider clamp or responsive units if needed */
+  color: var(--text-color); /* Use global theme variable for standard text */
+  margin-bottom: var(--space-md); /* Use global spacing */
+  font-family: var(--font-gaming); /* Align with other headers */
 }
 
 .login-subtitle {
   font-size: 1em;
-  color: var(--text-color-secondary, #666);
-  margin-bottom: 30px;
+  color: var(--subtle-text-color); /* Use global theme variable */
+  margin-bottom: var(--space-xl); /* Use global spacing */
 }
 
+/* This class seems to be a wrapper for the button, not the button itself. */
+/* Its styling seems fine for a full-width container. */
 .login-button {
   width: 100%;
-  padding: 12px 20px;
+  /* The padding, font-size etc. here will be overridden by the .google-login-button if it's the same element */
+  /* Assuming .google-login-button is a child, these act as defaults for other potential buttons or spacing */
+  padding: var(--space-md) var(--space-lg);
   font-size: 1em;
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: var(--radius-sm); /* Slightly smaller radius for inner button if distinct */
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: var(--space-sm);
 }
 
+/* Google button: Brand colors are important, but let's make it more theme-aware for text/disabled states */
 .google-login-button {
-  background-color: #4285F4; /* Google Blue */
-  color: white;
+  background-color: #4285F4; /* Google Blue - Standard, keeping for branding */
+  color: var(--button-text-color); /* Use theme variable for text on buttons */
+  /* Inherits display, align-items, justify-content, gap from .login-button if it's on the same element */
+  /* If it's a child, these properties need to be on .google-login-button itself. */
+  /* Assuming it's the same element that gets both classes or Login.tsx applies .login-button to the button itself */
+  width: 100%; /* Ensure it takes full width of parent if it's the one with .login-button class */
+  padding: var(--space-md) var(--space-lg); /* Consistent padding */
+  font-size: 1em;
+  font-weight: 600;
+  border-radius: var(--radius-md); /* Consistent with other buttons */
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
 }
 
 .google-login-button:hover {
-  background-color: #357ae8;
-  box-shadow: 0 2px 8px rgba(66, 133, 244, 0.4);
+  background-color: #357ae8; /* Darker Google Blue for hover - Standard, keeping for branding */
+  box-shadow: 0 2px 8px rgba(66, 133, 244, 0.4); /* Keep existing specific shadow for this button */
 }
 
 .google-login-button:disabled {
-  background-color: #cccccc;
+  background-color: var(--disabled-bg-color); /* Use theme variable */
+  color: var(--disabled-text-color); /* Use theme variable */
   cursor: not-allowed;
+  box-shadow: none; /* Remove shadow when disabled */
 }
 
 /* Add a Google icon - using a simple SVG as a data URI */
 .google-login-button::before {
   content: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='18px' height='18px' viewBox='0 0 48 48'%3E%3Cg%3E%3Cpath fill='%23EA4335' d='M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z'%3E%3C/path%3E%3Cpath fill='%234285F4' d='M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z'%3E%3C/path%3E%3Cpath fill='%23FBBC05' d='M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z'%3E%3C/path%3E%3Cpath fill='%2334A853' d='M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z'%3E%3C/path%3E%3Cpath fill='none' d='M0 0h48v48H0z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
-  margin-right: 8px; /* Adjust spacing as needed */
+  margin-right: var(--space-sm); /* Use global spacing */
   display: inline-block;
   vertical-align: middle;
+}
+
+.login-error-message {
+  color: var(--error-color);
+  background-color: rgba(var(--error-color-rgb), 0.1); /* Use defined RGB variable */
+  border: 1px solid rgba(var(--error-color-rgb), 0.3); /* Use defined RGB variable */
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-lg);
+  font-size: 0.9em;
+  text-align: center;
 }
