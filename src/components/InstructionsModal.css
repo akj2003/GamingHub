@@ -1,12 +1,25 @@
-/* Keyframes (can be shared or defined per component style) */
-@keyframes fadeInOverlay {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* Enhanced Instructions Modal with Rich Design */
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-@keyframes popInContent {
-  from { transform: scale(0.85); opacity: 0; } /* Start from a slightly larger scale for smoother pop */
-  to { transform: scale(1); opacity: 1; }
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(10px);
+  }
 }
 
 .instructions-modal-overlay {
@@ -15,74 +28,234 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.65); /* Slightly darker overlay */
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(15, 15, 35, 0.8) 100%);
+  backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
-  animation: fadeInOverlay 0.25s ease-out forwards;
+  z-index: 9000;
+  animation: overlayFadeIn 0.3s ease-out forwards;
+  padding: 1rem;
 }
 
 .instructions-modal-content {
-  background: var(--card-background-color);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
   color: var(--text-color);
-  padding: 25px; /* Increased padding */
-  border-radius: 12px; /* Consistent with game-card */
-  width: 90%;
-  max-width: 550px; /* Slightly wider for more content */
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25); /* Enhanced shadow */
-  transform: scale(0.9); /* Initial state for animation */
-  animation: popInContent 0.25s 0.05s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Smoother pop with custom bezier */
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  position: relative;
+  overflow: hidden;
+}
+
+.instructions-modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
 }
 
 .instructions-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 12px; /* Adjusted padding */
-  margin-bottom: 18px; /* Adjusted margin */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .instructions-modal-header h2 {
   margin: 0;
-  font-size: 1.6em; /* Adjusted size */
-  color: var(--primary-color);
-  font-weight: 700; /* Ensure consistent header weight */
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-family: var(--font-gaming);
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
 }
 
 .instructions-modal-close-btn {
-  background: none;
-  border: none;
-  font-size: 2.2em; /* Larger close button */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
   cursor: pointer;
-  color: var(--subtle-text-color); /* Subtle color */
-  padding: 0 8px; /* Adjust padding for better click area */
-  line-height: 1; /* Ensure consistent vertical alignment */
-  transition: color 0.2s ease-out;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-normal);
+  padding: 0;
 }
+
 .instructions-modal-close-btn:hover {
-  color: var(--secondary-color); /* Use secondary color for hover */
+  background: rgba(240, 147, 251, 0.2);
+  color: var(--secondary-color);
+  transform: scale(1.1);
+  border-color: var(--secondary-color);
+}
+
+.instructions-modal-close-btn:active {
+  transform: scale(0.95);
 }
 
 .instructions-modal-body {
-  max-height: 65vh; /* Slightly increased max-height */
+  max-height: 60vh;
   overflow-y: auto;
-  line-height: 1.65; /* Improved line height */
-  padding-right: 5px; /* Add a little padding if scrollbar appears */
+  line-height: 1.7;
+  padding-right: 0.5rem;
 }
-.instructions-modal-body ul {
-  padding-left: 20px;
-  margin-top: 0; /* Remove default top margin from ul */
+
+/* Custom Scrollbar */
+.instructions-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.instructions-modal-body::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.instructions-modal-body::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 3px;
+}
+
+.instructions-modal-body::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+}
+
+.instructions-modal-body h3 {
+  color: var(--accent-color);
+  font-size: 1.2rem;
+  margin: 1.5rem 0 0.75rem;
+  font-weight: 600;
+}
+
+.instructions-modal-body h3:first-child {
+  margin-top: 0;
+}
+
+.instructions-modal-body p {
+  margin: 0 0 1rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.instructions-modal-body p:last-child {
   margin-bottom: 0;
 }
+
+.instructions-modal-body ul {
+  padding-left: 1.5rem;
+  margin: 0 0 1rem;
+}
+
 .instructions-modal-body li {
-  margin-bottom: 0.6em; /* Slightly more space between list items */
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  position: relative;
 }
-.instructions-modal-body p {
-    margin-top: 0;
-    margin-bottom: 1em;
+
+.instructions-modal-body li::marker {
+  color: var(--primary-color);
 }
-.instructions-modal-body p:last-child {
-    margin-bottom: 0;
+
+.instructions-modal-body strong {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.instructions-modal-body code {
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--accent-color);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+/* Highlight boxes for important information */
+.instructions-highlight {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(240, 147, 251, 0.1));
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.instructions-highlight p {
+  margin: 0;
+  color: var(--text-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .instructions-modal-overlay {
+    padding: 0.5rem;
+  }
+  
+  .instructions-modal-content {
+    padding: 1.5rem;
+    max-height: 85vh;
+  }
+  
+  .instructions-modal-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .instructions-modal-close-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .instructions-modal-content {
+    padding: 1rem;
+    max-height: 90vh;
+  }
+  
+  .instructions-modal-header {
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .instructions-modal-body {
+    font-size: 0.9rem;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .instructions-modal-overlay,
+  .instructions-modal-content {
+    animation: none;
+  }
+  
+  .instructions-modal-close-btn:hover {
+    transform: none;
+  }
+}
+
+/* Focus indicators */
+.instructions-modal-close-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
