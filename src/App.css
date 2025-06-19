@@ -6,15 +6,15 @@ body {
   font-family: var(--font-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, var(--background-color) 0%, var(--background-secondary) 50%, var(--background-tertiary) 100%);
-  background-attachment: fixed;
+  background-color: var(--background-color);
   color: var(--text-color);
   overflow-x: hidden;
   position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Animated Background Particles */
-body::before {
+/* Animated Background for Dark Theme */
+[data-theme="dark"] body::before {
   content: '';
   position: fixed;
   top: 0;
@@ -47,9 +47,36 @@ body::before {
   overflow-x: hidden;
 }
 
-/* Floating Geometric Shapes */
-.app-container::before,
-.app-container::after {
+/* Theme Toggle Button */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: 1.2rem;
+  color: var(--text-color);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+  background: var(--primary-color);
+  color: var(--button-text-color);
+}
+
+/* Floating Geometric Shapes for Dark Theme */
+[data-theme="dark"] .app-container::before,
+[data-theme="dark"] .app-container::after {
   content: '';
   position: fixed;
   border-radius: 50%;
@@ -58,7 +85,7 @@ body::before {
   opacity: 0.03;
 }
 
-.app-container::before {
+[data-theme="dark"] .app-container::before {
   width: 400px;
   height: 400px;
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -67,7 +94,7 @@ body::before {
   animation: float 20s ease-in-out infinite;
 }
 
-.app-container::after {
+[data-theme="dark"] .app-container::after {
   width: 300px;
   height: 300px;
   background: linear-gradient(135deg, var(--accent-color), var(--accent-dark));
@@ -138,7 +165,7 @@ body::before {
 }
 
 .app-header p {
-  color: var(--text-secondary);
+  color: var(--subtle-text-color);
   font-size: clamp(1rem, 2.5vw, 1.25rem);
   margin: var(--space-lg) 0 0;
   font-weight: 500;
@@ -191,9 +218,9 @@ body::before {
 
 .nav-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   border-color: var(--primary-color);
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(93, 173, 226, 0.1);
 }
 
 .nav-button:hover::before {
@@ -206,15 +233,15 @@ body::before {
 
 .nav-button-active {
   background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-  color: white;
+  color: var(--button-text-color);
   border-color: transparent;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(93, 173, 226, 0.4);
 }
 
 .nav-button-active:hover {
   background: linear-gradient(135deg, var(--primary-light), var(--secondary-color));
   transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 10px 30px rgba(93, 173, 226, 0.5);
 }
 
 /* Enhanced Main Content */
@@ -264,7 +291,7 @@ body::before {
 .game-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  border-color: rgba(102, 126, 234, 0.3);
+  border-color: var(--primary-color);
 }
 
 .game-card:hover::before {
@@ -286,7 +313,7 @@ body::before {
 
 .game-card p {
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: var(--subtle-text-color);
   margin-top: 0;
   margin-bottom: var(--space-xl);
   text-align: center;
@@ -298,7 +325,7 @@ body::before {
 .game-button {
   position: relative;
   background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-  color: white;
+  color: var(--button-text-color);
   min-width: 140px;
   border: none;
   border-radius: var(--radius-md);
@@ -310,7 +337,7 @@ body::before {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(93, 173, 226, 0.3);
   margin: var(--space-sm);
 }
 
@@ -327,7 +354,7 @@ body::before {
 
 .game-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(93, 173, 226, 0.4);
 }
 
 .game-button:hover::before {
@@ -347,28 +374,28 @@ body::before {
 }
 
 .game-button-secondary:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(93, 173, 226, 0.1);
   border-color: var(--primary-color);
   transform: translateY(-3px);
 }
 
 .game-button-primary {
-  background: linear-gradient(135deg, var(--success-color), var(--success-light));
-  box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+  background: linear-gradient(135deg, var(--success-color), #68d391);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
 }
 
 .game-button-primary:hover {
-  box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+  box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
   transform: translateY(-3px);
 }
 
 .game-button-special {
   background: linear-gradient(135deg, var(--secondary-color), var(--secondary-light));
-  box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+  box-shadow: 0 4px 15px rgba(245, 176, 65, 0.3);
 }
 
 .game-button-special:hover {
-  box-shadow: 0 8px 25px rgba(240, 147, 251, 0.4);
+  box-shadow: 0 8px 25px rgba(245, 176, 65, 0.4);
   transform: translateY(-3px);
 }
 
@@ -395,7 +422,7 @@ body::before {
   border-radius: var(--radius-md);
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
-  color: var(--text-secondary);
+  color: var(--subtle-text-color);
   cursor: pointer;
   transition: all var(--transition-normal);
   display: flex;
@@ -420,7 +447,7 @@ body::before {
 .tictactoe-cell:hover {
   transform: translateY(-2px) scale(1.05);
   border-color: var(--primary-color);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 8px 25px rgba(93, 173, 226, 0.2);
 }
 
 .tictactoe-cell:hover::before {
@@ -428,24 +455,24 @@ body::before {
 }
 
 .tictactoe-cell.x {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(102, 126, 234, 0.1));
+  background: linear-gradient(135deg, rgba(93, 173, 226, 0.2), rgba(93, 173, 226, 0.1));
   color: var(--primary-color);
   border-color: var(--primary-color);
-  box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 0 20px rgba(93, 173, 226, 0.3);
 }
 
 .tictactoe-cell.o {
-  background: linear-gradient(135deg, rgba(240, 147, 251, 0.2), rgba(240, 147, 251, 0.1));
+  background: linear-gradient(135deg, rgba(245, 176, 65, 0.2), rgba(245, 176, 65, 0.1));
   color: var(--secondary-color);
   border-color: var(--secondary-color);
-  box-shadow: 0 0 20px rgba(240, 147, 251, 0.3);
+  box-shadow: 0 0 20px rgba(245, 176, 65, 0.3);
 }
 
 /* Enhanced Footer */
 .app-footer {
   width: 100%;
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--subtle-text-color);
   font-size: 1rem;
   margin-top: var(--space-2xl);
   padding: var(--space-2xl) var(--space-lg) var(--space-lg);
@@ -486,16 +513,11 @@ body::before {
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid rgba(102, 126, 234, 0.3);
+  border: 3px solid rgba(93, 173, 226, 0.3);
   border-top: 3px solid var(--primary-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: var(--space-lg) auto;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 /* Responsive Enhancements */
@@ -512,6 +534,13 @@ body::before {
   .nav-button {
     min-width: 120px;
     font-size: 0.9rem;
+  }
+  
+  .theme-toggle {
+    top: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
   }
 }
 
@@ -534,6 +563,14 @@ body::before {
   .tictactoe-grid {
     gap: var(--space-sm);
     padding: var(--space-md);
+  }
+  
+  .theme-toggle {
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
   }
 }
 
@@ -570,8 +607,8 @@ body::before {
 
 /* Accessibility Enhancements */
 @media (prefers-reduced-motion: reduce) {
-  .app-container::before,
-  .app-container::after {
+  [data-theme="dark"] .app-container::before,
+  [data-theme="dark"] .app-container::after {
     animation: none;
   }
   
@@ -588,7 +625,8 @@ body::before {
 /* Focus Indicators */
 .tictactoe-cell:focus-visible,
 .game-button:focus-visible,
-.nav-button:focus-visible {
+.nav-button:focus-visible,
+.theme-toggle:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
