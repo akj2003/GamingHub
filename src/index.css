@@ -4,7 +4,7 @@
   --secondary-color: #F5B041;
   --background-color: #FDFEFE;
   --text-color: #34495E;
-  --border-color: #EAEDED;
+  --border-color: #D5DBDB; /* Made slightly darker for better visibility */
   --card-background-color: #FFFFFF;
   --error-color: #E74C3C;
   --error-color-rgb: 231, 76, 60; /* RGB for #E74C3C */
