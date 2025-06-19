@@ -6,6 +6,6 @@ export default defineConfig({
     browserName: 'chromium',
     headless: true,
   },
-  globalSetup: './global-setup.ts',
-  globalTeardown: './global-teardown.ts',
+ // globalSetup: './global-setup.ts',
+  //globalTeardown: './global-teardown.ts',
 });
