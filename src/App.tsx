@@ -890,7 +890,7 @@ function Chess() {
 
 // Memory Game Component
 const MemoryGame = () => {
-  const cardValues = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  const cardValues = ['A', 'D', 'H', 'Y', 'C', 'U', 'I', 'S'];
   const initialCards = [...cardValues, ...cardValues]
     .sort(() => Math.random() - 0.5)
     .map((value, index) => ({ id: index, value, isFlipped: false, isMatched: false }));
