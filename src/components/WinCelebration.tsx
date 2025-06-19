@@ -42,6 +42,10 @@ const WinCelebration: React.FC<WinCelebrationProps> = ({
     return () => {
       window.removeEventListener('keydown', handleEsc);
     };
+    // TODO: Implement focus management for accessibility:
+    // 1. Trap focus within the modal when it's open.
+    // 2. Set initial focus to an element within the modal (e.g., the modal itself or the first button).
+    // 3. Return focus to the element that opened the modal when it closes.
   }, [isOpen, onClose]);
 
   if (!isOpen) {

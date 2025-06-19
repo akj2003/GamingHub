@@ -225,13 +225,7 @@ function App() {
               description="Choose your favorite game to start playing"
               icon="🎮"
             >
-              <div className="game-grid" style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-                gap: '1rem', 
-                width: '100%',
-                maxWidth: '800px'
-              }}>
+              <div className="game-hub-grid">
                 <GameCard
                   title="Tic Tac Toe"
                   description="Classic strategy game"

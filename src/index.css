@@ -7,6 +7,7 @@
   --border-color: #EAEDED;
   --card-background-color: #FFFFFF;
   --error-color: #E74C3C;
+  --error-color-rgb: 231, 76, 60; /* RGB for #E74C3C */
   --success-color: #2ECC71;
   --button-text-color: #FFFFFF;
   --subtle-text-color: #7F8C8D;
@@ -15,8 +16,10 @@
 
   /* Enhanced Design Variables */
   --primary-light: #85C1E9;
+  --primary-color-rgb: 93, 173, 226; /* RGB for #5DADE2 */
   --secondary-light: #F8C471;
   --accent-color: #48CAE4;
+  --accent-color-rgb: 72, 202, 228; /* RGB for #48CAE4 */
   --accent-dark: #0077B6;
   
   /* Glass Morphism */
@@ -68,6 +71,7 @@
   --border-color: #2d3748;
   --card-background-color: #1a1a2e;
   --error-color: #fc8181;
+  --error-color-rgb: 252, 129, 129; /* RGB for #fc8181 */
   --success-color: #68d391;
   --button-text-color: #ffffff;
   --subtle-text-color: #a0aec0;
@@ -76,8 +80,10 @@
 
   /* Enhanced Dark Theme Variables */
   --primary-light: #764ba2;
+  --primary-color-rgb: 102, 126, 234; /* RGB for #667eea */
   --secondary-light: #f5576c;
   --accent-color: #4facfe;
+  --accent-color-rgb: 79, 172, 254; /* RGB for #4facfe */
   --accent-dark: #00f2fe;
   
   /* Dark Glass Morphism */

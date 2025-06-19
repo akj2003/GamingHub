@@ -400,6 +400,15 @@ body {
 }
 
 /* Enhanced Game Grids */
+.game-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-md); /* Was 1rem */
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto; /* Center the grid if its max-width is reached */
+}
+
 .tictactoe-grid {
   display: grid;
   grid-template-columns: repeat(3, clamp(80px, 20vw, 120px));

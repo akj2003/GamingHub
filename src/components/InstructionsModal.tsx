@@ -21,7 +21,11 @@ const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, onClose, 
     };
     if (isOpen) {
       window.addEventListener('keydown', handleEsc);
-      // Future enhancement: focus management
+      // TODO: Implement robust focus management for accessibility:
+      // 1. Trap focus within the modal.
+      // 2. Set initial focus (e.g., to the close button or the modal container).
+      // 3. Return focus to the triggering element when the modal closes.
+      // The comment "Future enhancement: focus management" is noted. This is a critical part of it.
     }
     return () => {
       window.removeEventListener('keydown', handleEsc);
