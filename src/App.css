@@ -273,7 +273,7 @@ body {
   align-items: center;
   transition: all var(--transition-normal);
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to allow modal visibility */
 }
 
 .game-card::before {
