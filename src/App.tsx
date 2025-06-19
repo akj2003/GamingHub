@@ -312,7 +312,7 @@ function TicTacToe() {
               disabled={!!cell || !!winner}
               aria-label={`Tic-Tac-Toe cell ${idx + 1}`}
             >
-              {cell}
+              {cell ? <span key={idx + cell} className="tictactoe-cell-content-animated">{cell}</span> : ''}
             </button>
           ))}
         </div>
@@ -391,6 +391,8 @@ function Ludo() {
 
         const finalRoll = Math.floor(Math.random() * 6) + 1;
         setDice(finalRoll);
+        setDisplayDice(finalRoll); // ADDED THIS LINE
+
         const movedPlayer = currentPlayer;
 
         const gameWillBeWonThisTurn = (positions[movedPlayer] + finalRoll) === boardSize;
@@ -998,22 +1000,22 @@ const MemoryGame = () => {
                 width: '80px',
                 height: '80px',
                 fontSize: '2em',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
                 cursor: 'pointer',
                 border: '2px solid var(--border-color)',
                 borderRadius: '8px',
-                background: card.isFlipped || card.isMatched ? 'var(--card-bg-flipped)' : 'var(--button-bg-color)',
-                color: card.isFlipped || card.isMatched ? 'var(--text-color)' : 'transparent',
-                transition: 'transform 0.3s, background-color 0.3s',
-                transform: card.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                padding: 0, // Remove padding for inner content to fill
+                // background, color, transform are now handled by CSS classes
               }}
               aria-label={card.isFlipped || card.isMatched ? `Card ${card.value}` : `Hidden card ${index + 1}`}
             >
-              <span style={{ transform: card.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}> {/* Counter-rotate text */}
-                {card.isFlipped || card.isMatched ? card.value : '?'}
-              </span>
+              <div className="memory-card-inner">
+                <div className="memory-card-front">
+                  <span style={{ fontFamily: 'Arial, sans-serif', fontSize: '1.5em', color: 'var(--text-color)' }}>?</span>
+                </div>
+                <div className="memory-card-back">
+                  {card.value}
+                </div>
+              </div>
             </button>
           ))}
         </div>
