@@ -402,11 +402,11 @@ body {
 /* Enhanced Game Grids */
 .game-hub-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--space-md); /* Was 1rem */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Increased min card width */
+  gap: var(--space-md);
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto; /* Center the grid if its max-width is reached */
+  /* max-width: 800px; Removed for full width */
+  /* margin: 0 auto; Removed as no longer centering a max-width element */
 }
 
 .tictactoe-grid {
