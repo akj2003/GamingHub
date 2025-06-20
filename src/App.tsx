@@ -501,7 +501,7 @@ function Ludo() {
                   const i = row * 5 + col;
                   const playerHere = positions.findIndex((p, playerIdx) => playerIdx < numPlayers && p === i);
                   return (
-                    <div key={col} className={`ludo-board-cell ${playerHere !== -1 ? 'ludo-board-cell-player' : ''}`} style={{ background: playerHere !== -1 ? playerColors[playerHere] : undefined, borderColor: playerHere !== -1 ? playerColors[playerHere] : 'var(--border-color)', boxShadow: playerHere !== -1 ? `0 1px 4px ${playerColors[playerHere]}99` : undefined }} role="gridcell" aria-label={`Cell ${i+1}`}>
+                    <div key={col} className={`ludo-board-cell ${playerHere !== -1 ? 'ludo-board-cell-player' : ''}`} style={{ background: playerHere !== -1 ? playerColors[playerHere] : undefined, borderColor: playerHere !== -1 ? playerColors[playerHere] : undefined /* Let CSS handle empty cell border color */, boxShadow: playerHere !== -1 ? `0 1px 4px ${playerColors[playerHere]}99` : undefined }} role="gridcell" aria-label={`Cell ${i+1}`}>
                     </div>
                   );
                 })}
