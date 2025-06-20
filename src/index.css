@@ -12,6 +12,9 @@
   --subtle-text-color: #7F8C8D; /* Lighter gray for less important text */
   --disabled-bg-color: #BDC3C7;
   --disabled-text-color: #7F8C8D;
+  --button-bg-color: var(--card-background-color); /* For elements like memory card front */
+  --card-bg-flipped: #e0e0e0; /* Memory card back */
+  --warning-bg-color: #FFD700; /* Gold - for things like flagged cells */
 
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -40,6 +43,9 @@
   --subtle-text-color: #A0AEC0; /* Medium Gray */
   --disabled-bg-color: #4A5568;
   --disabled-text-color: #A0AEC0;
+  --button-bg-color: var(--card-background-color); /* For elements like memory card front */
+  --card-bg-flipped: #374151; /* Memory card back - a bit lighter than card bg */
+  --warning-bg-color: var(--secondary-color); /* Lighter Orange/Yellow for dark mode warnings */
 
   color-scheme: dark;
 }
