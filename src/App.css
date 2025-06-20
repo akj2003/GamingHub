@@ -204,7 +204,7 @@ body {
 
 
 .game-card h1, .game-card h2 {
-  color: var(--primary-color);
+  color: var(--text-color); /* Use main text color for better contrast */
   margin-top: 0;
   margin-bottom: 0.75em;
   letter-spacing: 0.8px;
@@ -988,7 +988,7 @@ body {
 }
 
 .memory-card-front,
-.memory-card-back {
+button.memory-card .memory-card-back { /* Increased specificity for .memory-card-back */
   position: absolute;
   width: 100%;
   height: 100%;
@@ -1001,16 +1001,25 @@ body {
 }
 
 .memory-card-front {
-  background-color: var(--button-bg-color); /* Or your card's front color */
+  background-color: var(--button-bg-color);
   color: transparent; /* Hide the '?' if it was text, or style it as card front */
-  /* Content of the front (e.g., '?') will be styled by the component */
 }
 
-button.memory-card .memory-card-back { /* Increased specificity */
-  background-color: var(--card-bg-flipped, #e0e0e0);
-  color: var(--text-color);
+/* Specific text color for memory card back in light theme */
+:root button.memory-card .memory-card-back {
+  color: #000000; /* Pure black for light theme card back text */
+}
+
+/* Specific text color for memory card back in dark theme */
+[data-theme="dark"] button.memory-card .memory-card-back {
+  color: var(--text-color); /* Uses dark theme's light text color */
+}
+
+button.memory-card .memory-card-back { /* Base styles for back */
+  background-color: var(--card-bg-flipped);
   transform: rotateY(180deg);
 }
+
 
 /* Minesweeper cell default border */
 .minesweeper-cell {
@@ -1022,17 +1031,27 @@ button.memory-card .memory-card-back { /* Increased specificity */
   border-color: var(--subtle-text-color); /* Provides contrast against various cell backgrounds in dark mode */
 }
 
+/* Minesweeper symbol colors (flag, mine) - overrides component inline style for color */
+:root .minesweeper-cell.flagged {
+  color: var(--text-color); /* Dark text for flag on gold background in light theme */
+}
+[data-theme="dark"] .minesweeper-cell.flagged {
+  color: #000000; /* Black text for flag on light orange background in dark theme */
+}
+:root .minesweeper-cell.mine.revealed {
+  color: #000000; /* Black mine symbol on red background in light theme */
+}
+[data-theme="dark"] .minesweeper-cell.mine.revealed {
+  color: #000000; /* Black mine symbol on light red background in dark theme */
+}
+
+
 /* Hangman Game Input Field */
 .game-input {
   background-color: var(--background-color); /* Use page background for base */
   color: var(--text-color);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  /* Padding and font-size are handled inline in App.tsx for this specific input, but could be standardized here */
-  /* Example:
-  padding: 0.5em 0.8em;
-  font-size: 1em;
-  */
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
 }
