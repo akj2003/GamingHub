@@ -340,6 +340,12 @@ body {
   transition-duration: 0.05s;
 }
 
+[data-theme="dark"] .tictactoe-cell {
+  border-color: var(--subtle-text-color); /* Ensures visibility against dark card background */
+}
+[data-theme="dark"] .tictactoe-cell:hover {
+  border-color: var(--primary-color); /* Keep hover consistent with light theme intent */
+}
 
 .tictactoe-cell:disabled {
   cursor: not-allowed;
