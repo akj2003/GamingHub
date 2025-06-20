@@ -994,3 +994,40 @@ body {
   transform: rotateY(180deg);
   /* Content of the back (e.g., 'A', 'B') will be styled by the component */
 }
+
+/* Hangman Game Input Field */
+.game-input {
+  background-color: var(--background-color); /* Use page background for base */
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  /* Padding and font-size are handled inline in App.tsx for this specific input, but could be standardized here */
+  /* Example:
+  padding: 0.5em 0.8em;
+  font-size: 1em;
+  */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.game-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-color) 30%, transparent);
+  outline: none;
+}
+
+[data-theme="dark"] .game-input {
+  background-color: var(--card-background-color); /* Use card background for better blend in dark game card */
+  border-color: var(--subtle-text-color); /* Contrasting border */
+}
+
+[data-theme="dark"] .game-input::placeholder {
+  color: var(--subtle-text-color);
+  opacity: 0.7;
+}
+
+/* General placeholder, could be useful if not already globally set */
+.game-input::placeholder {
+  color: var(--subtle-text-color);
+  opacity: 0.7;
+}

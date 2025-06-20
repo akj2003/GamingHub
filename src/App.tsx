@@ -1001,7 +1001,7 @@ const MemoryGame = () => {
                 height: '80px',
                 fontSize: '2em',
                 cursor: 'pointer',
-                border: '2px solid var(--border-color)',
+                /* border: '2px solid var(--border-color)', // Moved to CSS */
                 borderRadius: '8px',
                 padding: 0, // Remove padding for inner content to fill
                 // background, color, transform are now handled by CSS classes
@@ -1444,7 +1444,7 @@ const MinesweeperGame = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  border: '1px solid var(--border-color)',
+                  /* border: '1px solid var(--border-color)', // Moved to CSS */
                   borderRadius: '4px',
                   backgroundColor: cell.isRevealed
                     ? (cell.isMine ? 'var(--error-color)' : 'var(--disabled-bg-color)')
