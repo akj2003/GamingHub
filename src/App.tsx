@@ -5,6 +5,7 @@ import WinCelebration from './components/WinCelebration';
 import InstructionsModal from './components/InstructionsModal';
 import Login from './components/Login';
 import FloatingActionButton from './components/FloatingActionButton'; // Import the FAB
+import Chatbot from './components/Chatbot'; // Import the Chatbot
 
 // SVG Icon for TicTacToe
 const TicTacToeIcon = () => (
@@ -1685,6 +1686,7 @@ function App() {
           subject="Feedback from Gaming Hub"
           buttonText="Contact Us"
         />
+        <Chatbot currentGame={game as keyof Omit<ChatKeywordsData, 'general'>} />
       </div>
     // Closing AuthProvider wrapper removed
   );

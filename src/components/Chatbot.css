@@ -1,0 +1,203 @@
+/* Chatbot Toggle Button */
+.chatbot-toggle-button {
+  position: fixed;
+  bottom: 20px; /* Position above the FAB or adjust as needed */
+  left: 20px; /* Or right: 20px; if FAB is on the left or for different positioning */
+  background-color: var(--secondary-color);
+  color: var(--button-text-color); /* Usually white for dark secondary, or dark for light secondary */
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 1.5rem; /* Icon size */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999; /* Below FAB if they are on the same side and FAB is 1000 */
+  transition: background-color 0.2s ease-out, transform 0.2s ease-out;
+}
+
+.chatbot-toggle-button:hover {
+  background-color: color-mix(in srgb, var(--secondary-color) 85%, black);
+  transform: scale(1.05);
+}
+
+/* Ensure icon color matches button text color for toggle */
+.chatbot-toggle-button svg {
+  fill: var(--button-text-color);
+}
+
+/* Chatbot Window */
+.chatbot-window {
+  position: fixed;
+  bottom: 20px;
+  left: 20px; /* Match toggle button or adjust */
+  width: 350px;
+  max-width: calc(100vw - 40px);
+  height: 450px;
+  max-height: calc(100vh - 90px); /* Consider FAB height too if on same side */
+  background-color: var(--card-background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000; /* Same as FAB, or higher if it should overlay it */
+  overflow: hidden; /* Prevent content from spilling */
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.chatbot-header {
+  background-color: var(--primary-color);
+  color: var(--button-text-color); /* Text on primary bg */
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 11px; /* Match parent */
+  border-top-right-radius: 11px; /* Match parent */
+}
+
+.chatbot-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--button-text-color); /* Ensure h3 color matches */
+}
+
+.chatbot-close-button {
+  background: none;
+  border: none;
+  color: var(--button-text-color);
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chatbot-close-button svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--button-text-color);
+}
+
+/* Messages Area */
+.chatbot-messages {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  padding: 8px 12px;
+  border-radius: 18px;
+  max-width: 75%;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+.message p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.message-user {
+  background-color: var(--primary-color);
+  color: var(--button-text-color); /* Text on primary for user */
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.message-bot {
+  background-color: var(--disabled-bg-color); /* A neutral color for bot messages */
+  color: var(--text-color); /* Regular text color for bot on its bg */
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+/* Dark theme adjustments for bot messages if needed */
+[data-theme="dark"] .message-bot {
+  background-color: var(--disabled-bg-color); /* Dark theme disabled bg */
+  color: var(--text-color); /* Dark theme text color (light) */
+}
+
+
+/* Input Form */
+.chatbot-input-form {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--card-background-color); /* Match window bg or slightly different */
+}
+
+.chatbot-input-form input[type="text"] {
+  flex-grow: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  margin-right: 8px;
+  background-color: var(--background-color); /* Page bg for input */
+  color: var(--text-color);
+}
+.chatbot-input-form input[type="text"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-color) 20%, transparent);
+}
+
+
+.chatbot-input-form button[type="submit"] {
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.chatbot-input-form button[type="submit"]:hover {
+  background-color: color-mix(in srgb, var(--primary-color) 85%, black);
+}
+
+/* Dark theme for toggle button if secondary color is light */
+[data-theme="dark"] .chatbot-toggle-button {
+    background-color: var(--secondary-color); /* Uses dark theme secondary */
+    /* Text color var(--button-text-color) should be white already */
+}
+[data-theme="dark"] .chatbot-toggle-button svg {
+    fill: var(--button-text-color);
+}
+[data-theme="dark"] .chatbot-toggle-button:hover {
+    background-color: color-mix(in srgb, var(--secondary-color) 85%, black);
+}
+
+[data-theme="dark"] .chatbot-header {
+    background-color: var(--primary-color); /* Uses dark theme primary */
+    /* Text color var(--button-text-color) should be white */
+}
+[data-theme="dark"] .chatbot-header h3 {
+    color: var(--button-text-color);
+}
+[data-theme="dark"] .chatbot-close-button svg {
+    fill: var(--button-text-color);
+}
+
+[data-theme="dark"] .chatbot-input-form input[type="text"] {
+  background-color: var(--background-color); /* Dark page bg for input */
+  color: var(--text-color); /* Light text */
+  border-color: var(--subtle-text-color); /* Darker border */
+}
+[data-theme="dark"] .chatbot-input-form button[type="submit"] {
+    background-color: var(--primary-color); /* Uses dark theme primary */
+    /* Text color var(--button-text-color) should be white */
+}
+[data-theme="dark"] .chatbot-input-form button[type="submit"]:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 85%, black);
+}
