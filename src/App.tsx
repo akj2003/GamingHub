@@ -1627,7 +1627,11 @@ function App() {
                 </button>
                 <button
                   className={`nav-button ${game === 'memory' ? 'nav-button-active' : ''}`}
-                  style={game === 'memory' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'memory' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+                  style={
+                    game === 'memory' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' }
+                    : game === 'memory' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--accent-color1-dark), var(--accent-color2-dark))', color: 'var(--button-text-color)', borderColor: 'transparent'}
+                    : {}
+                  }
                   onClick={() => setGame('memory')}
                   aria-label="Play Memory Game"
                 >
@@ -1635,7 +1639,11 @@ function App() {
                 </button>
                 <button
                   className={`nav-button ${game === 'hangman' ? 'nav-button-active' : ''}`}
-                  style={game === 'hangman' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'hangman' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+                  style={
+                    game === 'hangman' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' }
+                    : game === 'hangman' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}
+                    : {}
+                  }
                   onClick={() => setGame('hangman')}
                   aria-label="Play Hangman Game"
                 >
@@ -1643,7 +1651,11 @@ function App() {
                 </button>
                 <button
                   className={`nav-button ${game === 'minesweeper' ? 'nav-button-active' : ''}`}
-                  style={game === 'minesweeper' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'minesweeper' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+                  style={
+                    game === 'minesweeper' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' }
+                    : game === 'minesweeper' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2-dark))', color: 'var(--button-text-color)', borderColor: 'transparent'}
+                    : {}
+                  }
                   onClick={() => setGame('minesweeper')}
                   aria-label="Play Minesweeper Game"
                 >

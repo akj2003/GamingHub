@@ -204,7 +204,7 @@ body {
 
 
 .game-card h1, .game-card h2 {
-  color: var(--primary-color);
+  color: var(--text-color); /* Use main text color for better contrast */
   margin-top: 0;
   margin-bottom: 0.75em;
   letter-spacing: 0.8px;
