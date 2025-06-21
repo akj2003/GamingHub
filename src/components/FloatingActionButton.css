@@ -1,0 +1,75 @@
+.fab-contact-us {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+  border: none;
+  border-radius: 28px; /* Adjust for pill shape with text or 50% for circle if icon only */
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 1000; /* Ensure it's above most other content */
+  transition: background-color 0.2s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  text-decoration: none; /* Just in case it's wrapped in <a> later, though it's a button now */
+}
+
+.fab-contact-us:hover {
+  background-color: color-mix(in srgb, var(--primary-color) 85%, black);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.fab-contact-us:active {
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.fab-contact-us svg {
+  width: 20px; /* Adjust icon size as needed */
+  height: 20px;
+  stroke: var(--button-text-color); /* Ensure icon color matches button text color */
+}
+
+.fab-text {
+  display: inline; /* By default, show text */
+  /* transition: opacity 0.3s ease, max-width 0.3s ease; */
+  /* For hover-to-show-text effect, you'd initially hide this and show on .fab-contact-us:hover .fab-text */
+}
+
+
+/* Example for icon-only that expands text on hover - not active by default with current TSX */
+/*
+.fab-contact-us.icon-only .fab-text {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fab-contact-us.icon-only:hover .fab-text {
+  max-width: 100px; // Or whatever max content width
+  opacity: 1;
+  margin-left: 8px;
+}
+*/
+
+/* Ensure dark theme compatibility for text if primary color becomes very light */
+[data-theme="dark"] .fab-contact-us {
+  background-color: var(--primary-color); /* Uses dark theme primary */
+  color: var(--button-text-color); /* Should be white from previous fix */
+}
+
+[data-theme="dark"] .fab-contact-us svg {
+  stroke: var(--button-text-color); /* Should be white */
+}
+
+[data-theme="dark"] .fab-contact-us:hover {
+  background-color: color-mix(in srgb, var(--primary-color) 85%, black); /* Darken the dark theme primary */
+}
