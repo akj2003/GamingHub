@@ -3,13 +3,13 @@
   position: fixed;
   bottom: 20px; /* Position above the FAB or adjust as needed */
   left: 20px; /* Or right: 20px; if FAB is on the left or for different positioning */
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   color: var(--button-text-color); /* Usually white for dark secondary, or dark for light secondary */
   border: none;
   border-radius: 50%;
   width: 56px;
   height: 56px;
-  font-size: 1.5rem; /* Icon size */
+  font-size: 1px; /* Icon size */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   display: flex;
