@@ -4,6 +4,7 @@ import { useAuth } from './contexts/AuthContext'; // AuthProvider import removed
 import WinCelebration from './components/WinCelebration';
 import InstructionsModal from './components/InstructionsModal';
 import Login from './components/Login';
+import FloatingActionButton from './components/FloatingActionButton'; // Import the FAB
 
 // SVG Icon for TicTacToe
 const TicTacToeIcon = () => (
@@ -1679,6 +1680,11 @@ function App() {
         <footer className="app-footer">
           &copy; {new Date().getFullYear()} <span className="brand-text">Gaming Hub</span> &mdash; Built with <span className="tech-text">Vite + React</span>
         </footer>
+        <FloatingActionButton
+          email="digging.payoff-54@icloud.com"
+          subject="Feedback from Gaming Hub"
+          buttonText="Contact Us"
+        />
       </div>
     // Closing AuthProvider wrapper removed
   );
