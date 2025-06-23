@@ -1646,7 +1646,7 @@ function App() {
                 <button
                   className={`nav-button ${game === 'hangman' ? 'nav-button-active' : ''}`}
                   style={
-                    game === 'hangman' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' }
+                    game === 'hangman' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' }
                     : game === 'hangman' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}
                     : {}
                   }
@@ -1690,7 +1690,6 @@ function App() {
           subject="Feedback from Gaming Hub"
           buttonText="Contact Us"
         />
-        {/* Replace 'any' with the correct type if you have it elsewhere */}
         <Chatbot currentGame={game as "tictactoe" | "ludo" | "sudoku" | "chess" | "memory" | "hangman" | "minesweeper" | undefined} />
       </div>
     // Closing AuthProvider wrapper removed
