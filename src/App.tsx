@@ -4,6 +4,8 @@ import { useAuth } from './contexts/AuthContext'; // AuthProvider import removed
 import WinCelebration from './components/WinCelebration';
 import InstructionsModal from './components/InstructionsModal';
 import Login from './components/Login';
+import FloatingActionButton from './components/FloatingActionButton'; // Import the FAB
+import Chatbot from './components/Chatbot'; // Import the Chatbot
 
 // SVG Icon for TicTacToe
 const TicTacToeIcon = () => (
@@ -163,29 +165,31 @@ function GamingPage() {
       </InstructionsModal>
       <div className="game-card" style={{ maxWidth: 420 }}>
         <h1><span role="img" aria-label="Palette icon">🎨</span> Shape & Color Game</h1>
-        <p className="score-text">
+        <p className="score-text" data-testid="sc-score">
           Score: <b aria-live="polite">{score}</b> / 10
         </p>
         {step !== 'win' && (
           <button
             className="game-button game-button-secondary mb-2"
             onClick={restartGame}
+            data-testid="sc-restart-button"
           >
             <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
           </button>
         )}
-         <button className="game-button game-button-secondary mb-2" onClick={() => setShowInstructions(true)}><span>❓ Instructions</span></button>
+         <button className="game-button game-button-secondary mb-2" onClick={() => setShowInstructions(true)} data-testid="sc-instructions-button"><span>❓ Instructions</span></button>
         {step === 'color' && (
           <>
-            <div className="mt-2 mb-1" style={{ fontSize: '1.2em', fontWeight: 600, color: 'var(--text-color)' }}>
+            <div className="mt-2 mb-1" style={{ fontSize: '1.2em', fontWeight: 600, color: 'var(--text-color)' }} data-testid="sc-color-prompt">
               Identify the color:
-              <span className="gaming-page-color-display" style={{ background: currentColor }} />
+              <span className="gaming-page-color-display" style={{ background: currentColor }} data-testid="sc-color-target-display"/>
             </div>
-            <div className="gaming-page-options-container">
+            <div className="gaming-page-options-container" data-testid="sc-color-options">
               {colorOptions.map((color) => (
                 <button
                   key={color}
                   className="gaming-page-option-button"
+                  data-testid={`sc-color-option-${color.toLowerCase()}`}
                   style={{
                     background: color,
                     color: ['white', 'yellow', 'pink', 'orange', 'lime', 'cyan', 'silver', 'gold', '#fdfefe', '#eaeded'].includes(color.toLowerCase()) ? 'var(--text-color)' : 'var(--button-text-color)',
@@ -200,15 +204,16 @@ function GamingPage() {
         )}
         {step === 'shape' && (
           <>
-            <div className="mt-2 mb-1" style={{ fontSize: '1.2em', fontWeight: 600, color: 'var(--text-color)' }}>
+            <div className="mt-2 mb-1" style={{ fontSize: '1.2em', fontWeight: 600, color: 'var(--text-color)' }} data-testid="sc-shape-prompt">
               Identify the shape:
-              <div style={{ marginTop: 16 }}>{renderShape(currentShape, currentColor)}</div>
+              <div style={{ marginTop: 16 }} data-testid="sc-shape-target-display">{renderShape(currentShape, currentColor)}</div>
             </div>
-            <div className="gaming-page-options-container">
+            <div className="gaming-page-options-container" data-testid="sc-shape-options">
               {shapeOptions.map((shape) => (
                 <button
                   key={shape}
                   className="gaming-page-option-button"
+                  data-testid={`sc-shape-option-${shape.toLowerCase()}`}
                   onClick={() => handleShapeGuess(shape)}
                 >
                   {shape.charAt(0).toUpperCase() + shape.slice(1)}
@@ -218,17 +223,18 @@ function GamingPage() {
           </>
         )}
         {step === 'win' && (
-          <div className="gaming-page-win-message">
+          <div className="gaming-page-win-message" data-testid="sc-win-message">
             🏆 You win! Congratulations!<br />
             <button
               className="game-button game-button-primary mt-2"
               onClick={restartGame}
+              data-testid="sc-win-play-again-button"
             >
               <span><span role="img" aria-label="Restart icon">🔄</span> Play Again</span>
             </button>
           </div>
         )}
-        {message && <div role="status" aria-live="polite"><p className="gaming-page-message" style={{ color: message.includes('win') ? 'var(--success-color)' : message.includes('Try again') || message.includes('Invalid') ? 'var(--error-color)' : 'var(--text-color)' }}>{message}</p></div>}
+        {message && <div role="status" aria-live="polite" data-testid="sc-message-area"><p className="gaming-page-message" style={{ color: message.includes('win') ? 'var(--success-color)' : message.includes('Try again') || message.includes('Invalid') ? 'var(--error-color)' : 'var(--text-color)' }}>{message}</p></div>}
       </div>
     </>
   );
@@ -501,7 +507,7 @@ function Ludo() {
                   const i = row * 5 + col;
                   const playerHere = positions.findIndex((p, playerIdx) => playerIdx < numPlayers && p === i);
                   return (
-                    <div key={col} className={`ludo-board-cell ${playerHere !== -1 ? 'ludo-board-cell-player' : ''}`} style={{ background: playerHere !== -1 ? playerColors[playerHere] : undefined, borderColor: playerHere !== -1 ? playerColors[playerHere] : 'var(--border-color)', boxShadow: playerHere !== -1 ? `0 1px 4px ${playerColors[playerHere]}99` : undefined }} role="gridcell" aria-label={`Cell ${i+1}`}>
+                    <div key={col} className={`ludo-board-cell ${playerHere !== -1 ? 'ludo-board-cell-player' : ''}`} style={{ background: playerHere !== -1 ? playerColors[playerHere] : undefined, borderColor: playerHere !== -1 ? playerColors[playerHere] : undefined /* Let CSS handle empty cell border color */, boxShadow: playerHere !== -1 ? `0 1px 4px ${playerColors[playerHere]}99` : undefined }} role="gridcell" aria-label={`Cell ${i+1}`}>
                     </div>
                   );
                 })}
@@ -1001,7 +1007,7 @@ const MemoryGame = () => {
                 height: '80px',
                 fontSize: '2em',
                 cursor: 'pointer',
-                border: '2px solid var(--border-color)',
+                /* border: '2px solid var(--border-color)', // Moved to CSS */
                 borderRadius: '8px',
                 padding: 0, // Remove padding for inner content to fill
                 // background, color, transform are now handled by CSS classes
@@ -1444,7 +1450,7 @@ const MinesweeperGame = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  border: '1px solid var(--border-color)',
+                  /* border: '1px solid var(--border-color)', // Moved to CSS */
                   borderRadius: '4px',
                   backgroundColor: cell.isRevealed
                     ? (cell.isMine ? 'var(--error-color)' : 'var(--disabled-bg-color)')
@@ -1627,7 +1633,11 @@ function App() {
                 </button>
                 <button
                   className={`nav-button ${game === 'memory' ? 'nav-button-active' : ''}`}
-                  style={game === 'memory' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'memory' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+                  style={
+                    game === 'memory' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--accent-color1), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' }
+                    : game === 'memory' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--accent-color1-dark), var(--accent-color2-dark))', color: 'var(--button-text-color)', borderColor: 'transparent'}
+                    : {}
+                  }
                   onClick={() => setGame('memory')}
                   aria-label="Play Memory Game"
                 >
@@ -1635,7 +1645,11 @@ function App() {
                 </button>
                 <button
                   className={`nav-button ${game === 'hangman' ? 'nav-button-active' : ''}`}
-                  style={game === 'hangman' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'hangman' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+                  style={
+                    game === 'hangman' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--warning-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent' }
+                    : game === 'hangman' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--secondary-color), var(--error-color))', color: 'var(--button-text-color)', borderColor: 'transparent'}
+                    : {}
+                  }
                   onClick={() => setGame('hangman')}
                   aria-label="Play Hangman Game"
                 >
@@ -1643,7 +1657,11 @@ function App() {
                 </button>
                 <button
                   className={`nav-button ${game === 'minesweeper' ? 'nav-button-active' : ''}`}
-                  style={game === 'minesweeper' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' } : game === 'minesweeper' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent'} : {}}
+                  style={
+                    game === 'minesweeper' && theme === 'light' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2))', color: 'var(--button-text-color)', borderColor: 'transparent' }
+                    : game === 'minesweeper' && theme === 'dark' ? { background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color2-dark))', color: 'var(--button-text-color)', borderColor: 'transparent'}
+                    : {}
+                  }
                   onClick={() => setGame('minesweeper')}
                   aria-label="Play Minesweeper Game"
                 >
@@ -1667,6 +1685,12 @@ function App() {
         <footer className="app-footer">
           &copy; {new Date().getFullYear()} <span className="brand-text">Gaming Hub</span> &mdash; Built with <span className="tech-text">Vite + React</span>
         </footer>
+        <FloatingActionButton
+          email="digging.payoff-54@icloud.com"
+          subject="Feedback from Gaming Hub"
+          buttonText="Contact Us"
+        />
+        <Chatbot currentGame={game as keyof Omit<ChatKeywordsData, 'general'>} />
       </div>
     // Closing AuthProvider wrapper removed
   );

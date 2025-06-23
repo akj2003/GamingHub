@@ -12,6 +12,21 @@
   --subtle-text-color: #7F8C8D; /* Lighter gray for less important text */
   --disabled-bg-color: #BDC3C7;
   --disabled-text-color: #7F8C8D;
+  --button-bg-color: var(--card-background-color); /* For elements like memory card front */
+  --card-bg-flipped: #e0e0e0; /* Memory card back */
+  --warning-bg-color: #FFD700; /* Gold - for things like flagged cells */
+  --accent-color1: #A569BD; /* Purple */
+  --accent-color2: #EC7063; /* Reddish-Orange */
+
+  /* Minesweeper Number Colors - Light Theme */
+  --mine-count-1: #0000FF; /* Blue */
+  --mine-count-2: #008000; /* Green */
+  --mine-count-3: #FF0000; /* Red */
+  --mine-count-4: #000080; /* Navy */
+  --mine-count-5: #800000; /* Maroon */
+  --mine-count-6: #008080; /* Teal */
+  --mine-count-7: #000000; /* Black */
+  --mine-count-8: #808080; /* Gray */
 
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -36,10 +51,25 @@
   --card-background-color: #2D3748; /* Slightly lighter than main bg, or same */
   --error-color: #FC8181; /* Lighter Red */
   --success-color: #68D391; /* Lighter Green */
-  --button-text-color: #1A202C; /* Dark text for light primary/secondary buttons if they stay light, else #FFFFFF */
+  --button-text-color: #FFFFFF; /* White text for buttons in dark mode */
   --subtle-text-color: #A0AEC0; /* Medium Gray */
   --disabled-bg-color: #4A5568;
   --disabled-text-color: #A0AEC0;
+  --button-bg-color: var(--card-background-color); /* For elements like memory card front */
+  --card-bg-flipped: #374151; /* Memory card back - a bit lighter than card bg */
+  --warning-bg-color: var(--secondary-color); /* Lighter Orange/Yellow for dark mode warnings */
+
+  /* Minesweeper Number Colors - Dark Theme */
+  --mine-count-1: #ADD8E6; /* Light Blue */
+  --mine-count-2: #90EE90; /* Light Green */
+  --mine-count-3: #FFB6C1; /* Light Pink/Red */
+  --mine-count-4: #B19CD9; /* Light Purple/Navy */
+  --mine-count-5: #F5DEB3; /* Wheat/Light Brown */
+  --mine-count-6: #AFEEEE; /* Pale Turquoise/Cyan */
+  --mine-count-7: #D3D3D3; /* Light Gray (for black in light) */
+  --mine-count-8: #A9A9A9; /* Dark Gray (for gray in light, needs to be lighter than cell bg) */
+  --accent-color1-dark: #C39BD3; /* Lighter Purple */
+  --accent-color2-dark: #F1948A; /* Lighter Reddish-Orange */
 
   color-scheme: dark;
 }

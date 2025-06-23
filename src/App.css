@@ -126,7 +126,6 @@ body {
   /* border-color for top/left/right is transparent via inline style in App.tsx */
   border-bottom: 3px solid var(--secondary-color); /* Distinctive active indicator */
   box-shadow: 0 4px 12px color-mix(in srgb, var(--primary-color) 30%, transparent);
-  /* padding-bottom: calc(0.7em - 3px); /* Adjust if border was outside padding box. Not needed with border-box. */
 }
 .nav-button-active:hover {
   /* background-color is inline, but we can adjust other properties */
@@ -205,7 +204,7 @@ body {
 
 
 .game-card h1, .game-card h2 {
-  color: var(--primary-color);
+  color: var(--text-color); /* Use main text color for better contrast */
   margin-top: 0;
   margin-bottom: 0.75em;
   letter-spacing: 0.8px;
@@ -340,6 +339,12 @@ body {
   transition-duration: 0.05s;
 }
 
+[data-theme="dark"] .tictactoe-cell {
+  border-color: var(--subtle-text-color); /* Ensures visibility against dark card background */
+}
+[data-theme="dark"] .tictactoe-cell:hover {
+  border-color: var(--primary-color); /* Keep hover consistent with light theme intent */
+}
 
 .tictactoe-cell:disabled {
   cursor: not-allowed;
@@ -395,6 +400,14 @@ body {
   transform: translateY(0px);
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   transition-duration: 0.05s;
+}
+
+[data-theme="dark"] .sudoku-cell:not(.sudoku-cell-initial):not(.sudoku-cell-selected) {
+  border: 1px solid var(--subtle-text-color); /* Explicitly set full border property */
+}
+/* Ensure hover in dark mode also has clear border if not already covered by general hover */
+[data-theme="dark"] .sudoku-cell:hover:not(:disabled):not(.sudoku-cell-initial):not(.sudoku-cell-selected) {
+  border-color: var(--primary-color); /* This should be fine as primary-color is themed for dark */
 }
 
 .sudoku-cell-initial {
@@ -576,6 +589,13 @@ body {
   background: color-mix(in srgb, var(--border-color) 40%, var(--card-background-color));
   margin: 1px;
 }
+
+[data-theme="dark"] .ludo-board-cell {
+  /* This applies to empty cells because App.tsx now sets borderColor: undefined for them.
+     Occupied cells use inline playerColors for border-color. */
+  border-color: var(--subtle-text-color);
+  /* Background is correctly handled by the base .ludo-board-cell rule using themed variables */
+}
 .ludo-board-cell-player {
   border-width: 2px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
@@ -654,7 +674,6 @@ body {
 .nav-button svg, .game-button svg {
   width: 1em;
   height: 1em;
-  /* margin-right: 0.5em; Already handled by gap in span */
   vertical-align: -0.125em;
   fill: currentColor;
 }
@@ -945,6 +964,11 @@ body {
   /* Ensure these are set for 3D perspective if not already on a parent */
   perspective: 1000px;
   /* Remove direct transform from inline styles if it's for flip, let classes handle it */
+  border: 2px solid var(--border-color); /* Default border */
+}
+
+[data-theme="dark"] .memory-card {
+  border-color: var(--subtle-text-color); /* Contrast border for dark theme */
 }
 
 .memory-card-inner {
@@ -964,7 +988,7 @@ body {
 }
 
 .memory-card-front,
-.memory-card-back {
+button.memory-card .memory-card-back { /* Increased specificity for .memory-card-back */
   position: absolute;
   width: 100%;
   height: 100%;
@@ -977,14 +1001,79 @@ body {
 }
 
 .memory-card-front {
-  background-color: var(--button-bg-color); /* Or your card's front color */
+  background-color: var(--button-bg-color);
   color: transparent; /* Hide the '?' if it was text, or style it as card front */
-  /* Content of the front (e.g., '?') will be styled by the component */
 }
 
-.memory-card-back {
-  background-color: var(--card-bg-flipped, #e0e0e0); /* Or your card's back color */
-  color: var(--text-color); /* Or your card's back text color */
+/* Specific text color for memory card back in light theme */
+:root button.memory-card .memory-card-back {
+  color: #000000; /* Pure black for light theme card back text */
+}
+
+/* Specific text color for memory card back in dark theme */
+[data-theme="dark"] button.memory-card .memory-card-back {
+  color: var(--text-color); /* Uses dark theme's light text color */
+}
+
+button.memory-card .memory-card-back { /* Base styles for back */
+  background-color: var(--card-bg-flipped);
   transform: rotateY(180deg);
-  /* Content of the back (e.g., 'A', 'B') will be styled by the component */
+}
+
+
+/* Minesweeper cell default border */
+.minesweeper-cell {
+  border: 1px solid var(--border-color);
+}
+
+/* Minesweeper cell border in dark theme */
+[data-theme="dark"] .minesweeper-cell {
+  border-color: var(--subtle-text-color); /* Provides contrast against various cell backgrounds in dark mode */
+}
+
+/* Minesweeper symbol colors (flag, mine) - overrides component inline style for color */
+:root .minesweeper-cell.flagged {
+  color: var(--text-color); /* Dark text for flag on gold background in light theme */
+}
+[data-theme="dark"] .minesweeper-cell.flagged {
+  color: #000000; /* Black text for flag on light orange background in dark theme */
+}
+:root .minesweeper-cell.mine.revealed {
+  color: #000000; /* Black mine symbol on red background in light theme */
+}
+[data-theme="dark"] .minesweeper-cell.mine.revealed {
+  color: #000000; /* Black mine symbol on light red background in dark theme */
+}
+
+
+/* Hangman Game Input Field */
+.game-input {
+  background-color: var(--background-color); /* Use page background for base */
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.game-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-color) 30%, transparent);
+  outline: none;
+}
+
+[data-theme="dark"] .game-input {
+  background-color: var(--card-background-color); /* Use card background for better blend in dark game card */
+  border-color: var(--subtle-text-color); /* Contrasting border */
+}
+
+[data-theme="dark"] .game-input::placeholder {
+  color: var(--subtle-text-color);
+  opacity: 0.7;
+}
+
+/* General placeholder, could be useful if not already globally set */
+.game-input::placeholder {
+  color: var(--subtle-text-color);
+  opacity: 0.7;
 }
