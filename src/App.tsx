@@ -1690,7 +1690,8 @@ function App() {
           subject="Feedback from Gaming Hub"
           buttonText="Contact Us"
         />
-        <Chatbot currentGame={game as keyof Omit<ChatKeywordsData, 'general'>} />
+        {/* Replace 'any' with the correct type if you have it elsewhere */}
+        <Chatbot currentGame={game as "tictactoe" | "ludo" | "sudoku" | "chess" | "memory" | "hangman" | "minesweeper" | undefined} />
       </div>
     // Closing AuthProvider wrapper removed
   );
