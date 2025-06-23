@@ -165,29 +165,31 @@ function GamingPage() {
       </InstructionsModal>
       <div className="game-card" style={{ maxWidth: 420 }}>
         <h1><span role="img" aria-label="Palette icon">🎨</span> Shape & Color Game</h1>
-        <p className="score-text">
+        <p className="score-text" data-testid="sc-score">
           Score: <b aria-live="polite">{score}</b> / 10
         </p>
         {step !== 'win' && (
           <button
             className="game-button game-button-secondary mb-2"
             onClick={restartGame}
+            data-testid="sc-restart-button"
           >
             <span><span role="img" aria-label="Restart icon">🔄</span> Restart</span>
           </button>
         )}
-         <button className="game-button game-button-secondary mb-2" onClick={() => setShowInstructions(true)}><span>❓ Instructions</span></button>
+         <button className="game-button game-button-secondary mb-2" onClick={() => setShowInstructions(true)} data-testid="sc-instructions-button"><span>❓ Instructions</span></button>
         {step === 'color' && (
           <>
-            <div className="mt-2 mb-1" style={{ fontSize: '1.2em', fontWeight: 600, color: 'var(--text-color)' }}>
+            <div className="mt-2 mb-1" style={{ fontSize: '1.2em', fontWeight: 600, color: 'var(--text-color)' }} data-testid="sc-color-prompt">
               Identify the color:
-              <span className="gaming-page-color-display" style={{ background: currentColor }} />
+              <span className="gaming-page-color-display" style={{ background: currentColor }} data-testid="sc-color-target-display"/>
             </div>
-            <div className="gaming-page-options-container">
+            <div className="gaming-page-options-container" data-testid="sc-color-options">
               {colorOptions.map((color) => (
                 <button
                   key={color}
                   className="gaming-page-option-button"
+                  data-testid={`sc-color-option-${color.toLowerCase()}`}
                   style={{
                     background: color,
                     color: ['white', 'yellow', 'pink', 'orange', 'lime', 'cyan', 'silver', 'gold', '#fdfefe', '#eaeded'].includes(color.toLowerCase()) ? 'var(--text-color)' : 'var(--button-text-color)',
@@ -202,15 +204,16 @@ function GamingPage() {
         )}
         {step === 'shape' && (
           <>
-            <div className="mt-2 mb-1" style={{ fontSize: '1.2em', fontWeight: 600, color: 'var(--text-color)' }}>
+            <div className="mt-2 mb-1" style={{ fontSize: '1.2em', fontWeight: 600, color: 'var(--text-color)' }} data-testid="sc-shape-prompt">
               Identify the shape:
-              <div style={{ marginTop: 16 }}>{renderShape(currentShape, currentColor)}</div>
+              <div style={{ marginTop: 16 }} data-testid="sc-shape-target-display">{renderShape(currentShape, currentColor)}</div>
             </div>
-            <div className="gaming-page-options-container">
+            <div className="gaming-page-options-container" data-testid="sc-shape-options">
               {shapeOptions.map((shape) => (
                 <button
                   key={shape}
                   className="gaming-page-option-button"
+                  data-testid={`sc-shape-option-${shape.toLowerCase()}`}
                   onClick={() => handleShapeGuess(shape)}
                 >
                   {shape.charAt(0).toUpperCase() + shape.slice(1)}
@@ -220,17 +223,18 @@ function GamingPage() {
           </>
         )}
         {step === 'win' && (
-          <div className="gaming-page-win-message">
+          <div className="gaming-page-win-message" data-testid="sc-win-message">
             🏆 You win! Congratulations!<br />
             <button
               className="game-button game-button-primary mt-2"
               onClick={restartGame}
+              data-testid="sc-win-play-again-button"
             >
               <span><span role="img" aria-label="Restart icon">🔄</span> Play Again</span>
             </button>
           </div>
         )}
-        {message && <div role="status" aria-live="polite"><p className="gaming-page-message" style={{ color: message.includes('win') ? 'var(--success-color)' : message.includes('Try again') || message.includes('Invalid') ? 'var(--error-color)' : 'var(--text-color)' }}>{message}</p></div>}
+        {message && <div role="status" aria-live="polite" data-testid="sc-message-area"><p className="gaming-page-message" style={{ color: message.includes('win') ? 'var(--success-color)' : message.includes('Try again') || message.includes('Invalid') ? 'var(--error-color)' : 'var(--text-color)' }}>{message}</p></div>}
       </div>
     </>
   );
