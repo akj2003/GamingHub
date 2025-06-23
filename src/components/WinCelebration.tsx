@@ -56,17 +56,18 @@ const WinCelebration: React.FC<WinCelebrationProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
+      data-testid="win-celebration-modal"
     >
       <div className="win-celebration-content" onClick={(e) => e.stopPropagation()}>
         <span className="win-celebration-icon" role="img" aria-label="Trophy">🏆</span>
-        <h1 id={titleId}>{modalTitleText}</h1>
-        {score !== undefined && <p className="win-celebration-score">Final Score: {score}</p>}
+        <h1 id={titleId} data-testid="win-celebration-title">{modalTitleText}</h1>
+        {score !== undefined && <p className="win-celebration-score" data-testid="win-celebration-score">Final Score: {score}</p>}
         <p>Congratulations!</p>
         <div className="win-celebration-actions">
-          <button className="game-button game-button-primary" onClick={handlePlayAgainClick}>
+          <button className="game-button game-button-primary" onClick={handlePlayAgainClick} data-testid="win-celebration-play-again-button">
             <span><span role="img" aria-label="Restart icon">🔄</span> Play Again</span>
           </button>
-          <button className="game-button game-button-secondary" onClick={handleBackToHubClick}>
+          <button className="game-button game-button-secondary" onClick={handleBackToHubClick} data-testid="win-celebration-back-to-hub-button">
             <span><span role="img" aria-label="Controller icon">🎮</span> Back to Hub</span>
           </button>
         </div>
