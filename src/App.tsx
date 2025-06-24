@@ -1688,7 +1688,7 @@ function App() {
         <FloatingActionButton
           email="digging.payoff-54@icloud.com"
           subject="Feedback from Gaming Hub"
-          //buttonText="Contact Us"
+          buttonText="Contact Us"
         />
         <Chatbot currentGame={game as "tictactoe" | "ludo" | "sudoku" | "chess" | "memory" | "hangman" | "minesweeper" | undefined} />
       </div>

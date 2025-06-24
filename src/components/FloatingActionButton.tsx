@@ -19,7 +19,7 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   email,
   subject,
   body = '',
-  buttonText = 'Contact Us',
+  buttonText = '',
 }) => {
   const handleFabClick = () => {
     let mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
@@ -33,7 +33,7 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
     <button
       className="fab-contact-us"
       onClick={handleFabClick}
-      title={buttonText} // Tooltip for accessibility
+      title="Contact Us" // Tooltip for accessibility
       aria-label={buttonText}
     >
       <EmailIcon />
